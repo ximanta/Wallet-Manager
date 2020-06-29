@@ -1,13 +1,13 @@
-package com.kodilla.walletmenager;
+package com.kodilla.walletmanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WalletmenagerApplication {
+public class WalletManagerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(WalletmenagerApplication.class, args);
+        SpringApplication.run(WalletManagerApplication.class, args);
     }
 
 }
