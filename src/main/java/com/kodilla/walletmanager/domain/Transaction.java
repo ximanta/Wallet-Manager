@@ -16,11 +16,11 @@ public class Transaction extends GenericEntity {
 
     @Column
     @NotBlank
-    public String title;
+    private String title;
 
     @Column
-    public String description;
+    private String description;
 
     @Column
-    public long amount;
+    private long amount;
 }
