@@ -1,15 +1,16 @@
 package com.kodilla.walletmanager.dto;
 
-import lombok.AllArgsConstructor;
+import com.kodilla.walletmanager.tools.ToolsManager;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class TransactionDto {
     private Long id;
     private String title;
     private String description;
     private double amount;
+
+    public void setAmount(double amount) {
+        this.amount = ToolsManager.positiveTenthRoundDouble(amount);
+    }
 }
