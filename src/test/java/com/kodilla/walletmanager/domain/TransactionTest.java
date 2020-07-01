@@ -6,13 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Example;
-import org.springframework.mock.web.DelegatingServletInputStream;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @Transactional
 @RunWith(SpringRunner.class)
@@ -25,7 +24,10 @@ public class TransactionTest {
     @Test
     public void createCompleteRecordTest(){
         //Given
-        Transaction transaction = new Transaction("Test","Test description",50);
+        Transaction transaction = new Transaction();
+        transaction.setTitle("Test");
+        transaction.setDescription("Test description");
+        transaction.setAmount(50);
 
         transactionRepository.save(transaction);
 
@@ -40,5 +42,4 @@ public class TransactionTest {
         transactionRepository.delete(fromDb);
         assertFalse(transactionRepository.existsById(transaction.getId()));
     }
-
 }
