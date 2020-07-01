@@ -37,7 +37,7 @@ public class TransactionTest {
         //Then
         assertEquals("Test",fromDb.getTitle());
         assertEquals("Test description",fromDb.getDescription());
-        assertEquals(50,fromDb.getAmount());
+        assertEquals(50,fromDb.getAmount(),0);
 
         transactionRepository.delete(fromDb);
         assertFalse(transactionRepository.existsById(transaction.getId()));
