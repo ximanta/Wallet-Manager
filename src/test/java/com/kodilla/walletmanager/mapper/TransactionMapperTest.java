@@ -34,7 +34,7 @@ public class TransactionMapperTest {
         assertNull(transaction.getId());
         assertEquals("Test",transaction.getTitle());
         assertEquals("Test description",transaction.getDescription());
-        assertEquals(100,transaction.getAmount());
+        assertEquals(100,transaction.getAmount(),0);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class TransactionMapperTest {
         assertNull(transactionDto.getId());
         assertEquals("Test",transactionDto.getTitle());
         assertEquals("Test description",transactionDto.getDescription());
-        assertEquals(100,transactionDto.getAmount());
+        assertEquals(100,transactionDto.getAmount(),0);
     }
 
     @Test
@@ -82,12 +82,12 @@ public class TransactionMapperTest {
         assertNull(transactionDto1.getId());
         assertEquals("Test1",transactionDto1.getTitle());
         assertEquals("Test1 description",transactionDto1.getDescription());
-        assertEquals(110,transactionDto1.getAmount());
+        assertEquals(110,transactionDto1.getAmount(),0);
 
         assertNull(transactionDto2.getId());
         assertEquals("Test2",transactionDto2.getTitle());
         assertEquals("Test2 description",transactionDto2.getDescription());
-        assertEquals(120,transactionDto2.getAmount());
+        assertEquals(120,transactionDto2.getAmount(),0);
     }
 
     @Test

@@ -22,5 +22,19 @@ public class Transaction {
     private String description;
 
     @Column
-    private long amount;
+    private double amount;
+
+    public void setAmount(double amount) {
+        if (amount < 0){
+            System.out.println("Amount cannot be negative");
+            this.amount = 0;
+        }
+        else if((amount * 100) - (long)(amount * 100) != 0) {
+            double tmp = Math.round(amount) * 100;
+            this.amount = tmp / 100 ;
+        }
+        else {
+            this.amount = amount;
+        }
+    }
 }

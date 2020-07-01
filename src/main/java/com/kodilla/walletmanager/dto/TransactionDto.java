@@ -11,5 +11,5 @@ public class TransactionDto {
     private Long id;
     private String title;
     private String description;
-    private long amount;
+    private double amount;
 }
