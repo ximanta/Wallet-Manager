@@ -1,6 +1,7 @@
 package com.kodilla.walletmanager.mapper;
 
 import com.kodilla.walletmanager.domain.Transaction;
+import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.dto.TransactionDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +27,7 @@ public class TransactionMapperTest {
         transactionDto.setTitle("Test");
         transactionDto.setDescription("Test description");
         transactionDto.setAmount(100);
+        transactionDto.setType(TransactionType.EXPENSES);
 
         //When
         Transaction transaction = transactionMapper.mapToEntity(transactionDto);
@@ -35,6 +37,7 @@ public class TransactionMapperTest {
         assertEquals("Test",transaction.getTitle());
         assertEquals("Test description",transaction.getDescription());
         assertEquals(100,transaction.getAmount(),0);
+        assertEquals(TransactionType.EXPENSES, transaction.getType());
     }
 
     @Test
@@ -44,6 +47,7 @@ public class TransactionMapperTest {
         transaction.setTitle("Test");
         transaction.setDescription("Test description");
         transaction.setAmount(100);
+        transaction.setType(TransactionType.REVENUES);
 
         //When
         TransactionDto transactionDto = transactionMapper.mapToDto(transaction);
@@ -53,6 +57,7 @@ public class TransactionMapperTest {
         assertEquals("Test",transactionDto.getTitle());
         assertEquals("Test description",transactionDto.getDescription());
         assertEquals(100,transactionDto.getAmount(),0);
+        assertEquals(TransactionType.REVENUES, transactionDto.getType());
     }
 
     @Test

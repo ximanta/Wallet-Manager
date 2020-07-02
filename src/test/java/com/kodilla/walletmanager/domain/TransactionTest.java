@@ -1,6 +1,7 @@
 package com.kodilla.walletmanager.domain;
 
 
+import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.repository.TransactionRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,7 @@ public class TransactionTest {
         transaction.setTitle("Test");
         transaction.setDescription("Test description");
         transaction.setAmount(50);
+        transaction.setType(TransactionType.EXPENSES);
 
         transactionRepository.save(transaction);
 
@@ -38,6 +40,7 @@ public class TransactionTest {
         assertEquals("Test",fromDb.getTitle());
         assertEquals("Test description",fromDb.getDescription());
         assertEquals(50,fromDb.getAmount(),0);
+        assertEquals(TransactionType.EXPENSES,fromDb.getType());
 
         transactionRepository.delete(fromDb);
         assertFalse(transactionRepository.existsById(transaction.getId()));

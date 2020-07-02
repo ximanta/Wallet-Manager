@@ -15,6 +15,7 @@ public class TransactionMapper {
         transaction.setTitle(transactionDto.getTitle());
         transaction.setDescription(transactionDto.getDescription());
         transaction.setAmount(transactionDto.getAmount());
+        transaction.setType(transactionDto.getType());
 
         return transaction;
     }
@@ -25,13 +26,14 @@ public class TransactionMapper {
         transactionDto.setTitle(transaction.getTitle());
         transactionDto.setDescription(transaction.getDescription());
         transactionDto.setAmount(transaction.getAmount());
+        transactionDto.setType(transaction.getType());
 
         return transactionDto;
     }
 
     public List<TransactionDto> mapToDtos(List<Transaction> transactions){
         return transactions.stream()
-                .map(transaction -> mapToDto(transaction))
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
