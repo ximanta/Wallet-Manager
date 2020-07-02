@@ -11,6 +11,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -35,12 +39,16 @@ public class TransactionTest {
 
         //When
         Transaction fromDb = transactionRepository.getOne(transaction.getId());
+        LocalDate localDate = LocalDate.now();
 
         //Then
         assertEquals("Test",fromDb.getTitle());
         assertEquals("Test description",fromDb.getDescription());
         assertEquals(50,fromDb.getAmount(),0);
         assertEquals(TransactionType.EXPENSES,fromDb.getType());
+        assertEquals(localDate.getDayOfMonth(),fromDb.getDate().toLocalDate().getDayOfMonth());
+        assertEquals(localDate.getMonthValue(),fromDb.getDate().toLocalDate().getMonthValue());
+        assertEquals(localDate.getYear(),fromDb.getDate().toLocalDate().getYear());
 
         transactionRepository.delete(fromDb);
         assertFalse(transactionRepository.existsById(transaction.getId()));
