@@ -22,7 +22,7 @@ import java.sql.Date;
                 query = "FROM Transaction WHERE MONTH(date) = :MONTH AND YEAR(date) = :YEAR"),
         @NamedQuery(
                 name = "Transaction.betweenDate",
-                query = "FROM Transaction WHERE date >= :FIRSTDATE and date <= :SECONDTDATE")
+                query = "FROM Transaction WHERE date >= :FROMDATE and date <= :TODATE")
 })
 @Data
 @NoArgsConstructor
