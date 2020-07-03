@@ -4,17 +4,29 @@ import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.tools.ToolsManager;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
-import java.util.Calendar;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "Transaction.thisWeek",
+                query = "FROM Transaction WHERE YEARWEEK(date) = YEARWEEK(NOW())"),
+        @NamedQuery(
+                name = "Transaction.thisMonth",
+                query = "FROM Transaction WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())"),
+        @NamedQuery(
+                name = "Transaction.selectedMonth",
+                query = "FROM Transaction WHERE MONTH(date) = :MONTH AND YEAR(date) = :YEAR"),
+        @NamedQuery(
+                name = "Transaction.betweenDate",
+                query = "FROM Transaction WHERE date >= :FIRSTDATE and date <= :SECONDTDATE")
+})
 @Data
 @NoArgsConstructor
-@Entity(name = "TRANSACTION")
+@Entity
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
