@@ -1,6 +1,9 @@
 package com.kodilla.walletmanager.tools;
 
+import com.kodilla.walletmanager.dto.TransactionDto;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class ToolsManager {
@@ -18,4 +21,21 @@ public class ToolsManager {
             return d;
         }
     }
+
+    public static boolean isTransactionDtoCorrect(TransactionDto transactionDto){
+        if (transactionDto.getDate() != null){
+            if (transactionDto.getType() != null){
+                return transactionDto.getTitle() != null && !transactionDto.getTitle().isEmpty();
+            }
+        }
+        return false;
+    }
+
+    public static boolean isMonthCorrect(int month,int year){
+        if (month >= 0 && month <= 12){
+            return year >= 1980 && year <= LocalDate.now().getYear();
+        }
+        return false;
+    }
 }
+
