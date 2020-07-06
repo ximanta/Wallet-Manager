@@ -71,6 +71,7 @@ public class TransactionServiceCRUD {
             transaction.setDescription(transactionDto.getDescription());
             transaction.setType(transactionDto.getType());
             transaction.setDate(transactionDto.getDate());
+            transaction.setAmount(transactionDto.getAmount());
             transactionRepository.save(transaction);
             return transactionMapper.mapToDto(transaction);
         }else {
