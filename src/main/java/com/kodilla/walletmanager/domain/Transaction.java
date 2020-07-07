@@ -67,6 +67,8 @@ public class Transaction {
     public void setCategory(Category category) {
         if (ToolsManager.isTheSameEnum(category.getType(),type)){
             this.category = category;
+        } else {
+            System.out.println("Not the came type TransactionType");
         }
     }
 }

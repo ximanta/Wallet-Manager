@@ -24,28 +24,23 @@ public class ToolsManager {
     }
 
     public static boolean isTransactionDtoCorrect(TransactionDto transactionDto){
-        if (transactionDto.getDate() != null){
-            if (transactionDto.getType() != null){
-                return transactionDto.getTitle() != null && !transactionDto.getTitle().isEmpty();
-            }
-        }
-        return false;
+        boolean isDate = transactionDto.getDate() != null;
+        boolean isType = transactionDto.getType() != null;
+        boolean isCategory = transactionDto.getCategoryDto() != null;
+        boolean isTitleNotBlank = transactionDto.getTitle() != null && !transactionDto.getTitle().isEmpty();
+
+        return isDate && isType && isCategory && isTitleNotBlank;
     }
 
     public static boolean isMonthCorrect(int month,int year){
-        if (month >= 0 && month <= 12){
-            return year >= 1980 && year <= LocalDate.now().getYear();
-        }
-        return false;
+        boolean isMonthCorrect = month > 0 && month <= 12;
+        boolean isYearCorrect = year >= 1980 && year <= LocalDate.now().getYear();
+
+        return isMonthCorrect && isYearCorrect;
     }
 
     public static boolean isTheSameEnum(TransactionType first, TransactionType second){
-        if (first != null && first == second){
-            return true;
-        }else {
-            System.out.println("Incorrect category");
-            return false;
-        }
+        return  first != null && first == second;
     }
 
 }
