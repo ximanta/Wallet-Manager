@@ -1,5 +1,6 @@
 package com.kodilla.walletmanager.tools;
 
+import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.dto.TransactionDto;
 import org.springframework.stereotype.Component;
 
@@ -37,5 +38,15 @@ public class ToolsManager {
         }
         return false;
     }
+
+    public static boolean isTheSameEnum(TransactionType first, TransactionType second){
+        if (first != null && first == second){
+            return true;
+        }else {
+            System.out.println("Incorrect category");
+            return false;
+        }
+    }
+
 }
 

@@ -14,8 +14,15 @@ public class TransactionDto {
     private double amount;
     private TransactionType type;
     private Date date;
+    private CategoryDto categoryDto;
 
     public void setAmount(double amount) {
         this.amount = ToolsManager.positiveTenthRoundDouble(amount);
+    }
+
+    public void setCategoryDto(CategoryDto categoryDto) {
+        if (ToolsManager.isTheSameEnum(categoryDto.getType(),type)){
+            this.categoryDto = categoryDto;
+        }
     }
 }
