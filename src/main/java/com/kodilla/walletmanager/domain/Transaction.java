@@ -64,13 +64,9 @@ public class Transaction {
         this.amount = ToolsManager.positiveTenthRoundDouble(amount);
     }
 
-    /*public void setCategory(Category category) {
-        boolean isNull = category.getType() != null;
-        boolean isTheSame = category.getType() == this.getType();
-        if (isNull && isTheSame){
+    public void setCategory(Category category) {
+        if (ToolsManager.isTheSameEnum(category.getType(),type)){
             this.category = category;
-        }else {
-            System.out.println("Incorrect category");
         }
-    }*/
+    }
 }
