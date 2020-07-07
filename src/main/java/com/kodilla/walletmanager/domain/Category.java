@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Data
 @Entity
@@ -23,4 +24,13 @@ public class Category {
     @Column
     @Enumerated(value = EnumType.STRING)
     private TransactionType type;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.DETACH,CascadeType.MERGE,
+                    CascadeType.PERSIST, CascadeType.REFRESH},
+            targetEntity = Transaction.class,
+            mappedBy = "category" )
+    private Set<Transaction> transactions;
 }
