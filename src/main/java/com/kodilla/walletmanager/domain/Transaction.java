@@ -51,7 +51,26 @@ public class Transaction {
     @Column
     private double amount;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.DETACH,CascadeType.MERGE,
+                    CascadeType.PERSIST, CascadeType.REFRESH},
+            targetEntity = Category.class)
+    @JoinColumn(name = "CATEGORY_ID")
+    private Category category;
+
     public void setAmount(double amount) {
         this.amount = ToolsManager.positiveTenthRoundDouble(amount);
     }
+
+    /*public void setCategory(Category category) {
+        boolean isNull = category.getType() != null;
+        boolean isTheSame = category.getType() == this.getType();
+        if (isNull && isTheSame){
+            this.category = category;
+        }else {
+            System.out.println("Incorrect category");
+        }
+    }*/
 }
