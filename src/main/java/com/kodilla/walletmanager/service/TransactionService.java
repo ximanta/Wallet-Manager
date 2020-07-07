@@ -1,24 +1,21 @@
 package com.kodilla.walletmanager.service;
 
-import com.kodilla.walletmanager.domain.Transaction;
 import com.kodilla.walletmanager.dto.TransactionDto;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceDate;
-import com.kodilla.walletmanager.tools.ToolsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TransactionService {
     @Autowired
-    TransactionServiceCRUD transactionServiceCRUD;
+    private TransactionServiceCRUD transactionServiceCRUD;
 
     @Autowired
-    TransactionServiceDate transactionServiceDate;
+    private TransactionServiceDate transactionServiceDate;
 
     //CRUD
     public TransactionDto create(final TransactionDto transactionDto){
