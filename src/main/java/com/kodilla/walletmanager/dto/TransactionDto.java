@@ -23,6 +23,8 @@ public class TransactionDto {
     public void setCategoryDto(CategoryDto categoryDto) {
         if (ToolsManager.isTheSameEnum(categoryDto.getType(),type)){
             this.categoryDto = categoryDto;
+        }else {
+            System.out.println("Not the came type TransactionType");
         }
     }
 }
