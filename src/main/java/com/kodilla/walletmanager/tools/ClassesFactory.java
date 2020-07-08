@@ -5,11 +5,13 @@ import com.kodilla.walletmanager.domain.Transaction;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.dto.CategoryDto;
 import com.kodilla.walletmanager.dto.TransactionDto;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashSet;
 
+@Component
 public final class ClassesFactory {
     public static final String COMPLETE = "COMPLETE";
     public static final String INCOMPLETE = "INCOMPLETE";
