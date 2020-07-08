@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -129,6 +130,7 @@ public class TransactionMapperTest {
         Category category = new Category();
         category.setName("Test");
         category.setType(TransactionType.REVENUES);
+        category.setTransactions(new HashSet<>());
 
         return category;
     }
