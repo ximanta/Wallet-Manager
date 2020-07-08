@@ -1,7 +1,9 @@
 package com.kodilla.walletmanager.mapper;
 
+import com.kodilla.walletmanager.domain.Category;
 import com.kodilla.walletmanager.domain.Transaction;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
+import com.kodilla.walletmanager.dto.CategoryDto;
 import com.kodilla.walletmanager.dto.TransactionDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,14 +22,19 @@ public class TransactionMapperTest {
     @Autowired
     TransactionMapper transactionMapper;
 
+    @Autowired
+    CategoryMapper categoryMapper;
+
     @Test
     public void mapToEntity() {
         //Given
-        TransactionDto transactionDto = new TransactionDto();
-        transactionDto.setTitle("Test");
-        transactionDto.setDescription("Test description");
-        transactionDto.setAmount(100);
-        transactionDto.setType(TransactionType.EXPENSES);
+        CategoryDto categoryDto = categoryMapper.mapToDto(createdCategory());
+        TransactionDto transactionDto = new TransactionDto.TransactionDtoBuilder()
+                .title("Test")
+                .description("Test description")
+                .amount(100)
+                .type(TransactionType.REVENUES)
+                .category(categoryDto).build();
 
         //When
         Transaction transaction = transactionMapper.mapToEntity(transactionDto);
@@ -37,17 +44,20 @@ public class TransactionMapperTest {
         assertEquals("Test",transaction.getTitle());
         assertEquals("Test description",transaction.getDescription());
         assertEquals(100,transaction.getAmount(),0);
-        assertEquals(TransactionType.EXPENSES, transaction.getType());
+        assertEquals(TransactionType.REVENUES, transaction.getType());
+        assertEquals(categoryDto.getName(),transaction.getCategory().getName());
+        assertEquals(categoryDto.getType(),transaction.getCategory().getType());
     }
 
     @Test
     public void mapToDto() {
         //Given
-        Transaction transaction = new Transaction();
-        transaction.setTitle("Test");
-        transaction.setDescription("Test description");
-        transaction.setAmount(100);
-        transaction.setType(TransactionType.REVENUES);
+        Transaction transaction = new Transaction.TransactionBuilder()
+                .title("Test")
+                .description("Test description")
+                .amount(100)
+                .type(TransactionType.REVENUES)
+                .category(createdCategory()).build();
 
         //When
         TransactionDto transactionDto = transactionMapper.mapToDto(transaction);
@@ -58,21 +68,27 @@ public class TransactionMapperTest {
         assertEquals("Test description",transactionDto.getDescription());
         assertEquals(100,transactionDto.getAmount(),0);
         assertEquals(TransactionType.REVENUES, transactionDto.getType());
+        assertEquals(createdCategory().getName(),transactionDto.getCategoryDto().getName());
+        assertEquals(createdCategory().getType(),transactionDto.getCategoryDto().getType());
     }
 
     @Test
     public void mapToDtos() {
         List<Transaction> transactions = new ArrayList<>();
 
-        Transaction transaction1 = new Transaction();
-        transaction1.setTitle("Test1");
-        transaction1.setDescription("Test1 description");
-        transaction1.setAmount(110);
+        Transaction transaction1 = new Transaction.TransactionBuilder()
+                .title("Test 1")
+                .description("Test 1 description")
+                .amount(110)
+                .type(TransactionType.REVENUES)
+                .category(createdCategory()).build();
 
-        Transaction transaction2 = new Transaction();
-        transaction2.setTitle("Test2");
-        transaction2.setDescription("Test2 description");
-        transaction2.setAmount(120);
+        Transaction transaction2 = new Transaction.TransactionBuilder()
+                .title("Test 2")
+                .description("Test 2 description")
+                .amount(120)
+                .type(TransactionType.REVENUES)
+                .category(createdCategory()).build();
 
         transactions.add(transaction1);
         transactions.add(transaction2);
@@ -85,13 +101,15 @@ public class TransactionMapperTest {
 
         //Then
         assertNull(transactionDto1.getId());
-        assertEquals("Test1",transactionDto1.getTitle());
-        assertEquals("Test1 description",transactionDto1.getDescription());
+        assertNotNull(transactionDto1.getCategoryDto());
+        assertEquals("Test 1",transactionDto1.getTitle());
+        assertEquals("Test 1 description",transactionDto1.getDescription());
         assertEquals(110,transactionDto1.getAmount(),0);
 
         assertNull(transactionDto2.getId());
-        assertEquals("Test2",transactionDto2.getTitle());
-        assertEquals("Test2 description",transactionDto2.getDescription());
+        assertNotNull(transactionDto2.getCategoryDto());
+        assertEquals("Test 2",transactionDto2.getTitle());
+        assertEquals("Test 2 description",transactionDto2.getDescription());
         assertEquals(120,transactionDto2.getAmount(),0);
     }
 
@@ -105,5 +123,13 @@ public class TransactionMapperTest {
 
         //Then
         assertTrue(transactionDtos.isEmpty());
+    }
+
+    private Category createdCategory(){
+        Category category = new Category();
+        category.setName("Test");
+        category.setType(TransactionType.REVENUES);
+
+        return category;
     }
 }

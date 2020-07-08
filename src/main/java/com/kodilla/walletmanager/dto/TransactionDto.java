@@ -62,7 +62,7 @@ public class TransactionDto {
             return this;
         }
 
-        public TransactionDtoBuilder amount(long amount){
+        public TransactionDtoBuilder amount(double amount){
             this.amount = amount;
             return this;
         }
