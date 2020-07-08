@@ -1,7 +1,10 @@
 package com.kodilla.walletmanager.mapper;
 
+import com.kodilla.walletmanager.domain.Category;
 import com.kodilla.walletmanager.domain.Transaction;
+import com.kodilla.walletmanager.dto.CategoryDto;
 import com.kodilla.walletmanager.dto.TransactionDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,28 +12,32 @@ import java.util.stream.Collectors;
 
 @Component
 public class TransactionMapper {
-    public Transaction mapToEntity(TransactionDto transactionDto){
-        Transaction transaction = new Transaction();
-        transaction.setId(transactionDto.getId());
-        transaction.setTitle(transactionDto.getTitle());
-        transaction.setDescription(transactionDto.getDescription());
-        transaction.setAmount(transactionDto.getAmount());
-        transaction.setType(transactionDto.getType());
-        transaction.setDate(transactionDto.getDate());
+    @Autowired
+    CategoryMapper categoryMapper;
 
-        return transaction;
+    public Transaction mapToEntity(TransactionDto transactionDto){
+        Category category = categoryMapper.mapToEntity(transactionDto.getCategoryDto());
+        return new Transaction.TransactionBuilder()
+                .id(transactionDto.getId())
+                .title(transactionDto.getTitle())
+                .description(transactionDto.getDescription())
+                .amount(transactionDto.getAmount())
+                .type(transactionDto.getType())
+                .date(transactionDto.getDate())
+                .category(category).build();
+
     }
 
     public TransactionDto mapToDto(Transaction transaction){
-        TransactionDto transactionDto = new TransactionDto();
-        transactionDto.setId(transaction.getId());
-        transactionDto.setTitle(transaction.getTitle());
-        transactionDto.setDescription(transaction.getDescription());
-        transactionDto.setAmount(transaction.getAmount());
-        transactionDto.setType(transaction.getType());
-        transactionDto.setDate(transaction.getDate());
-
-        return transactionDto;
+        CategoryDto categoryDto = categoryMapper.mapToDto(transaction.getCategory());
+        return new TransactionDto.TransactionDtoBuilder()
+                .id(transaction.getId())
+                .title(transaction.getTitle())
+                .description(transaction.getDescription())
+                .amount(transaction.getAmount())
+                .type(transaction.getType())
+                .date(transaction.getDate())
+                .category(categoryDto).build();
     }
 
     public List<TransactionDto> mapToDtos(List<Transaction> transactions){
@@ -38,6 +45,5 @@ public class TransactionMapper {
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
-
 
 }

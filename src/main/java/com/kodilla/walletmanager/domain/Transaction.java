@@ -106,7 +106,7 @@ public class Transaction {
             return this;
         }
 
-        public TransactionBuilder amount(long amount){
+        public TransactionBuilder amount(double amount){
             this.amount = amount;
             return this;
         }
