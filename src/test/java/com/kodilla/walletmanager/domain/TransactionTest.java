@@ -59,11 +59,11 @@ public class TransactionTest {
     @Test
     public void createUncompletedRecordTest(){
         //Given
-        Transaction transaction = new Transaction();
-        transaction.setTitle("Test");
-        transaction.setType(TransactionType.REVENUES);
-        transaction.setDate(Date.valueOf("2018-06-25"));
-        transaction.setCategory(createdCategory());
+        Transaction transaction = new Transaction.TransactionBuilder()
+                .title("Test")
+                .type(TransactionType.REVENUES)
+                .date(Date.valueOf("2018-06-25"))
+                .category(createdCategory()).build();
 
         transactionRepository.save(transaction);
 
@@ -90,14 +90,12 @@ public class TransactionTest {
     }
 
     private Transaction createTransaction(){
-        Transaction transaction = new Transaction();
-        transaction.setTitle("Test");
-        transaction.setDescription("Test description");
-        transaction.setAmount(50);
-        transaction.setType(TransactionType.REVENUES);
-        transaction.setCategory(createdCategory());
-
-        return transaction;
+        return new Transaction.TransactionBuilder()
+                .title("Test")
+                .description("Test description")
+                .amount(50)
+                .type(TransactionType.REVENUES)
+                .category(createdCategory()).build();
     }
 
     private Category createdCategory(){

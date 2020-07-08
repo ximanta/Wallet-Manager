@@ -27,4 +27,61 @@ public class TransactionDto {
             System.out.println("Not the came type TransactionType");
         }
     }
+
+    public static class TransactionDtoBuilder{
+        private Long id;
+        private Date date =  new Date(new java.util.Date().getTime());
+        private TransactionType type;
+        private String title;
+        private String description;
+        private double amount;
+        private CategoryDto category;
+
+        public TransactionDtoBuilder id(Long id){
+            this.id = id;
+            return this;
+        }
+
+        public TransactionDtoBuilder date(Date date){
+            this.date = date;
+            return this;
+        }
+
+        public TransactionDtoBuilder type(TransactionType type){
+            this.type = type;
+            return this;
+        }
+
+        public TransactionDtoBuilder title(String title){
+            this.title = title;
+            return this;
+        }
+
+        public TransactionDtoBuilder description(String description){
+            this.description = description;
+            return this;
+        }
+
+        public TransactionDtoBuilder amount(long amount){
+            this.amount = amount;
+            return this;
+        }
+
+        public TransactionDtoBuilder category(CategoryDto category){
+            this.category = category;
+            return this;
+        }
+
+        public TransactionDto build(){
+            TransactionDto transactionDto = new TransactionDto();
+            transactionDto.setDate(date);
+            transactionDto.setType(type);
+            transactionDto.setTitle(title);
+            transactionDto.setDescription(description);
+            transactionDto.setAmount(amount);
+            transactionDto.setCategoryDto(category);
+
+            return transactionDto;
+        }
+    }
 }
