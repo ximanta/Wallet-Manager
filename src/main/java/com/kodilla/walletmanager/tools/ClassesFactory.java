@@ -9,12 +9,16 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 @Component
 public final class ClassesFactory {
     public static final String COMPLETE = "COMPLETE";
     public static final String INCOMPLETE = "INCOMPLETE";
+    public static final String THREEOBJECT = "THREEOBJECT";
+    public static final String FIVEOBJECT = "FIVEOBJECT";
 
     public final Transaction makeTransaction(final String name){
         switch (name){
@@ -93,5 +97,35 @@ public final class ClassesFactory {
                     return null;
             }
 
+        }
+
+        public final List<Transaction> makeTranactionList(final String name){
+            Transaction transaction1 = makeTransaction(ClassesFactory.COMPLETE);
+            Transaction transaction2 = makeTransaction(ClassesFactory.COMPLETE);
+            Transaction transaction3 = makeTransaction(ClassesFactory.COMPLETE);
+            Transaction transaction4 = makeTransaction(ClassesFactory.COMPLETE);
+            Transaction transaction5 = makeTransaction(ClassesFactory.COMPLETE);
+
+        switch (name){
+            case THREEOBJECT:
+                List<Transaction> treeList = new ArrayList<>();
+                treeList.add(transaction1);
+                treeList.add(transaction2);
+                treeList.add(transaction3);
+
+                return treeList;
+            case FIVEOBJECT:
+                List<Transaction> fiveList = new ArrayList<>();
+                fiveList.add(transaction1);
+                fiveList.add(transaction2);
+                fiveList.add(transaction3);
+                fiveList.add(transaction4);
+                fiveList.add(transaction5);
+
+                return fiveList;
+
+            default:
+                return null;
+            }
         }
 }
