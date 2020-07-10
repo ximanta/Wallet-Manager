@@ -1,14 +1,18 @@
 package com.kodilla.walletmanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 public class Category {
@@ -32,5 +36,21 @@ public class Category {
                     CascadeType.PERSIST, CascadeType.REFRESH},
             targetEntity = Transaction.class,
             mappedBy = "category" )
-    private Set<Transaction> transactions;
+    private Set<Transaction> transactions = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\''+
+                '}';
+    }
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
+    }
 }

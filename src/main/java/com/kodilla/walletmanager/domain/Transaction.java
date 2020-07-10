@@ -1,9 +1,11 @@
 package com.kodilla.walletmanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.tools.ToolsManager;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,7 +26,9 @@ import java.sql.Date;
                 name = "Transaction.betweenDate",
                 query = "FROM Transaction WHERE date >= :FROMDATE and date <= :TODATE")
 })
-@Data
+
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class Transaction {
@@ -59,6 +63,23 @@ public class Transaction {
             targetEntity = Category.class)
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", date=" + date +
+                ", type=" + type +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", amount=" + amount +
+                ", category=" + category +
+                '}';
+    }
 
     public void setAmount(double amount) {
         this.amount = ToolsManager.positiveTenthRoundDouble(amount);
@@ -118,6 +139,7 @@ public class Transaction {
 
         public Transaction build(){
             Transaction transaction = new Transaction();
+            transaction.setId(id);
             transaction.setDate(date);
             transaction.setType(type);
             transaction.setTitle(title);

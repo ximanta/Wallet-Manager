@@ -1,5 +1,7 @@
 package com.kodilla.walletmanager.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.kodilla.walletmanager.dto.TransactionDto;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceDate;

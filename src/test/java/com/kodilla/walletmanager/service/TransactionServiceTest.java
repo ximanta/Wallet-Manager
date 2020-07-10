@@ -1,10 +1,14 @@
 package com.kodilla.walletmanager.service;
 
+import com.kodilla.walletmanager.domain.Category;
 import com.kodilla.walletmanager.domain.Transaction;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
+import com.kodilla.walletmanager.dto.CategoryDto;
 import com.kodilla.walletmanager.dto.TransactionDto;
-import com.kodilla.walletmanager.mapper.TransactionMapper;
+import com.kodilla.walletmanager.mapper.CategoryMapper;
+import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.repository.TransactionRepository;
+import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +34,20 @@ public class TransactionServiceTest {
     TransactionService transactionService;
 
     @Autowired
-    TransactionMapper transactionMapper;
+    CategoryRepository categoryRepository;
+
+    @Autowired
+    CategoryMapper categoryMapper;
+
+    @Autowired
+    ClassesFactory classesFactory;
 
     @Test
     public void create() {
         //When
-        TransactionDto fromDb = transactionService.create(createDto());
+        TransactionDto transactionDto = classesFactory.makeTransactionDto(ClassesFactory.COMPLETE);
+        transactionDto.setDate(Date.valueOf("2020-06-20"));
+        TransactionDto fromDb = transactionService.create(transactionDto);
         transactionRepository.deleteById(fromDb.getId());
 
         //Then
@@ -43,113 +55,129 @@ public class TransactionServiceTest {
         assertNotNull(fromDb.getId());
         assertEquals("Test",fromDb.getTitle());
         assertEquals("Test Description",fromDb.getDescription());
-        assertEquals(TransactionType.EXPENSES,fromDb.getType());
+        assertEquals(TransactionType.REVENUES,fromDb.getType());
         assertEquals(Date.valueOf("2020-06-20"),fromDb.getDate());
-        assertEquals(25,fromDb.getAmount(),0);
+        assertEquals(50,fromDb.getAmount(),0);
     }
 
     @Test
     public void getAll() {
         //Given
-        Transaction transaction1 = transactionRepository.save(createEntity());
-        Transaction transaction2 = transactionRepository.save(createEntity());
-        Transaction transaction3 = transactionRepository.save(createEntity());
+        List<Transaction> transactions = transactionDefaultList();
+        for (Transaction transaction : transactions){
+            transactionRepository.save(transaction);
+        }
 
         //When
         List<TransactionDto> transactionDtos = transactionService.getAll();
-        transactionRepository.delete(transaction1);
-        transactionRepository.delete(transaction2);
-        transactionRepository.delete(transaction3);
+        for (TransactionDto transaction: transactionDtos) {
+            transactionRepository.deleteById(transaction.getId());
+        }
+        categoryRepository.delete(transactions.get(0).getCategory());
 
         //Then
-        assertFalse(transactionRepository.existsById(transaction1.getId()));
-        assertFalse(transactionRepository.existsById(transaction2.getId()));
-        assertFalse(transactionRepository.existsById(transaction3.getId()));
+        for (TransactionDto transaction: transactionDtos) {
+            assertFalse(transactionRepository.existsById(transaction.getId()));
+            assertFalse(categoryRepository.existsById(transaction.getCategoryDto().getId()));
+        }
         assertEquals(3,transactionDtos.size());
     }
 
     @Test
     public void get() {
         //Given
-        Transaction transaction = transactionRepository.save(createEntity());
-        long transactionId = transaction.getId();
+        Transaction transaction = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        transaction.setDate(Date.valueOf("2020-06-20"));
+
+        Transaction toDb = transactionRepository.save(transaction);
+        long transactionId = toDb.getId();
 
         //When
         TransactionDto fromDb = transactionService.get(transactionId);
-        transactionRepository.delete(transaction);
+        transactionRepository.delete(toDb);
+        categoryRepository.delete(toDb.getCategory());
 
         //Then
         assertFalse(transactionRepository.existsById(fromDb.getId()));
+        assertFalse(categoryRepository.existsById(fromDb.getCategoryDto().getId()));
         assertEquals(transactionId,fromDb.getId(),0);
         assertEquals("Test",fromDb.getTitle());
         assertEquals("Test Description",fromDb.getDescription());
-        assertEquals(TransactionType.EXPENSES,fromDb.getType());
+        assertEquals(TransactionType.REVENUES,fromDb.getType());
         assertEquals(Date.valueOf("2020-06-20"),fromDb.getDate());
-        assertEquals(25,fromDb.getAmount(),0);
+        assertEquals(50,fromDb.getAmount(),0);
     }
 
     @Test
     public void update() {
         //Given
-        Transaction transaction = transactionRepository.save(createEntity());
-        long transactionId = transaction.getId();
+        Transaction transaction = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        Transaction toDb = transactionRepository.save(transaction);
+        long transactionId = toDb.getId();
+        CategoryDto categoryDto = categoryMapper.mapToDto(toDb.getCategory());
 
-        TransactionDto transactionDto = new TransactionDto();
-        transactionDto.setId(transactionId);
-        transactionDto.setTitle("Test beta");
-        transactionDto.setDescription("Test Description beta");
-        transactionDto.setType(TransactionType.EXPENSES);
-        transactionDto.setDate(Date.valueOf("2020-05-05"));
-        transactionDto.setAmount(40);
+
+        TransactionDto transactionDto = new TransactionDto.TransactionDtoBuilder()
+                .id(transactionId)
+                .title("Test beta")
+                .type(TransactionType.REVENUES)
+                .description("Test Description beta")
+                .date(Date.valueOf("2020-05-05"))
+                .amount(40)
+                .category(categoryDto).build();
 
         //When
-        transactionService.update(transactionDto);
-        Transaction formDb = transactionRepository.findById(transactionId).get();
-        transactionRepository.deleteById(formDb.getId());
+        TransactionDto updated =transactionService.update(transactionDto);
+        transactionRepository.deleteById(updated.getId());
+        categoryRepository.delete(toDb.getCategory());
 
         //Then
-        assertFalse(transactionRepository.existsById(formDb.getId()));
-        assertEquals(transactionId,formDb.getId(),0);
-        assertEquals("Test beta",formDb.getTitle());
-        assertEquals("Test Description beta",formDb.getDescription());
-        assertEquals(TransactionType.EXPENSES,formDb.getType());
-        assertEquals(Date.valueOf("2020-05-05"),formDb.getDate());
-        assertEquals(40,formDb.getAmount(),0);
+        assertFalse(transactionRepository.existsById(updated.getId()));
+        assertFalse(categoryRepository.existsById(updated.getCategoryDto().getId()));
+        assertEquals(toDb.getCategory().getId(),updated.getCategoryDto().getId());
+        assertEquals(transactionId,updated.getId(),0);
+        assertEquals("Test beta",updated.getTitle());
+        assertEquals("Test Description beta",updated.getDescription());
+        assertEquals(TransactionType.REVENUES,updated.getType());
+        assertEquals(Date.valueOf("2020-05-05"),updated.getDate());
+        assertEquals(40,updated.getAmount(),0);
     }
 
     @Test
     public void delete() {
         //Given
-        Transaction transaction = transactionRepository.save(createEntity());
-        long transactionId = transaction.getId();
+        Transaction transaction = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        Transaction fromDb = transactionRepository.save(transaction);
+        long transactionId = fromDb.getId();
 
         //When
         transactionService.delete(transactionId);
+        categoryRepository.delete(fromDb.getCategory());
 
         //Then
         assertFalse(transactionRepository.existsById(transactionId));
+        assertFalse(categoryRepository.existsById(fromDb.getCategory().getId()));
     }
 
     @Test
     public void findByDate() {
         //Given
-        Transaction transaction1 = transactionRepository.save(createEntity());
-        Transaction transaction2 = transactionRepository.save(createEntity());
+        List<Transaction> transactions = givenFindByDate();
 
         //When
         List<TransactionDto> fromDb = transactionService.findByDate(Date.valueOf("2020-06-20"));
-        transactionRepository.delete(transaction1);
-        transactionRepository.delete(transaction2);
-
-        long transaction1Id = transaction1.getId();
-        long transaction2Id = transaction2.getId();
+        for (Transaction transaction: transactions) {
+            transactionRepository.delete(transaction);
+        }
+        categoryRepository.delete(transactions.get(0).getCategory());
 
         //Then
-        assertFalse(transactionRepository.existsById(transaction1Id));
-        assertFalse(transactionRepository.existsById(transaction2Id));
+        for (TransactionDto transaction: fromDb) {
+            assertTrue(transaction.getDate().equals(Date.valueOf("2020-06-20")));
+            assertFalse(transactionRepository.existsById(transaction.getId()));
+            assertFalse(categoryRepository.existsById(transaction.getCategoryDto().getId()));
+        }
         assertEquals(2,fromDb.size());
-        assertEquals(Date.valueOf("2020-06-20"),fromDb.get(0).getDate());
-        assertEquals(Date.valueOf("2020-06-20"),fromDb.get(1).getDate());
     }
 
     @Test
@@ -162,10 +190,12 @@ public class TransactionServiceTest {
         for (Transaction transaction: transactions) {
             transactionRepository.delete(transaction);
         }
+        categoryRepository.delete(transactions.get(0).getCategory());
 
         //Then
         for (Transaction transaction: transactions) {
             assertFalse(transactionRepository.existsById(transaction.getId()));
+            assertFalse(categoryRepository.existsById(transaction.getCategory().getId()));
         }
         assertEquals(2,transactionDtos.size());
     }
@@ -180,10 +210,12 @@ public class TransactionServiceTest {
         for (Transaction transaction: transactions) {
             transactionRepository.delete(transaction);
         }
+        categoryRepository.delete(transactions.get(0).getCategory());
 
         //Then
         for (Transaction transaction: transactions) {
             assertFalse(transactionRepository.existsById(transaction.getId()));
+            assertFalse(categoryRepository.existsById(transaction.getCategory().getId()));
         }
         assertEquals(2,transactionDtos.size());
     }
@@ -198,10 +230,12 @@ public class TransactionServiceTest {
         for (Transaction transaction: transactions) {
             transactionRepository.delete(transaction);
         }
+        categoryRepository.delete(transactions.get(0).getCategory());
 
         //Then
         for (Transaction transaction: transactions) {
             assertFalse(transactionRepository.existsById(transaction.getId()));
+            assertFalse(categoryRepository.existsById(transaction.getCategory().getId()));
         }
         for (TransactionDto transactionDto: transactionDtos) {
             long monthNumber = transactionDto.getDate().toLocalDate().getMonthValue();
@@ -214,7 +248,7 @@ public class TransactionServiceTest {
     @Test
     public void betweenDate() {
         //Given
-        List<Transaction> transactions = givenBetweenMonth();
+        List<Transaction> transactions = givenBetweenDate();
         Date date1 = Date.valueOf("2019-03-05");
         Date date2 = Date.valueOf("2019-05-20");
 
@@ -223,122 +257,116 @@ public class TransactionServiceTest {
         for (Transaction transaction: transactions) {
             transactionRepository.delete(transaction);
         }
+        categoryRepository.delete(transactions.get(0).getCategory());
 
         //Then
         for (Transaction transaction: transactions) {
             assertFalse(transactionRepository.existsById(transaction.getId()));
+            assertFalse(categoryRepository.existsById(transaction.getCategory().getId()));
         }
         assertEquals(2,transactionDtos.size());
     }
 
-    private TransactionDto createDto(){
-        TransactionDto transactionDto = new TransactionDto();
-        transactionDto.setTitle("Test");
-        transactionDto.setDescription("Test Description");
-        transactionDto.setType(TransactionType.EXPENSES);
-        transactionDto.setDate(Date.valueOf("2020-06-20"));
-        transactionDto.setAmount(25);
+    private List<Transaction> givenFindByDate(){
+        List<Transaction> transactions = new ArrayList<>();
+        List<Transaction> baseList = transactionDefaultList();
+        baseList.get(0).setDate(Date.valueOf("2020-06-20"));
+        baseList.get(1).setDate(Date.valueOf("2020-06-20"));
 
-        return transactionDto;
-    }
+        for (Transaction transaction: baseList) {
+            Transaction formDb = transactionRepository.save(transaction);
+            transactions.add(formDb);
+        }
 
-    private Transaction createEntity(){
-        return transactionMapper.mapToEntity(createDto());
+        return transactions;
     }
 
     private List<Transaction> givenThisWeek(){
         List<Transaction> transactions = new ArrayList<>();
-
-        Transaction transaction1 = createEntity();
-        Transaction transaction2 = createEntity();
-        Transaction transaction3 = createEntity();
+        List<Transaction> baseList = transactionDefaultList();
 
         int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
 
-        transaction1.setDate(Date.valueOf(LocalDate.now()));
-
+        baseList.get(0).setDate(Date.valueOf("2020-06-20"));
         if (dayOfWeek - 2 <= 0){
-            transaction2.setDate(Date.valueOf(LocalDate.now()));
+            baseList.get(1).setDate(Date.valueOf(LocalDate.now()));
         }else {
-            transaction2.setDate(Date.valueOf(LocalDate.now().minusDays(2)));
+            baseList.get(1).setDate(Date.valueOf(LocalDate.now().minusDays(2)));
         }
 
-        Transaction formDb1 = transactionRepository.save(transaction1);
-        Transaction formDb2 = transactionRepository.save(transaction2);
-        Transaction formDb3 = transactionRepository.save(transaction3);
-
-        transactions.add(formDb1);
-        transactions.add(formDb2);
-        transactions.add(formDb3);
+        for (Transaction transaction: baseList) {
+            Transaction formDb = transactionRepository.save(transaction);
+            transactions.add(formDb);
+        }
 
         return transactions;
     }
 
     private List<Transaction> givenThisMonth(){
         List<Transaction> transactions = new ArrayList<>();
-
-        Transaction transaction1 = createEntity();
-        Transaction transaction2 = createEntity();
-        Transaction transaction3 = createEntity();
+        List<Transaction> baseList = transactionDefaultList();
 
         int dayOfMonth = LocalDate.now().getDayOfMonth();
 
-        transaction1.setDate(Date.valueOf(LocalDate.now()));
+        baseList.get(0).setDate(Date.valueOf("2020-06-20"));
         if (dayOfMonth - 8 <= 0){
-            transaction2.setDate(Date.valueOf(LocalDate.now()));
+            baseList.get(1).setDate(Date.valueOf(LocalDate.now()));
         }else {
-            transaction2.setDate(Date.valueOf(LocalDate.now().minusDays(8)));
+            baseList.get(1).setDate(Date.valueOf(LocalDate.now().minusDays(8)));
         }
 
-        Transaction formDb1 = transactionRepository.save(transaction1);
-        Transaction formDb2 = transactionRepository.save(transaction2);
-        Transaction formDb3 = transactionRepository.save(transaction3);
-
-        transactions.add(formDb1);
-        transactions.add(formDb2);
-        transactions.add(formDb3);
+        for (Transaction transaction: baseList) {
+            Transaction formDb = transactionRepository.save(transaction);
+            transactions.add(formDb);
+        }
 
         return transactions;
     }
 
     private List<Transaction> givenSelectedMonth(){
         List<Transaction> transactions = new ArrayList<>();
+        List<Transaction> baseList = transactionDefaultList();
 
-        Transaction transaction1 = createEntity();
-        Transaction transaction2 = createEntity();
-        Transaction transaction3 = createEntity();
+        baseList.get(0).setDate(Date.valueOf("2019-05-25"));
+        baseList.get(1).setDate(Date.valueOf("2019-05-04"));
 
-        transaction1.setDate(Date.valueOf("2019-05-25"));
-        transaction2.setDate(Date.valueOf("2019-05-04"));
-
-        Transaction formDb1 = transactionRepository.save(transaction1);
-        Transaction formDb2 = transactionRepository.save(transaction2);
-        Transaction formDb3 = transactionRepository.save(transaction3);
-
-        transactions.add(formDb1);
-        transactions.add(formDb2);
-        transactions.add(formDb3);
+        for (Transaction transaction: baseList) {
+            Transaction formDb = transactionRepository.save(transaction);
+            transactions.add(formDb);
+        }
 
         return transactions;
     }
 
-    private List<Transaction> givenBetweenMonth(){
+    private List<Transaction> givenBetweenDate(){
+        List<Transaction> transactions = new ArrayList<>();
+        List<Transaction> baseList = transactionDefaultList();
+
+        baseList.get(0).setDate(Date.valueOf("2019-03-25"));
+        baseList.get(1).setDate(Date.valueOf("2019-05-04"));
+
+        for (Transaction transaction: baseList) {
+            Transaction formDb = transactionRepository.save(transaction);
+            transactions.add(formDb);
+        }
+
+        return transactions;
+    }
+
+    private List<Transaction> transactionDefaultList(){
         List<Transaction> transactions = new ArrayList<>();
 
-        Transaction transaction1 = createEntity();
-        Transaction transaction2 = createEntity();
-        Transaction transaction3 = createEntity();
+        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
+        Transaction transaction1 = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        Transaction transaction2 = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        Transaction transaction3 = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        transaction1.setCategory(category);
+        transaction2.setCategory(category);
+        transaction3.setCategory(category);
 
-        transaction1.setDate(Date.valueOf("2019-03-25"));
-        transaction2.setDate(Date.valueOf("2019-05-04"));
-
-        Transaction formDb1 = transactionRepository.save(transaction1);
-        Transaction formDb2 = transactionRepository.save(transaction2);
-        Transaction formDb3 = transactionRepository.save(transaction3);
-
-        transactions.add(formDb1);
-        transactions.add(formDb2);
-        transactions.add(formDb3);
+        transactions.add(transaction1);
+        transactions.add(transaction2);
+        transactions.add(transaction3);
 
         return transactions;
     }

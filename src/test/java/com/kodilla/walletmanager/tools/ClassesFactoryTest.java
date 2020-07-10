@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 
 import static org.junit.Assert.*;
 
@@ -95,7 +94,7 @@ public class ClassesFactoryTest {
         assertNull(incomplete.getId());
         assertEquals("Test",incomplete.getName());
         assertEquals(TransactionType.REVENUES,incomplete.getType());
-        assertNull(incomplete.getTransactions());
+        assertNotNull(incomplete.getTransactions());
     }
 
     @Test
@@ -113,6 +112,6 @@ public class ClassesFactoryTest {
         assertNull(incomplete.getId());
         assertEquals("Test",incomplete.getName());
         assertEquals(TransactionType.REVENUES,incomplete.getType());
-        assertNull(incomplete.getTransactionDtos());
+        assertNotNull(incomplete.getTransactionDtos());
     }
 }
