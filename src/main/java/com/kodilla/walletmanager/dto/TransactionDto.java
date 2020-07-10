@@ -2,11 +2,13 @@ package com.kodilla.walletmanager.dto;
 
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.tools.ToolsManager;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Date;
 
-@Data
+@Getter
+@Setter
 public class TransactionDto {
     private Long id;
     private String title;
@@ -26,6 +28,19 @@ public class TransactionDto {
         }else {
             System.out.println("Not the came type TransactionType");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", amount=" + amount +
+                ", type=" + type +
+                ", date=" + date +
+                ", categoryDto=" + categoryDto +
+                '}';
     }
 
     public static class TransactionDtoBuilder{
@@ -74,6 +89,7 @@ public class TransactionDto {
 
         public TransactionDto build(){
             TransactionDto transactionDto = new TransactionDto();
+            transactionDto.setId(id);
             transactionDto.setDate(date);
             transactionDto.setType(type);
             transactionDto.setTitle(title);
