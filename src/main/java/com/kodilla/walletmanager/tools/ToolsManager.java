@@ -11,11 +11,6 @@ import java.util.List;
 @Component
 public class ToolsManager {
 
-    public static final String REV = "REV";
-    public static final String EXP = "EXP";
-    public static final String ALL = "ALL";
-
-
     public static double positiveTenthRoundDouble(double d){
         if (d < 0){
             System.out.println("Amount cannot be negative");
@@ -51,27 +46,31 @@ public class ToolsManager {
     }
 
     public static List<TransactionDto> sortByType(List<TransactionDto> dtos,String type){
-        switch (type){
-            case ALL:
-                return dtos;
-            case REV:
-                List<TransactionDto> revenues = new ArrayList<>();
-                for (TransactionDto dto:dtos) {
-                    if (dto.getType() == TransactionType.REVENUES){
-                        revenues.add(dto);
+        final String REV = "REV";
+        final String EXP = "EXP";
+        if (type == null){
+            return dtos;
+        }else {
+            switch (type){
+                case REV:
+                    List<TransactionDto> revenues = new ArrayList<>();
+                    for (TransactionDto dto:dtos) {
+                        if (dto.getType() == TransactionType.REVENUES){
+                            revenues.add(dto);
+                        }
                     }
-                }
-                return revenues;
-            case EXP:
-                List<TransactionDto> expenses = new ArrayList<>();
-                for (TransactionDto dto:dtos) {
-                    if (dto.getType().equals(TransactionType.EXPENSES)){
-                        expenses.add(dto);
+                    return revenues;
+                case EXP:
+                    List<TransactionDto> expenses = new ArrayList<>();
+                    for (TransactionDto dto:dtos) {
+                        if (dto.getType().equals(TransactionType.EXPENSES)){
+                            expenses.add(dto);
+                        }
                     }
-                }
-                return expenses;
-            default:
-                return new ArrayList<>();
+                    return expenses;
+                default:
+                    return new ArrayList<>();
+            }
         }
     }
 

@@ -145,7 +145,7 @@ public class ToolsManagerTest {
         dtos.add(dtoR);
 
         //When
-        List<TransactionDto> all = ToolsManager.sortByType(dtos,"ALL");
+        List<TransactionDto> all = ToolsManager.sortByType(dtos,"");
         List<TransactionDto> revenues = ToolsManager.sortByType(dtos,"REV");
         List<TransactionDto> expenses = ToolsManager.sortByType(dtos,"EXP");
 
