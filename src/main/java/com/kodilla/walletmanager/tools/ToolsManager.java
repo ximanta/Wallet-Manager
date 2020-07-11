@@ -10,9 +10,11 @@ import java.util.List;
 
 @Component
 public class ToolsManager {
+
     public static final String REV = "REV";
     public static final String EXP = "EXP";
     public static final String ALL = "ALL";
+
 
     public static double positiveTenthRoundDouble(double d){
         if (d < 0){
