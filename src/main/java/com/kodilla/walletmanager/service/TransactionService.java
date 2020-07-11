@@ -1,14 +1,11 @@
 package com.kodilla.walletmanager.service;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.kodilla.walletmanager.dto.TransactionDto;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -41,7 +38,7 @@ public class TransactionService {
     }
 
     //DATE
-    public List<TransactionDto> findByDate(Date date){
+    public List<TransactionDto> findByDate(String date){
         return transactionServiceDate.findByDate(date);
     }
 
@@ -53,11 +50,11 @@ public class TransactionService {
         return transactionServiceDate.thisMonth();
     }
 
-    public List<TransactionDto> selectedMonth(int month, int year){
-        return transactionServiceDate.selectedMonth(month,year);
+    public List<TransactionDto> selectedMonth(String year_month){
+        return transactionServiceDate.selectedMonth(year_month);
     }
 
-    public List<TransactionDto> betweenDate(Date fromDate, Date toDate){
+    public List<TransactionDto> betweenDate(String fromDate, String toDate){
         return transactionServiceDate.betweenDate(fromDate,toDate);
     }
 }

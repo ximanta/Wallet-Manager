@@ -20,8 +20,9 @@ public class TransactionServiceDate {
     @Autowired
     private TransactionMapper transactionMapper;
 
-    public List<TransactionDto> findByDate(Date date){
-        List<Transaction> transactions = transactionRepository.findByDate(date);
+    public List<TransactionDto> findByDate(String date){
+        Date of = Date.valueOf(date);
+        List<Transaction> transactions = transactionRepository.findByDate(of);
         return transactionMapper.mapToDtos(transactions);
     }
 
@@ -35,7 +36,9 @@ public class TransactionServiceDate {
         return transactionMapper.mapToDtos(transactions);
     }
 
-    public List<TransactionDto> selectedMonth(int month, int year){
+    public List<TransactionDto> selectedMonth(String year_month){
+        int year = Integer.parseInt(year_month.substring(0,4));
+        int month = Integer.parseInt(year_month.substring(5,7));
         if (ToolsManager.isMonthCorrect(month,year)){
             List<Transaction> transactions = transactionRepository.selectedMonth(month,year);
             return transactionMapper.mapToDtos(transactions);
@@ -44,8 +47,10 @@ public class TransactionServiceDate {
         }
     }
 
-    public List<TransactionDto> betweenDate(Date fromDate, Date toDate){
-        List<Transaction> transactions = transactionRepository.betweenDate(fromDate,toDate);
+    public List<TransactionDto> betweenDate(String fromDate, String toDate){
+        Date from = Date.valueOf(fromDate);
+        Date to = Date.valueOf(toDate);
+        List<Transaction> transactions = transactionRepository.betweenDate(from,to);
         return transactionMapper.mapToDtos(transactions);
     }
 }
