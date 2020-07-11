@@ -57,8 +57,7 @@ public class Transaction {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER,
-            cascade = {
-                    CascadeType.DETACH,CascadeType.MERGE, CascadeType.REFRESH},
+            cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH },
             targetEntity = Category.class)
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;

@@ -1,37 +1,41 @@
 package com.kodilla.walletmanager.controller;
 
 import com.kodilla.walletmanager.domain.Transaction;
+import com.kodilla.walletmanager.dto.TransactionDto;
+import com.kodilla.walletmanager.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/v1")
 public class TransactionController {
+    @Autowired
+    TransactionService transactionService;
 
     @PostMapping("/create")
-    public Transaction create(@RequestBody Transaction transaction){
-        return new Transaction();
+    public TransactionDto create(@RequestBody TransactionDto dto){
+        return transactionService.create(dto);
     }
 
     @GetMapping("/getAll")
-    public List<Transaction> getAll(){
-        return new ArrayList<>();
+    public List<TransactionDto> getAll(){
+        return transactionService.getAll();
     }
 
-    @GetMapping("/get/{transactionId}")
-    public Transaction get(@PathVariable long transactionId){
-        return new Transaction();
+    @GetMapping("/get/{id}")
+    public TransactionDto get(@PathVariable long id){
+        return transactionService.get(id);
     }
 
     @PutMapping("/update")
-    public Transaction update(@RequestBody Transaction transaction){
-        return new Transaction();
+    public TransactionDto update(@RequestBody TransactionDto dto){
+        return transactionService.update(dto);
     }
 
-    @DeleteMapping("/delete/{transactionId}")
-    public boolean delete(@PathVariable long transactionId){
-        return true;
+    @DeleteMapping("/delete/{id}")
+    public boolean delete(@PathVariable long id){
+        return transactionService.delete(id);
     }
 }
