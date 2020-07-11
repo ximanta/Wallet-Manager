@@ -165,7 +165,7 @@ public class TransactionServiceTest {
         List<Transaction> transactions = givenFindByDate();
 
         //When
-        List<TransactionDto> fromDb = transactionService.findByDate(Date.valueOf("2020-06-20"));
+        List<TransactionDto> fromDb = transactionService.findByDate("2020-06-20");
         for (Transaction transaction: transactions) {
             transactionRepository.delete(transaction);
         }
@@ -226,7 +226,7 @@ public class TransactionServiceTest {
         List<Transaction> transactions = givenSelectedMonth();
 
         //When
-        List<TransactionDto> transactionDtos = transactionService.selectedMonth(5,2019);
+        List<TransactionDto> transactionDtos = transactionService.selectedMonth("2019-05");
         for (Transaction transaction: transactions) {
             transactionRepository.delete(transaction);
         }
@@ -249,11 +249,9 @@ public class TransactionServiceTest {
     public void betweenDate() {
         //Given
         List<Transaction> transactions = givenBetweenDate();
-        Date date1 = Date.valueOf("2019-03-05");
-        Date date2 = Date.valueOf("2019-05-20");
 
         //When
-        List<TransactionDto> transactionDtos = transactionService.betweenDate(date1,date2);
+        List<TransactionDto> transactionDtos = transactionService.betweenDate("2019-03-05","2019-05-20");
         for (Transaction transaction: transactions) {
             transactionRepository.delete(transaction);
         }

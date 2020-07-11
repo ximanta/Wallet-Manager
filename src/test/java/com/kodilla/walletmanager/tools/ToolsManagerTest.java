@@ -1,6 +1,5 @@
 package com.kodilla.walletmanager.tools;
 
-import com.kodilla.walletmanager.domain.Category;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.dto.CategoryDto;
 import com.kodilla.walletmanager.dto.TransactionDto;
@@ -8,6 +7,8 @@ import org.junit.Test;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -109,11 +110,54 @@ public class ToolsManagerTest {
         isCorrect = ToolsManager.isTheSameEnum(enum1,null);
         assertFalse(isCorrect);
 
-        isCorrect = ToolsManager.isTheSameEnum(null,null);
-        assertFalse(isCorrect);
-
         enum2 = TransactionType.EXPENSES;
         isCorrect = ToolsManager.isTheSameEnum(enum1,enum2);
         assertTrue(isCorrect);
+    }
+
+    @Test
+    public void sortByType(){
+        //Given
+        CategoryDto category = new CategoryDto();
+        category.setType(TransactionType.EXPENSES);
+        TransactionDto dtoE = new TransactionDto.TransactionDtoBuilder()
+                .title("Test")
+                .description("Test Description")
+                .date(Date.valueOf(LocalDate.now()))
+                .type(TransactionType.EXPENSES)
+                .amount(50)
+                .category(category).build();
+
+        category.setType(TransactionType.REVENUES);
+        TransactionDto dtoR = new TransactionDto.TransactionDtoBuilder()
+                .title("Test")
+                .description("Test Description")
+                .date(Date.valueOf(LocalDate.now()))
+                .type(TransactionType.REVENUES)
+                .amount(50)
+                .category(category).build();
+
+        List<TransactionDto> dtos = new ArrayList<>();
+        dtos.add(dtoE);
+        dtos.add(dtoE);
+        dtos.add(dtoR);
+        dtos.add(dtoR);
+        dtos.add(dtoR);
+
+        //When
+        List<TransactionDto> all = ToolsManager.sortByType(dtos,"A");
+        List<TransactionDto> revenues = ToolsManager.sortByType(dtos,"R");
+        List<TransactionDto> expenses = ToolsManager.sortByType(dtos,"E");
+
+        //Then
+        assertEquals(5,all.size());
+        assertEquals(3,revenues.size());
+        assertEquals(2,expenses.size());
+        for (TransactionDto dto: revenues) {
+            assertEquals(TransactionType.REVENUES,dto.getType());
+        }
+        for (TransactionDto dto: expenses) {
+            assertEquals(TransactionType.EXPENSES,dto.getType());
+        }
     }
 }
