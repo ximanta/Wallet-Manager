@@ -10,9 +10,11 @@ import java.util.List;
 
 @Component
 public class ToolsManager {
-    public static final String R = "R";
-    public static final String E = "E";
-    public static final String A = "A";
+
+    public static final String REV = "REV";
+    public static final String EXP = "EXP";
+    public static final String ALL = "ALL";
+
 
     public static double positiveTenthRoundDouble(double d){
         if (d < 0){
@@ -50,9 +52,9 @@ public class ToolsManager {
 
     public static List<TransactionDto> sortByType(List<TransactionDto> dtos,String type){
         switch (type){
-            case A:
+            case ALL:
                 return dtos;
-            case R:
+            case REV:
                 List<TransactionDto> revenues = new ArrayList<>();
                 for (TransactionDto dto:dtos) {
                     if (dto.getType() == TransactionType.REVENUES){
@@ -60,7 +62,7 @@ public class ToolsManager {
                     }
                 }
                 return revenues;
-            case E:
+            case EXP:
                 List<TransactionDto> expenses = new ArrayList<>();
                 for (TransactionDto dto:dtos) {
                     if (dto.getType().equals(TransactionType.EXPENSES)){
