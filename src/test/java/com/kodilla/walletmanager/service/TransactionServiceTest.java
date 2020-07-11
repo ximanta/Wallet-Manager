@@ -45,8 +45,12 @@ public class TransactionServiceTest {
     @Test
     public void create() {
         //When
+        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
+        Category formDb = categoryRepository.save(category);
+        CategoryDto fromDbDto = categoryMapper.mapToDto(formDb);
         TransactionDto transactionDto = classesFactory.makeTransactionDto(ClassesFactory.COMPLETE);
         transactionDto.setDate(Date.valueOf("2020-06-20"));
+        transactionDto.setCategoryDto(fromDbDto);
         TransactionDto fromDb = transactionService.create(transactionDto);
         transactionRepository.deleteById(fromDb.getId());
 
@@ -76,9 +80,9 @@ public class TransactionServiceTest {
         categoryRepository.delete(transactions.get(0).getCategory());
 
         //Then
+        assertFalse(categoryRepository.existsById(transactionDtos.get(0).getCategoryDto().getId()));
         for (TransactionDto transaction: transactionDtos) {
             assertFalse(transactionRepository.existsById(transaction.getId()));
-            assertFalse(categoryRepository.existsById(transaction.getCategoryDto().getId()));
         }
         assertEquals(3,transactionDtos.size());
     }
@@ -86,8 +90,11 @@ public class TransactionServiceTest {
     @Test
     public void get() {
         //Given
+        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
+        Category formDb = categoryRepository.save(category);
         Transaction transaction = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
         transaction.setDate(Date.valueOf("2020-06-20"));
+        transaction.setCategory(formDb);
 
         Transaction toDb = transactionRepository.save(transaction);
         long transactionId = toDb.getId();
@@ -111,7 +118,10 @@ public class TransactionServiceTest {
     @Test
     public void update() {
         //Given
+        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
+        Category formDb = categoryRepository.save(category);
         Transaction transaction = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        transaction.setCategory(formDb);
         Transaction toDb = transactionRepository.save(transaction);
         long transactionId = toDb.getId();
         CategoryDto categoryDto = categoryMapper.mapToDto(toDb.getCategory());
@@ -146,7 +156,10 @@ public class TransactionServiceTest {
     @Test
     public void delete() {
         //Given
+        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
+        Category formDb = categoryRepository.save(category);
         Transaction transaction = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        transaction.setCategory(formDb);
         Transaction fromDb = transactionRepository.save(transaction);
         long transactionId = fromDb.getId();
 
@@ -355,12 +368,13 @@ public class TransactionServiceTest {
         List<Transaction> transactions = new ArrayList<>();
 
         Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
+        Category fromDb = categoryRepository.save(category);
         Transaction transaction1 = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
         Transaction transaction2 = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
         Transaction transaction3 = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
-        transaction1.setCategory(category);
-        transaction2.setCategory(category);
-        transaction3.setCategory(category);
+        transaction1.setCategory(fromDb);
+        transaction2.setCategory(fromDb);
+        transaction3.setCategory(fromDb);
 
         transactions.add(transaction1);
         transactions.add(transaction2);

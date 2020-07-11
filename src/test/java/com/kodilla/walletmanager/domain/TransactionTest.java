@@ -102,7 +102,7 @@ public class TransactionTest {
         Category category = new Category();
         category.setName("Test");
         category.setType(TransactionType.REVENUES);
-
+        categoryRepository.save(category);
         return category;
     }
 }
