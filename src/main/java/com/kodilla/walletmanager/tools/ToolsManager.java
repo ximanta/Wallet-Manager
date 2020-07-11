@@ -5,9 +5,14 @@ import com.kodilla.walletmanager.dto.TransactionDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ToolsManager {
+    public static final String REV = "REV";
+    public static final String EXP = "EXP";
+    public static final String ALL = "ALL";
 
     public static double positiveTenthRoundDouble(double d){
         if (d < 0){
@@ -41,6 +46,31 @@ public class ToolsManager {
 
     public static boolean isTheSameEnum(TransactionType first, TransactionType second){
         return  first != null && first == second;
+    }
+
+    public static List<TransactionDto> sortByType(List<TransactionDto> dtos,String type){
+        switch (type){
+            case ALL:
+                return dtos;
+            case REV:
+                List<TransactionDto> revenues = new ArrayList<>();
+                for (TransactionDto dto:dtos) {
+                    if (dto.getType() == TransactionType.REVENUES){
+                        revenues.add(dto);
+                    }
+                }
+                return revenues;
+            case EXP:
+                List<TransactionDto> expenses = new ArrayList<>();
+                for (TransactionDto dto:dtos) {
+                    if (dto.getType().equals(TransactionType.EXPENSES)){
+                        expenses.add(dto);
+                    }
+                }
+                return expenses;
+            default:
+                return new ArrayList<>();
+        }
     }
 
 }
