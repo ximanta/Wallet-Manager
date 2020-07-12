@@ -86,7 +86,6 @@ public final class ClassesFactory {
                     CategoryDto categoryDto = new CategoryDto();
                     categoryDto.setName("Test");
                     categoryDto.setType(TransactionType.REVENUES);
-                    categoryDto.setTransactionDtos(new HashSet<>());
                     return categoryDto;
                 case INCOMPLETE:
                     CategoryDto icCategoryDto = new CategoryDto();

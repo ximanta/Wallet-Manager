@@ -107,11 +107,9 @@ public class ClassesFactoryTest {
         assertNull(complete.getId());
         assertEquals("Test",complete.getName());
         assertEquals(TransactionType.REVENUES,complete.getType());
-        assertNotNull(complete.getTransactionDtos());
 
         assertNull(incomplete.getId());
         assertEquals("Test",incomplete.getName());
         assertEquals(TransactionType.REVENUES,incomplete.getType());
-        assertNotNull(incomplete.getTransactionDtos());
     }
 }

@@ -54,7 +54,6 @@ public class CategoryMapperTest {
         assertNull(categoryDto.getId());
         assertEquals("Test",categoryDto.getName());
         assertEquals(TransactionType.REVENUES,categoryDto.getType());
-        assertEquals(0,categoryDto.getTransactionDtos().size());
     }
 
     @Test

@@ -10,8 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
-import java.util.HashSet;
-
 import static org.junit.Assert.*;
 
 @Transactional
@@ -27,7 +25,6 @@ public class CategoryTest {
         Category category = new Category();
         category.setName("Test");
         category.setType(TransactionType.EXPENSES);
-        category.setTransactions(new HashSet<>());
 
         categoryRepository.save(category);
 
