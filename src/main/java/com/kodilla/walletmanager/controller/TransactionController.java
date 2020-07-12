@@ -23,7 +23,7 @@ public class TransactionController {
     @GetMapping("/getAll")
     public List<TransactionDto> getAll(@RequestParam(value = "type",required = false) String type){
         List<TransactionDto> dtos = transactionService.getAll();
-        return ToolsManager.sortByType(dtos,type);
+        return ToolsManager.sortByTypeT(dtos,type);
     }
 
     @GetMapping("/get/{id}")
@@ -46,26 +46,26 @@ public class TransactionController {
     public List<TransactionDto> findByDate(@PathVariable String date,
                                            @RequestParam(value = "type",required = false) String type){
         List<TransactionDto> dtos = transactionService.findByDate(date);
-        return ToolsManager.sortByType(dtos,type);
+        return ToolsManager.sortByTypeT(dtos,type);
     }
 
     @GetMapping("/thisWeek")
     public List<TransactionDto> thisWeek(@RequestParam(value = "type",required = false) String type){
         List<TransactionDto> dtos = transactionService.thisWeek();
-        return ToolsManager.sortByType(dtos,type);
+        return ToolsManager.sortByTypeT(dtos,type);
     }
 
     @GetMapping("/thisMonth")
     public List<TransactionDto> thisMonth(@RequestParam(value = "type",required = false) String type){
         List<TransactionDto> dtos = transactionService.thisMonth();
-        return ToolsManager.sortByType(dtos,type);
+        return ToolsManager.sortByTypeT(dtos,type);
     }
 
     @GetMapping("/selectedMonth/{year_month}")
     public List<TransactionDto> selectedMonth(@PathVariable String year_month,
                                               @RequestParam(value = "type",required = false) String type){
         List<TransactionDto> dtos = transactionService.selectedMonth(year_month);
-        return ToolsManager.sortByType(dtos,type);
+        return ToolsManager.sortByTypeT(dtos,type);
     }
 
     @GetMapping("/betweenDate/{fromDate}/{toDate}")
@@ -73,6 +73,6 @@ public class TransactionController {
                                             @PathVariable String toDate,
                                             @RequestParam(value = "type",required = false)String type) {
         List<TransactionDto> dtos = transactionService.betweenDate(fromDate, toDate);
-        return ToolsManager.sortByType(dtos,type);
+        return ToolsManager.sortByTypeT(dtos,type);
     }
 }

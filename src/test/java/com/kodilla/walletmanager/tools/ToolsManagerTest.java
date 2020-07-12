@@ -116,7 +116,7 @@ public class ToolsManagerTest {
     }
 
     @Test
-    public void sortByType(){
+    public void sortByTypeT(){
         //Given
         CategoryDto category = new CategoryDto();
         category.setType(TransactionType.EXPENSES);
@@ -145,18 +145,56 @@ public class ToolsManagerTest {
         dtos.add(dtoR);
 
         //When
-        List<TransactionDto> all = ToolsManager.sortByType(dtos,"");
-        List<TransactionDto> revenues = ToolsManager.sortByType(dtos,"REV");
-        List<TransactionDto> expenses = ToolsManager.sortByType(dtos,"EXP");
+        List<TransactionDto> all = ToolsManager.sortByTypeT(dtos,"");
+        List<TransactionDto> revenues = ToolsManager.sortByTypeT(dtos,"REV");
+        List<TransactionDto> expenses = ToolsManager.sortByTypeT(dtos,"EXP");
 
         //Then
-        assertEquals(5,all.size());
+        assertEquals(0,all.size());
         assertEquals(3,revenues.size());
         assertEquals(2,expenses.size());
         for (TransactionDto dto: revenues) {
             assertEquals(TransactionType.REVENUES,dto.getType());
         }
         for (TransactionDto dto: expenses) {
+            assertEquals(TransactionType.EXPENSES,dto.getType());
+        }
+    }
+
+    @Test
+    public void sortByTypeC(){
+        //Given
+        CategoryDto category1 = new CategoryDto();
+        CategoryDto category2 = new CategoryDto();
+        CategoryDto category3 = new CategoryDto();
+        CategoryDto category4 = new CategoryDto();
+        CategoryDto category5 = new CategoryDto();
+        category1.setType(TransactionType.EXPENSES);
+        category2.setType(TransactionType.EXPENSES);
+        category3.setType(TransactionType.REVENUES);
+        category4.setType(TransactionType.REVENUES);
+        category5.setType(TransactionType.REVENUES);
+
+        List<CategoryDto> dtos = new ArrayList<>();
+        dtos.add(category1);
+        dtos.add(category2);
+        dtos.add(category3);
+        dtos.add(category4);
+        dtos.add(category5);
+
+        //When
+        List<CategoryDto> all = ToolsManager.sortByTypeC(dtos,"");
+        List<CategoryDto> revenues = ToolsManager.sortByTypeC(dtos,"REV");
+        List<CategoryDto> expenses = ToolsManager.sortByTypeC(dtos,"EXP");
+
+        //Then
+        assertEquals(0,all.size());
+        assertEquals(3,revenues.size());
+        assertEquals(2,expenses.size());
+        for (CategoryDto dto: revenues) {
+            assertEquals(TransactionType.REVENUES,dto.getType());
+        }
+        for (CategoryDto dto: expenses) {
             assertEquals(TransactionType.EXPENSES,dto.getType());
         }
     }
