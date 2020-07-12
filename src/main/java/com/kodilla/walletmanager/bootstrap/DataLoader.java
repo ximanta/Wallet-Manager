@@ -27,6 +27,8 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        transactionRepository.deleteAll();
+        categoryRepository.deleteAll();
         List<Transaction> transactions = transactionRepository.findAll();
         List<Category> categories = categoryRepository.findAll();
         boolean areEmpty = transactions.isEmpty() && categories.isEmpty();
