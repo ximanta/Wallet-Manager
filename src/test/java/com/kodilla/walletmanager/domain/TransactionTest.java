@@ -49,8 +49,8 @@ public class TransactionTest {
         assertEquals(today.getYear(),fromDb.getDate().toLocalDate().getYear());
 
         assertNotNull(fromDb.getCategory().getId());
-        assertEquals(createdCategory().getName(),fromDb.getCategory().getName());
-        assertEquals(createdCategory().getType(),fromDb.getCategory().getType());
+        assertEquals(transaction.getCategory().getName(),fromDb.getCategory().getName());
+        assertEquals(transaction.getCategory().getType(),fromDb.getCategory().getType());
 
         assertFalse(transactionRepository.existsById(transaction.getId()));
         assertFalse(categoryRepository.existsById(fromDb.getCategory().getId()));

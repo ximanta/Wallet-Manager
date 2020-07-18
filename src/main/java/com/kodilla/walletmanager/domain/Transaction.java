@@ -52,7 +52,7 @@ public class Transaction {
     @Column
     private String description;
 
-    @Column
+    @Column(precision = 2, length = 25)
     private double amount;
 
     @NotNull

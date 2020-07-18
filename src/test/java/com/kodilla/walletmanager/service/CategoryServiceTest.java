@@ -1,7 +1,6 @@
 package com.kodilla.walletmanager.service;
 
 import com.kodilla.walletmanager.domain.Category;
-import com.kodilla.walletmanager.domain.Transaction;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.dto.CategoryDto;
 import com.kodilla.walletmanager.mapper.CategoryMapper;

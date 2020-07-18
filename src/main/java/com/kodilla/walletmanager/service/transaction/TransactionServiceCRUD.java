@@ -1,7 +1,9 @@
 package com.kodilla.walletmanager.service.transaction;
 
+import com.kodilla.walletmanager.domain.Category;
 import com.kodilla.walletmanager.domain.Transaction;
 import com.kodilla.walletmanager.dto.TransactionDto;
+import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.mapper.TransactionMapper;
 import com.kodilla.walletmanager.repository.TransactionRepository;
 import com.kodilla.walletmanager.tools.ToolsManager;
@@ -15,6 +17,9 @@ import java.util.Optional;
 public class TransactionServiceCRUD {
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @Autowired
     private TransactionMapper transactionMapper;
@@ -66,12 +71,14 @@ public class TransactionServiceCRUD {
     private TransactionDto updateMechanic(TransactionDto transactionDto){
         Optional<Transaction> optional = transactionRepository.findById(transactionDto.getId());
         if (optional.isPresent()){
+            Category category = categoryMapper.mapToEntity(transactionDto.getCategoryDto());
             Transaction transaction = optional.get();
             transaction.setTitle(transactionDto.getTitle());
             transaction.setDescription(transactionDto.getDescription());
             transaction.setType(transactionDto.getType());
             transaction.setDate(transactionDto.getDate());
             transaction.setAmount(transactionDto.getAmount());
+            transaction.setCategory(category);
             transactionRepository.save(transaction);
             return transactionMapper.mapToDto(transaction);
         }else {
