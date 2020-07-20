@@ -21,7 +21,7 @@ public class User {
     private String emile;
 
     @NotNull
-    @Column(precision = 2, length = 25)
+    @Column(precision = 2, length = 25, scale = 2)
     private double balance;
 
     @Override
