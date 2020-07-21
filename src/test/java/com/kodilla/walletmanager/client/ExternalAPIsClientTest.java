@@ -1,5 +1,7 @@
 package com.kodilla.walletmanager.client;
 
+import com.kodilla.walletmanager.json.CurrencyJson;
+import com.kodilla.walletmanager.json.RatesJson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -9,10 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -24,19 +24,29 @@ public class ExternalAPIsClientTest {
     private ExternalAPIsClient client;
 
     @Test
-    public void bitcoinPrice() throws URISyntaxException {
-        //Given
-        String price = "150";
-        URI uri = new URI("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=USD");
+    public void bitcoinPrice() {
 
-        when(template.getForEntity("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=USD",String.class)).thenReturn(new ResponseEntity<>(HttpStatus.OK));
-
-        //When
-        Double d = client.bitcoinPrice();
-        System.out.println(d);
     }
 
     @Test
     public void getCurrenciesValues() {
+        //Given
+        CurrencyJson currencyJson = new CurrencyJson();
+        currencyJson.setDate("2020-05-05");
+        currencyJson.setBase("USD");
+        currencyJson.setRates(new RatesJson());
+
+        ResponseEntity<CurrencyJson> entity = new ResponseEntity<>(currencyJson, HttpStatus.OK);
+
+        //When
+        when(template.getForEntity(
+                "https://api.exchangeratesapi.io/latest?base=USD",
+                CurrencyJson.class)).thenReturn(entity);
+        CurrencyJson json = client.getCurrenciesValues();
+
+        //Then
+        assertEquals("2020-05-05",json.getDate());
+        assertEquals("USD",json.getBase());
+        assertNotNull(json.getRates());
     }
 }
