@@ -33,7 +33,7 @@ public class TransactionMapperTest {
     @Test
     public void mapToEntity() {
         //Given
-        TransactionDto transactionDto = factory.makeTransactionDto(ClassesFactory.COMPLETE);
+        TransactionDto transactionDto = factory.transactionDto();
 
         //When
         Transaction transaction = transactionMapper.mapToEntity(transactionDto);
@@ -51,7 +51,7 @@ public class TransactionMapperTest {
     @Test
     public void mapToDto() {
         //Given
-        Transaction transaction = factory.makeTransaction(ClassesFactory.COMPLETE);
+        Transaction transaction = factory.transaction();
 
         //When
         TransactionDto transactionDto = transactionMapper.mapToDto(transaction);
@@ -68,7 +68,10 @@ public class TransactionMapperTest {
 
     @Test
     public void mapToDtos() {
-        List<Transaction> transactions = factory.makeTransactionList(ClassesFactory.FIVEOBJECT);
+        List<Transaction> transactions = new ArrayList<>();
+        for (int i = 1; i <= 3; i++){
+            transactions.add(factory.transaction());
+        }
 
         //When
         List<TransactionDto> transactionDtos = transactionMapper.mapToDtos(transactions);
@@ -80,7 +83,7 @@ public class TransactionMapperTest {
         assertEquals("Test",transactionDto.getTitle());
         assertEquals("Test Description",transactionDto.getDescription());
         assertEquals(50,transactionDto.getAmount(),0);
-        assertEquals(5,transactionDtos.size());
+        assertEquals(3,transactionDtos.size());
     }
 
     @Test
@@ -96,6 +99,6 @@ public class TransactionMapperTest {
     }
 
     private Category createdCategory(){
-        return factory.makeCategory(ClassesFactory.COMPLETE);
+        return factory.category();
     }
 }

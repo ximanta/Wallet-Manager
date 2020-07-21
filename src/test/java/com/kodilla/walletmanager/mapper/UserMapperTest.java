@@ -2,6 +2,7 @@ package com.kodilla.walletmanager.mapper;
 
 import com.kodilla.walletmanager.domain.User;
 import com.kodilla.walletmanager.dto.UserDto;
+import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,14 @@ public class UserMapperTest {
     @Autowired
     UserMapper mapper;
 
+    @Autowired
+    ClassesFactory factory;
+
     @Test
     public void mapToEntity() {
         //Given
-        UserDto dto = new UserDto();
+        UserDto dto = factory.userDto();
         dto.setId(1L);
-        dto.setBalance(-150.0);
-        dto.setEmile("test@gmail.com");
 
         //When
         User user = mapper.mapToEntity(dto);
@@ -34,39 +36,40 @@ public class UserMapperTest {
         //Then
         assertEquals(1L,user.getId(),0);
         assertEquals(-150,user.getBalance(),0);
-        assertEquals("test@gmail.com",user.getEmile());
+        assertEquals("test@email.com",user.getEmile());
     }
 
     @Test
     public void mapToDto() {
         //Given
-        User user = createUser();
+        User user = factory.user();
+        user.setId(1L);
 
         //When
         UserDto dto = mapper.mapToDto(user);
 
+
         //Then
         assertEquals(1L,dto.getId(),0);
         assertEquals(-150,dto.getBalance(),0);
-        assertEquals("test@gmail.com",dto.getEmile());
+        assertEquals("test@email.com",dto.getEmile());
     }
 
     @Test
     public void mapToDtos() {
         //Given
         List<User> users = new ArrayList<>();
-        users.add(createUser());
-        users.add(createUser());
-        users.add(createUser());
+        for (int i = 1; i <= 3; i++){
+            users.add(factory.user());
+        }
 
         //When
         List<UserDto> dtos = mapper.mapToDtos(users);
         UserDto dto = dtos.get(0);
 
         //Then
-        assertEquals(1L,dto.getId(),0);
         assertEquals(-150,dto.getBalance(),0);
-        assertEquals("test@gmail.com",dto.getEmile());
+        assertEquals("test@email.com",dto.getEmile());
         assertEquals(3,dtos.size());
     }
 
@@ -80,14 +83,5 @@ public class UserMapperTest {
 
         //Then
         assertTrue(dtos.isEmpty());
-    }
-
-    private User createUser(){
-        User user = new User();
-        user.setId(1L);
-        user.setBalance(-150.0);
-        user.setEmile("test@gmail.com");
-
-        return user;
     }
 }

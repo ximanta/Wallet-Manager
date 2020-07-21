@@ -43,7 +43,7 @@ public class TransactionDto {
                 '}';
     }
 
-    public static class TransactionDtoBuilder{
+    public static class TransactionDtoBuilder {
         private Long id;
         private Date date =  new Date(new java.util.Date().getTime());
         private TransactionType type;

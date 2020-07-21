@@ -90,7 +90,7 @@ public class Transaction {
         }
     }
 
-    public static class TransactionBuilder{
+    public static class TransactionBuilder {
         private Long id;
         private Date date =  new Date(new java.util.Date().getTime());
         private TransactionType type;

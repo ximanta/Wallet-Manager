@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-import java.sql.Date;
 import java.time.LocalDate;
 
 import static org.junit.Assert.*;
@@ -70,12 +69,12 @@ public class TransactionTest {
     }
 
     private Transaction createTransaction(){
-        Transaction transaction = factory.makeTransaction(ClassesFactory.COMPLETE);
+        Transaction transaction = factory.transaction();
         transaction.setCategory(createdCategory());
         return transactionRepository.save(transaction);
     }
 
     private Category createdCategory(){
-        return categoryRepository.save(factory.makeCategory(ClassesFactory.COMPLETE));
+        return categoryRepository.save(factory.category());
     }
 }

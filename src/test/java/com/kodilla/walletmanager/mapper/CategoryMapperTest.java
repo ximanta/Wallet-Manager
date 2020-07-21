@@ -19,18 +19,18 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class CategoryMapperTest {
     @Autowired
-    CategoryMapper categoryMapper;
+    CategoryMapper mapper;
 
     @Autowired
-    ClassesFactory classesFactory;
+    ClassesFactory factory;
 
     @Test
     public void mapToEntity() {
         //Given
-        CategoryDto categoryDto = classesFactory.makeCategoryDto(ClassesFactory.COMPLETE);
+        CategoryDto categoryDto = factory.categoryDto();
 
         //When
-        Category category = categoryMapper.mapToEntity(categoryDto);
+        Category category = mapper.mapToEntity(categoryDto);
 
         //Then
         assertNull(category.getId());
@@ -41,10 +41,10 @@ public class CategoryMapperTest {
 
     @Test
     public void mapToDto() {
-        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
+        Category category = factory.category();
 
         //When
-        CategoryDto categoryDto = categoryMapper.mapToDto(category);
+        CategoryDto categoryDto = mapper.mapToDto(category);
 
         //Then
         assertNull(categoryDto.getId());
@@ -56,17 +56,15 @@ public class CategoryMapperTest {
     public void mapToDtos() {
         //Given
         List<Category> categories = new ArrayList<>();
-        Category category1 = classesFactory.makeCategory(ClassesFactory.COMPLETE);
-        Category category2 = classesFactory.makeCategory(ClassesFactory.COMPLETE);
-
-        categories.add(category1);
-        categories.add(category2);
+        for (int i = 1; i <= 3; i++){
+            categories.add(factory.category());
+        }
 
         //When
-        List<CategoryDto> categoryDtos = categoryMapper.mapToDtos(categories);
+        List<CategoryDto> categoryDtos = mapper.mapToDtos(categories);
 
         //Then
-        assertEquals(2,categoryDtos.size());
+        assertEquals(3,categoryDtos.size());
     }
 
     @Test
@@ -75,7 +73,7 @@ public class CategoryMapperTest {
         List<Category> categories = new ArrayList<>();
 
         //When
-        List<CategoryDto> categoryDtos = categoryMapper.mapToDtos(categories);
+        List<CategoryDto> categoryDtos = mapper.mapToDtos(categories);
 
         //Then
         assertTrue(categoryDtos.isEmpty());

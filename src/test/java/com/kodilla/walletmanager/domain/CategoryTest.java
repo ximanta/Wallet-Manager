@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class CategoryTest {
     @Autowired
-    CategoryRepository categoryRepository;
+    CategoryRepository repository;
 
     @Autowired
     ClassesFactory factory;
@@ -26,18 +26,18 @@ public class CategoryTest {
     @Test
     public void createCompleteRecordTest(){
         //Given
-        Category category = factory.makeCategory(ClassesFactory.COMPLETE);
-        categoryRepository.save(category);
+        Category category = factory.category();
+        repository.save(category);
 
         //When
-        Category fromDb = categoryRepository.getOne(category.getId());
-        categoryRepository.delete(category);
+        Category fromDb = repository.getOne(category.getId());
+        repository.delete(category);
 
         //Then
         assertEquals("Test",fromDb.getName());
         assertEquals(TransactionType.REVENUES,fromDb.getType());
         assertTrue(fromDb.getTransactions().isEmpty());
-        assertFalse(categoryRepository.existsById(category.getId()));
+        assertFalse(repository.existsById(category.getId()));
     }
 
 }

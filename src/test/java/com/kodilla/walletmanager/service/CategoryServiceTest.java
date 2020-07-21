@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -34,7 +35,7 @@ public class CategoryServiceTest {
     @Test
     public void create() {
         //Given
-        CategoryDto categoryDto = factory.makeCategoryDto(ClassesFactory.COMPLETE);
+        CategoryDto categoryDto = factory.categoryDto();
 
         //When
         CategoryDto fromDb = service.create(categoryDto);
@@ -49,28 +50,29 @@ public class CategoryServiceTest {
     @Test
     public void getAll() {
         //Given
-        Category A = factory.makeCategory(ClassesFactory.COMPLETE);
-        Category B = factory.makeCategory(ClassesFactory.COMPLETE);
+        List<Category> categories = new ArrayList<>();
+        for (int i = 0; i <= 3; i++){
+            categories.add(repository.save(factory.category()));
+        }
 
         //When
-        Category Db1 = repository.save(A);
-        Category Db2 = repository.save(B);
-
         List<CategoryDto> dtos = service.getAll(null);
-        repository.delete(Db1);
-        repository.delete(Db2);
+        System.out.println(dtos);
+        for (Category category: categories) {
+            repository.delete(category);
+        }
 
         //Then
-        assertFalse(repository.existsById(Db1.getId()));
-        assertFalse(repository.existsById(Db2.getId()));
+        for (Category category: categories) {
+            assertFalse(repository.existsById(category.getId()));
+        }
         assertFalse(dtos.isEmpty());
     }
 
     @Test
     public void get() {
         //Given
-        Category category = factory.makeCategory(ClassesFactory.COMPLETE);
-        Category fromDb = repository.save(category);
+        Category fromDb = repository.save(factory.category());
 
         //When
         CategoryDto categoryDto = service.get(fromDb.getId());
@@ -85,8 +87,7 @@ public class CategoryServiceTest {
     @Test
     public void update() {
         //Given
-        Category category = factory.makeCategory(ClassesFactory.COMPLETE);
-        Category fromDb = repository.save(category);
+        Category fromDb = repository.save(factory.category());
         CategoryDto dto = mapper.mapToDto(fromDb);
         dto.setName("Test update");
         dto.setType(TransactionType.EXPENSES);
@@ -105,8 +106,7 @@ public class CategoryServiceTest {
     @Test
     public void delete() {
         //When
-        Category category = factory.makeCategory(ClassesFactory.COMPLETE);
-        Category fromDb = repository.save(category);
+        Category fromDb = repository.save(factory.category());
 
         //When
         service.delete(fromDb.getId());

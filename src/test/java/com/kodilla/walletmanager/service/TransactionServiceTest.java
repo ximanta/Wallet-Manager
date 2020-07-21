@@ -37,25 +37,26 @@ public class TransactionServiceTest {
     CategoryRepository categoryRepository;
 
     @Autowired
-    CategoryMapper categoryMapper;
+    CategoryMapper mapper;
 
     @Autowired
-    ClassesFactory classesFactory;
+    ClassesFactory factory;
 
     @Test
     public void create() {
         //When
-        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
-        Category formDb = categoryRepository.save(category);
-        CategoryDto fromDbDto = categoryMapper.mapToDto(formDb);
-        TransactionDto transactionDto = classesFactory.makeTransactionDto(ClassesFactory.COMPLETE);
+        Category category = categoryRepository.save(factory.category());
+        CategoryDto fromDbDto = mapper.mapToDto(category);
+        TransactionDto transactionDto = factory.transactionDto();
         transactionDto.setDate(Date.valueOf("2020-06-20"));
         transactionDto.setCategoryDto(fromDbDto);
         TransactionDto fromDb = transactionService.create(transactionDto);
         transactionRepository.deleteById(fromDb.getId());
+        categoryRepository.delete(category);
 
         //Then
         assertFalse(transactionRepository.existsById(fromDb.getId()));
+        assertFalse(categoryRepository.existsById(category.getId()));
         assertNotNull(fromDb.getId());
         assertEquals("Test",fromDb.getTitle());
         assertEquals("Test Description",fromDb.getDescription());
@@ -90,9 +91,8 @@ public class TransactionServiceTest {
     @Test
     public void get() {
         //Given
-        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
-        Category formDb = categoryRepository.save(category);
-        Transaction transaction = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        Category formDb = categoryRepository.save(factory.category());
+        Transaction transaction = factory.transaction();
         transaction.setDate(Date.valueOf("2020-06-20"));
         transaction.setCategory(formDb);
 
@@ -118,14 +118,12 @@ public class TransactionServiceTest {
     @Test
     public void update() {
         //Given
-        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
-        Category formDb = categoryRepository.save(category);
-        Transaction transaction = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
+        Category formDb = categoryRepository.save(factory.category());
+        Transaction transaction = factory.transaction();
         transaction.setCategory(formDb);
         Transaction toDb = transactionRepository.save(transaction);
         long transactionId = toDb.getId();
-        CategoryDto categoryDto = categoryMapper.mapToDto(toDb.getCategory());
-
+        CategoryDto categoryDto = mapper.mapToDto(formDb);
 
         TransactionDto transactionDto = new TransactionDto.TransactionDtoBuilder()
                 .id(transactionId)
@@ -156,19 +154,17 @@ public class TransactionServiceTest {
     @Test
     public void delete() {
         //Given
-        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
-        Category formDb = categoryRepository.save(category);
-        Transaction transaction = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
-        transaction.setCategory(formDb);
+        Category category = categoryRepository.save(factory.category());
+        Transaction transaction = factory.transaction();
+        transaction.setCategory(category);
         Transaction fromDb = transactionRepository.save(transaction);
-        long transactionId = fromDb.getId();
 
         //When
-        transactionService.delete(transactionId);
+        transactionService.delete(fromDb.getId());
         categoryRepository.delete(fromDb.getCategory());
 
         //Then
-        assertFalse(transactionRepository.existsById(transactionId));
+        assertFalse(transactionRepository.existsById(fromDb.getId()));
         assertFalse(categoryRepository.existsById(fromDb.getCategory().getId()));
     }
 
@@ -366,19 +362,13 @@ public class TransactionServiceTest {
 
     private List<Transaction> transactionDefaultList(){
         List<Transaction> transactions = new ArrayList<>();
+        Category fromDb = categoryRepository.save(factory.category());
 
-        Category category = classesFactory.makeCategory(ClassesFactory.COMPLETE);
-        Category fromDb = categoryRepository.save(category);
-        Transaction transaction1 = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
-        Transaction transaction2 = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
-        Transaction transaction3 = classesFactory.makeTransaction(ClassesFactory.COMPLETE);
-        transaction1.setCategory(fromDb);
-        transaction2.setCategory(fromDb);
-        transaction3.setCategory(fromDb);
-
-        transactions.add(transaction1);
-        transactions.add(transaction2);
-        transactions.add(transaction3);
+        for (int i = 1; i <= 3; i++){
+            Transaction transaction = factory.transaction();
+            transaction.setCategory(fromDb);
+            transactions.add(transaction);
+        }
 
         return transactions;
     }

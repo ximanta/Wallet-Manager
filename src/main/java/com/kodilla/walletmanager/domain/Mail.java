@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Mail {
+public class Mail  {
     private String mailTo;
     private String subject;
     private String message;
