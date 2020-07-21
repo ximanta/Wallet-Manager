@@ -14,6 +14,6 @@ public class UserDto {
     private double balance;
 
     public void setBalance(double balance) {
-        this.balance = ToolsManager.positiveTenthRoundDouble(balance);
+        this.balance = ToolsManager.tenthRoundDouble(balance);
     }
 }

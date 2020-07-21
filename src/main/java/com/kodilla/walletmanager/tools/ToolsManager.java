@@ -18,12 +18,16 @@ public class ToolsManager {
         if (d < 0){
             System.out.println("Amount cannot be negative");
             return 0;
+        } else {
+            return tenthRoundDouble(d);
         }
-        else if((d * 100) - (long)(d * 100) != 0) {
+    }
+
+    public static double tenthRoundDouble(double d){
+        if((d * 100) - (long)(d * 100) != 0) {
             double tmp = Math.round(d) * 100;
             return tmp / 100 ;
-        }
-        else {
+        } else {
             return d;
         }
     }

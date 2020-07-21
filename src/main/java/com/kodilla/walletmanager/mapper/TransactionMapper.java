@@ -25,7 +25,6 @@ public class TransactionMapper {
                 .type(transactionDto.getType())
                 .date(transactionDto.getDate())
                 .category(category).build();
-
     }
 
     public TransactionDto mapToDto(Transaction transaction){

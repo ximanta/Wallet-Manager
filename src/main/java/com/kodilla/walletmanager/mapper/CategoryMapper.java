@@ -1,14 +1,11 @@
 package com.kodilla.walletmanager.mapper;
 
 import com.kodilla.walletmanager.domain.Category;
-import com.kodilla.walletmanager.domain.Transaction;
 import com.kodilla.walletmanager.dto.CategoryDto;
-import com.kodilla.walletmanager.dto.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,7 +27,6 @@ public class CategoryMapper {
         categoryDto.setId(category.getId());
         categoryDto.setName(category.getName());
         categoryDto.setType(category.getType());
-
 
         return categoryDto;
     }

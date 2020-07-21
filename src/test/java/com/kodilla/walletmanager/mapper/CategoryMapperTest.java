@@ -1,10 +1,8 @@
 package com.kodilla.walletmanager.mapper;
 
 import com.kodilla.walletmanager.domain.Category;
-import com.kodilla.walletmanager.domain.Transaction;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.dto.CategoryDto;
-import com.kodilla.walletmanager.dto.TransactionDto;
 import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,9 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -60,7 +56,6 @@ public class CategoryMapperTest {
     public void mapToDtos() {
         //Given
         List<Category> categories = new ArrayList<>();
-
         Category category1 = classesFactory.makeCategory(ClassesFactory.COMPLETE);
         Category category2 = classesFactory.makeCategory(ClassesFactory.COMPLETE);
 

@@ -20,6 +20,28 @@ public final class ClassesFactory {
     public static final String THREEOBJECT = "THREEOBJECT";
     public static final String FIVEOBJECT = "FIVEOBJECT";
 
+    public final Object makeClasses(String name){
+        switch (name){
+            case COMPLETE:
+                return new Transaction.TransactionBuilder()
+                        .title("Test")
+                        .description("Test Description")
+                        .date(Date.valueOf(LocalDate.now()))
+                        .type(TransactionType.REVENUES)
+                        .amount(50)
+                        .category(makeCategory(COMPLETE)).build();
+            case INCOMPLETE:
+                Category category = new Category();
+                category.setName("Test");
+                category.setType(TransactionType.REVENUES);
+                category.setTransactions(new HashSet<>());
+                return category;
+
+            default:
+                return null;
+        }
+    }
+
     public final Transaction makeTransaction(final String name){
         switch (name){
             case COMPLETE:
@@ -98,7 +120,7 @@ public final class ClassesFactory {
 
         }
 
-        public final List<Transaction> makeTranactionList(final String name){
+        public final List<Transaction> makeTransactionList(final String name){
             Transaction transaction1 = makeTransaction(ClassesFactory.COMPLETE);
             Transaction transaction2 = makeTransaction(ClassesFactory.COMPLETE);
             Transaction transaction3 = makeTransaction(ClassesFactory.COMPLETE);

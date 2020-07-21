@@ -2,6 +2,7 @@ package com.kodilla.walletmanager.domain;
 
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.repository.CategoryRepository;
+import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,13 @@ public class CategoryTest {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    ClassesFactory factory;
+
     @Test
     public void createCompleteRecordTest(){
         //Given
-        Category category = new Category();
-        category.setName("Test");
-        category.setType(TransactionType.EXPENSES);
-
+        Category category = factory.makeCategory(ClassesFactory.COMPLETE);
         categoryRepository.save(category);
 
         //When
@@ -34,7 +35,7 @@ public class CategoryTest {
 
         //Then
         assertEquals("Test",fromDb.getName());
-        assertEquals(TransactionType.EXPENSES,fromDb.getType());
+        assertEquals(TransactionType.REVENUES,fromDb.getType());
         assertTrue(fromDb.getTransactions().isEmpty());
         assertFalse(categoryRepository.existsById(category.getId()));
     }

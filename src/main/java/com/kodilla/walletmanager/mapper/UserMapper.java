@@ -1,6 +1,5 @@
 package com.kodilla.walletmanager.mapper;
 
-import com.kodilla.walletmanager.domain.Transaction;
 import com.kodilla.walletmanager.domain.User;
 import com.kodilla.walletmanager.dto.UserDto;
 import org.springframework.stereotype.Component;

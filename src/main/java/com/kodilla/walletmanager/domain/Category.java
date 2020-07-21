@@ -1,10 +1,9 @@
 package com.kodilla.walletmanager.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
