@@ -1,5 +1,7 @@
 package com.kodilla.walletmanager.tools;
 
+import com.kodilla.walletmanager.domain.builders.TransactionBuilder;
+import com.kodilla.walletmanager.domain.builders.TransactionDtoBuilder;
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
@@ -16,7 +18,7 @@ import java.time.LocalDate;
 public final class ClassesFactory {
 
     public Transaction transaction(){
-        return new Transaction.TransactionBuilder()
+        return new TransactionBuilder()
                 .title("Test")
                 .description("Test Description")
                 .date(Date.valueOf(LocalDate.now()))
@@ -27,7 +29,7 @@ public final class ClassesFactory {
     }
 
     public TransactionDto transactionDto(){
-        return new TransactionDto.TransactionDtoBuilder()
+        return new TransactionDtoBuilder()
                 .title("Test")
                 .description("Test Description")
                 .date(Date.valueOf(LocalDate.now()))
