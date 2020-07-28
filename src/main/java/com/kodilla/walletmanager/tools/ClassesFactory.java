@@ -2,6 +2,8 @@ package com.kodilla.walletmanager.tools;
 
 import com.kodilla.walletmanager.domain.builders.TransactionBuilder;
 import com.kodilla.walletmanager.domain.builders.TransactionDtoBuilder;
+import com.kodilla.walletmanager.domain.builders.UserBuilder;
+import com.kodilla.walletmanager.domain.builders.UserDtoBuilder;
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
@@ -23,9 +25,7 @@ public final class ClassesFactory {
                 .description("Test Description")
                 .date(Date.valueOf(LocalDate.now()))
                 .type(TransactionType.REVENUES)
-                .amount(50)
-                .category(category())
-                .build();
+                .amount(50).build();
     }
 
     public TransactionDto transactionDto(){
@@ -34,9 +34,7 @@ public final class ClassesFactory {
                 .description("Test Description")
                 .date(Date.valueOf(LocalDate.now()))
                 .type(TransactionType.REVENUES)
-                .amount(50)
-                .category(categoryDto())
-                .build();
+                .amount(50).build();
     }
 
     public Category category(){
@@ -54,16 +52,22 @@ public final class ClassesFactory {
     }
 
     public User user(){
-        User user = new User();
-        user.setBalance(-150);
-        user.setEmile("test@email.com");
-        return user;
+        return new UserBuilder()
+                .login("Test")
+                .password("Password")
+                .emile("test@email.com")
+                .birthDate(Date.valueOf("2000-02-20"))
+                .active(true)
+                .balance(-150).build();
     }
 
     public UserDto userDto(){
-        UserDto userDto = new UserDto();
-        userDto.setBalance(-150);
-        userDto.setEmile("test@email.com");
-        return userDto;
+        return new UserDtoBuilder()
+                .login("Test")
+                .password("Password")
+                .emile("test@email.com")
+                .birthDate(Date.valueOf("2000-02-20"))
+                .active(true)
+                .balance(-150).build();
     }
 }
