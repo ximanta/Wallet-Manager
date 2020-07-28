@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class UserMapper {
     public User mapToEntity(UserDto dto){
         return new UserBuilder()
+                .id(dto.getId())
                 .login(dto.getLogin())
                 .password(dto.getPassword())
                 .emile(dto.getEmile())
@@ -24,6 +25,7 @@ public class UserMapper {
 
     public UserDto mapToDto(User user){
         return new UserDtoBuilder()
+                .id(user.getId())
                 .login(user.getLogin())
                 .password(user.getPassword())
                 .emile(user.getEmile())
