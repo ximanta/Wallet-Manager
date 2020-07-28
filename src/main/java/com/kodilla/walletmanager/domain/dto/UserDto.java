@@ -5,12 +5,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.sql.Date;
+
 @Getter
 @Setter
 @ToString
 public class UserDto {
     private Long id;
+    private String login;
+    private String password;
     private String emile;
+    private Date birthDate;
+    private boolean active;
     private double balance;
 
     public void setBalance(double balance) {
