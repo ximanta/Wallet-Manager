@@ -1,3 +1,4 @@
+/*
 package com.kodilla.walletmanager.service;
 
 import com.kodilla.walletmanager.domain.entities.Category;
@@ -372,4 +373,4 @@ public class TransactionServiceTest {
 
         return transactions;
     }
-}
+}*/

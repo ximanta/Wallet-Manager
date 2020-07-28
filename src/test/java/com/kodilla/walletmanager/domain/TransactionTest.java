@@ -3,9 +3,11 @@ package com.kodilla.walletmanager.domain;
 
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
+import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.repository.TransactionRepository;
+import com.kodilla.walletmanager.repository.UserRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +31,9 @@ public class TransactionTest {
     public CategoryRepository categoryRepository;
 
     @Autowired
+    public UserRepository userRepository;
+
+    @Autowired
     ClassesFactory factory;
 
     @Test
@@ -41,6 +46,7 @@ public class TransactionTest {
         LocalDate today = LocalDate.now();
         transactionRepository.delete(fromDb);
         categoryRepository.delete(fromDb.getCategory());
+        userRepository.delete(fromDb.getUser());
         String toString = "Transaction{" +
                 "id=" + fromDb.getId() +
                 ", date=" + fromDb.getDate() +
@@ -49,6 +55,7 @@ public class TransactionTest {
                 ", description='" + fromDb.getDescription() + '\'' +
                 ", amount=" + fromDb.getAmount() +
                 ", category=" + fromDb.getCategory() +
+                ", user=" + fromDb.getUser() +
                 '}';
 
         //Then
@@ -68,15 +75,21 @@ public class TransactionTest {
 
         assertFalse(transactionRepository.existsById(transaction.getId()));
         assertFalse(categoryRepository.existsById(fromDb.getCategory().getId()));
+        assertFalse(userRepository.existsById(fromDb.getUser().getId()));
     }
 
     private Transaction createTransaction(){
         Transaction transaction = factory.transaction();
         transaction.setCategory(createdCategory());
+        transaction.setUser(createUser());
         return transactionRepository.save(transaction);
     }
 
     private Category createdCategory(){
         return categoryRepository.save(factory.category());
+    }
+
+    private User createUser(){
+        return userRepository.save(factory.user());
     }
 }

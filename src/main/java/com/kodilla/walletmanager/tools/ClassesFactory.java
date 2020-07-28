@@ -25,7 +25,10 @@ public final class ClassesFactory {
                 .description("Test Description")
                 .date(Date.valueOf(LocalDate.now()))
                 .type(TransactionType.REVENUES)
-                .amount(50).build();
+                .amount(50)
+                .category(category())
+                .user(user())
+                .build();
     }
 
     public TransactionDto transactionDto(){

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Date;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -26,13 +28,26 @@ public class UserTest  {
         User user = factory.user();
         //When
         User formDb = repository.save(user);
-        String toString = "User{" + "id=" + formDb.getId() + ", emile='" + formDb.getEmile() + "', balance=" + formDb.getBalance() + '}';
+        String toString = "User{" +
+                "id=" + user.getId() +
+                ", login='" + user.getLogin() + '\'' +
+                ", password='" + user.getPassword() + '\'' +
+                ", emile='" + user.getEmile() + '\'' +
+                ", birthDate=" + user.getBirthDate() +
+                ", active=" + user.isActive() +
+                ", balance=" + user.getBalance() +
+                '}';
 
         //Then
         assertTrue(repository.existsById(formDb.getId()));
+        assertTrue(formDb.isActive());
+        assertEquals("Test",formDb.getLogin());
+        assertEquals("Password",formDb.getPassword());
+        assertEquals("test@email.com",formDb.getEmile());
+        assertEquals(Date.valueOf("2000-02-20"),formDb.getBirthDate());
         assertEquals(-150.0,formDb.getBalance(),0);
-        assertEquals("test@email.com",user.getEmile());
         assertEquals(toString,formDb.toString());
+
         repository.delete(formDb);
         assertFalse(repository.existsById(formDb.getId()));
     }
