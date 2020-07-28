@@ -55,15 +55,20 @@ public class Transaction {
     private double amount;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER,
+    @ManyToOne(
+            fetch = FetchType.EAGER,
             cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH },
             targetEntity = Category.class)
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
-    public Category getCategory() {
-        return category;
-    }
+    @NotNull
+    @ManyToOne(
+            fetch = FetchType.EAGER,
+            cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH },
+            targetEntity = User.class)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @Override
     public String toString() {
@@ -75,6 +80,7 @@ public class Transaction {
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
                 ", category=" + category +
+                ", user=" + user +
                 '}';
     }
 
