@@ -1,8 +1,8 @@
 package com.kodilla.walletmanager.mapper;
 
-import com.kodilla.walletmanager.domain.Category;
+import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;

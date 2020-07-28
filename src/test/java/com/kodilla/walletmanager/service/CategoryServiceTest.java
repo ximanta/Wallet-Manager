@@ -1,8 +1,8 @@
 package com.kodilla.walletmanager.service;
 
-import com.kodilla.walletmanager.domain.Category;
+import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;

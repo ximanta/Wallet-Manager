@@ -1,6 +1,6 @@
 package com.kodilla.walletmanager.service;
 
-import com.kodilla.walletmanager.dto.TransactionDto;
+import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceDate;
 import org.springframework.beans.factory.annotation.Autowired;

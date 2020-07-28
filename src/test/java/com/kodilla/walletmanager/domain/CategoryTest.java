@@ -1,5 +1,6 @@
 package com.kodilla.walletmanager.domain;
 
+import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;

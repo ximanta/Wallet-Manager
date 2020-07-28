@@ -1,4 +1,4 @@
-package com.kodilla.walletmanager.domain;
+package com.kodilla.walletmanager.domain.entities;
 
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.tools.ToolsManager;

@@ -1,6 +1,6 @@
 package com.kodilla.walletmanager.service.transaction;
 
-import com.kodilla.walletmanager.domain.Mail;
+import com.kodilla.walletmanager.domain.entities.Mail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class SimpleEmailService {
             sender.send(createMailMessage(mail));
             LOGGER.info("Email has been sent.");
         }catch (MailException e){
-            LOGGER.error("Failed to process email sending", e.getMessage(), e);
+            LOGGER.error("Failed to process email sending", e.getMessage());
         }
     }
 

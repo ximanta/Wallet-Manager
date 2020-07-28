@@ -1,4 +1,4 @@
-package com.kodilla.walletmanager.domain;
+package com.kodilla.walletmanager.domain.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,5 +61,15 @@ public class User {
                 ", active=" + active +
                 ", balance=" + balance +
                 '}';
+    }
+
+    public static class UserBuilder {
+        private Long id;
+        private String login;
+        private String password;
+        private String emile;
+        private Date birthDate;
+        private boolean active;
+        private double balance;
     }
 }

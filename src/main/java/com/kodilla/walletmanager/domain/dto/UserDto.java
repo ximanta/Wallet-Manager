@@ -1,4 +1,4 @@
-package com.kodilla.walletmanager.dto;
+package com.kodilla.walletmanager.domain.dto;
 
 import com.kodilla.walletmanager.tools.ToolsManager;
 import lombok.Getter;

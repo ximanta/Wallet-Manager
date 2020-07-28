@@ -1,10 +1,10 @@
 package com.kodilla.walletmanager.service;
 
-import com.kodilla.walletmanager.domain.Category;
-import com.kodilla.walletmanager.domain.Transaction;
+import com.kodilla.walletmanager.domain.entities.Category;
+import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.dto.CategoryDto;
-import com.kodilla.walletmanager.dto.TransactionDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.repository.TransactionRepository;
@@ -182,7 +182,7 @@ public class TransactionServiceTest {
 
         //Then
         for (TransactionDto transaction: fromDb) {
-            assertTrue(transaction.getDate().equals(Date.valueOf("2020-06-20")));
+            assertEquals(transaction.getDate(), Date.valueOf("2020-06-20"));
             assertFalse(transactionRepository.existsById(transaction.getId()));
             assertFalse(categoryRepository.existsById(transaction.getCategoryDto().getId()));
         }

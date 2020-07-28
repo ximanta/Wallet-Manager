@@ -1,6 +1,6 @@
 package com.kodilla.walletmanager.repository;
 
-import com.kodilla.walletmanager.domain.Transaction;
+import com.kodilla.walletmanager.domain.entities.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

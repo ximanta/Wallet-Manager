@@ -1,5 +1,6 @@
 package com.kodilla.walletmanager.domain;
 
+import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.repository.UserRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;

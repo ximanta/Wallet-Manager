@@ -1,7 +1,7 @@
 package com.kodilla.walletmanager.mapper;
 
-import com.kodilla.walletmanager.domain.User;
-import com.kodilla.walletmanager.dto.UserDto;
+import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.dto.UserDto;
 import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;

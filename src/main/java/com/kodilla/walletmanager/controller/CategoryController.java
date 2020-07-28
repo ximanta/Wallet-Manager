@@ -1,6 +1,6 @@
 package com.kodilla.walletmanager.controller;
 
-import com.kodilla.walletmanager.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

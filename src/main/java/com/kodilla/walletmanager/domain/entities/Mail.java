@@ -1,4 +1,4 @@
-package com.kodilla.walletmanager.domain;
+package com.kodilla.walletmanager.domain.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

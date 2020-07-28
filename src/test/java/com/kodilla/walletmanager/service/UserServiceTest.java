@@ -1,7 +1,7 @@
 package com.kodilla.walletmanager.service;
 
-import com.kodilla.walletmanager.domain.User;
-import com.kodilla.walletmanager.dto.UserDto;
+import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.dto.UserDto;
 import com.kodilla.walletmanager.mapper.UserMapper;
 import com.kodilla.walletmanager.repository.UserRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;

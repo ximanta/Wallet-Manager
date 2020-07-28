@@ -1,12 +1,12 @@
 package com.kodilla.walletmanager.tools;
 
-import com.kodilla.walletmanager.domain.Category;
-import com.kodilla.walletmanager.domain.Transaction;
-import com.kodilla.walletmanager.domain.User;
+import com.kodilla.walletmanager.domain.entities.Category;
+import com.kodilla.walletmanager.domain.entities.Transaction;
+import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.dto.CategoryDto;
-import com.kodilla.walletmanager.dto.TransactionDto;
-import com.kodilla.walletmanager.dto.UserDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.TransactionDto;
+import com.kodilla.walletmanager.domain.dto.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
