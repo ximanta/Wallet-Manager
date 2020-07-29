@@ -1,8 +1,13 @@
 package com.kodilla.walletmanager.tools;
 
+import com.kodilla.walletmanager.domain.dto.UserDto;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
+import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -13,6 +18,7 @@ import java.util.List;
 public class ToolsManager {
     public static final String REV = "REV";
     public static final String EXP = "EXP";
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionServiceCRUD.class);
 
     public static double positiveTenthRoundDouble(double d){
         if (d < 0){
@@ -32,14 +38,41 @@ public class ToolsManager {
         }
     }
 
-    public static boolean isTransactionDtoCorrect(TransactionDto transactionDto){
-        boolean isDate = transactionDto.getDate() != null;
-        boolean isType = transactionDto.getType() != null;
-        boolean isCategory = transactionDto.getCategoryDto() != null;
-        boolean isUser = transactionDto.getUserDto() != null;
-        boolean isTitleNotBlank = transactionDto.getTitle() != null && !transactionDto.getTitle().isEmpty();
+    public static boolean isTransactionDtoCorrect(TransactionDto dto){
+        boolean isDate = dto.getDate() != null;
+        boolean isType = dto.getType() != null;
+        boolean isCategory = dto.getCategoryDto() != null;
+        boolean isUser = dto.getUserDto() != null;
+        boolean isTitleNotBlank = dto.getTitle() != null && !dto.getTitle().isEmpty();
 
         return isDate && isType && isCategory && isTitleNotBlank && isUser;
+    }
+
+    public static boolean isUserDtoCorrect(UserDto dto){
+        boolean isLogin = dto.getLogin() != null;
+        boolean isLoginEmpty = !dto.getLogin().isEmpty();
+        boolean isEmile = dto.getEmile() != null;
+        boolean isBirthDate = dto.getBirthDate() != null;
+        boolean isPassword = isPasswordAccept(dto.getPassword());
+        if (isLogin && isLoginEmpty && isEmile && isBirthDate && isPassword){
+            LOGGER.info("UserDto is correct");
+            return true;
+        }else {
+            LOGGER.info("UserDto is incorrect");
+            return false;
+        }
+
+    }
+
+    private static boolean isPasswordAccept(String password){
+        boolean isPassword = password != null;
+        boolean isLength = password.length() >= 6;
+        if (isPassword && isLength){
+            LOGGER.info("Password is accepted");
+            return true;
+        }
+        LOGGER.warn("Incorrect password");
+        return false;
     }
 
     public static boolean isTheSameEnum(TransactionType first, TransactionType second){

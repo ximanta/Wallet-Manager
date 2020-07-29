@@ -18,14 +18,14 @@ public class TransactionServiceCRUD {
     private final TransactionMapper mapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionServiceCRUD.class);
 
-    private TransactionServiceCRUD(TransactionRepository transactionRepository, TransactionMapper transactionMapper) {
-        this.repository = transactionRepository;
-        this.mapper = transactionMapper;
+    private TransactionServiceCRUD(TransactionRepository repository, TransactionMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public TransactionDto create(final TransactionDto transactionDto){
-        if (ToolsManager.isTransactionDtoCorrect(transactionDto)){
-            Transaction transaction = mapper.mapToEntity(transactionDto);
+    public TransactionDto create(final TransactionDto dto){
+        if (ToolsManager.isTransactionDtoCorrect(dto)){
+            Transaction transaction = mapper.mapToEntity(dto);
             Transaction fromDb = checkTransactionSave(transaction);
             return mapper.mapToDto(fromDb);
         }else {
@@ -47,20 +47,20 @@ public class TransactionServiceCRUD {
         }
     }
 
-    public boolean delete(final long transactionId){
-        Optional<Transaction> optional = repository.findById(transactionId);
-        if(optional.isPresent()){
-            Transaction transaction = optional.get();
-            repository.delete(transaction);
-            return !repository.existsById(transactionId);
+    public boolean delete(final long id){
+        Optional<Transaction> transaction = repository.findById(id);
+        if(transaction.isPresent()){
+            repository.delete(transaction.get());
+            LOGGER.info("Transaction has been deleted");
+            return !repository.existsById(id);
         }else {
             throw new RuntimeException("Cannot find Transaction by id");
         }
     }
 
-    private TransactionDto updateMechanic(TransactionDto transactionDto){
-        if (repository.existsById(transactionDto.getId())){
-            Transaction transaction = mapper.mapToEntity(transactionDto);
+    private TransactionDto updateMechanic(TransactionDto dto){
+        if (repository.existsById(dto.getId())){
+            Transaction transaction = mapper.mapToEntity(dto);
             Transaction fromDb = checkTransactionSave(transaction);
             return mapper.mapToDto(fromDb);
         }else {

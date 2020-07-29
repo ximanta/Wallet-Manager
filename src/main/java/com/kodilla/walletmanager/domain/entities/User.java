@@ -5,11 +5,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
-
+@NamedQuery(
+        name = "User.get",
+        query = "FROM User WHERE login = :LOGIN and password = :PASSWORD")
+@NamedQuery(
+        name = "User.getByLogin",
+        query = "FROM User WHERE login = :LOGIN")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,6 +34,7 @@ public class User {
     private String password;
 
     @NotNull
+    @Email(message = "Email should be valid")
     @Column
     private String emile;
 

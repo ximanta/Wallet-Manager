@@ -19,9 +19,6 @@ import java.sql.Date;
                 name = "Transaction.thisMonth",
                 query = "FROM Transaction WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())"),
         @NamedQuery(
-                name = "Transaction.selectedMonth",
-                query = "FROM Transaction WHERE MONTH(date) = :MONTH AND YEAR(date) = :YEAR"),
-        @NamedQuery(
                 name = "Transaction.betweenDate",
                 query = "FROM Transaction WHERE date >= :FROMDATE and date <= :TODATE")
 })

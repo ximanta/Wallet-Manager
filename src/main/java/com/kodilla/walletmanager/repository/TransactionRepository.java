@@ -11,16 +11,11 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction,Long> {
-    List<Transaction> findByDate(Date date);
-
     @Query
     List<Transaction> thisWeek();
 
     @Query
     List<Transaction> thisMonth();
-
-    @Query
-    List<Transaction> selectedMonth(@Param("MONTH") int month, @Param("YEAR") int year);
 
     @Query
     List<Transaction> betweenDate(@Param("FROMDATE") Date fromDate, @Param("TODATE") Date toDate);
