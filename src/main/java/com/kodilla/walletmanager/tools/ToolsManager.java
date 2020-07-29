@@ -36,16 +36,10 @@ public class ToolsManager {
         boolean isDate = transactionDto.getDate() != null;
         boolean isType = transactionDto.getType() != null;
         boolean isCategory = transactionDto.getCategoryDto() != null;
+        boolean isUser = transactionDto.getUserDto() != null;
         boolean isTitleNotBlank = transactionDto.getTitle() != null && !transactionDto.getTitle().isEmpty();
 
-        return isDate && isType && isCategory && isTitleNotBlank;
-    }
-
-    public static boolean isMonthCorrect(int month,int year){
-        boolean isMonthCorrect = month > 0 && month <= 12;
-        boolean isYearCorrect = year >= 1980 && year <= LocalDate.now().getYear();
-
-        return isMonthCorrect && isYearCorrect;
+        return isDate && isType && isCategory && isTitleNotBlank && isUser;
     }
 
     public static boolean isTheSameEnum(TransactionType first, TransactionType second){
@@ -107,4 +101,3 @@ public class ToolsManager {
     }
 
 }
-

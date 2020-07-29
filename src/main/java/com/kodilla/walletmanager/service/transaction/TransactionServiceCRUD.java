@@ -1,13 +1,12 @@
 package com.kodilla.walletmanager.service.transaction;
 
-import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
-import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.mapper.TransactionMapper;
 import com.kodilla.walletmanager.repository.TransactionRepository;
 import com.kodilla.walletmanager.tools.ToolsManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,38 +14,29 @@ import java.util.Optional;
 
 @Component
 public class TransactionServiceCRUD {
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository repository;
+    private final TransactionMapper mapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionServiceCRUD.class);
 
-    @Autowired
-    private CategoryMapper categoryMapper;
-
-    @Autowired
-    private TransactionMapper transactionMapper;
+    private TransactionServiceCRUD(TransactionRepository transactionRepository, TransactionMapper transactionMapper) {
+        this.repository = transactionRepository;
+        this.mapper = transactionMapper;
+    }
 
     public TransactionDto create(final TransactionDto transactionDto){
         if (ToolsManager.isTransactionDtoCorrect(transactionDto)){
-            Transaction transaction = transactionMapper.mapToEntity(transactionDto);
-            Transaction fromDb = transactionRepository.save(transaction);
-            return transactionMapper.mapToDto(fromDb);
+            Transaction transaction = mapper.mapToEntity(transactionDto);
+            Transaction fromDb = checkTransactionSave(transaction);
+            return mapper.mapToDto(fromDb);
         }else {
-            throw new RuntimeException("Incorrect object");
+            LOGGER.error("Incorrect object");
+            throw new RuntimeException();
         }
     }
 
     public List<TransactionDto> getAll(){
-        List<Transaction> transactions = transactionRepository.findAll();
-        return transactionMapper.mapToDtos(transactions);
-    }
-
-    public TransactionDto get(long transactionId){
-        Optional<Transaction> optional = transactionRepository.findById(transactionId);
-        if (optional.isPresent()){
-            Transaction transaction = optional.get();
-            return transactionMapper.mapToDto(transaction);
-        }else {
-            throw new RuntimeException("Cannot find Transaction by id");
-        }
+        List<Transaction> transactions = repository.findAll();
+        return mapper.mapToDtos(transactions);
     }
 
     public TransactionDto update(TransactionDto transactionDto){
@@ -58,31 +48,35 @@ public class TransactionServiceCRUD {
     }
 
     public boolean delete(final long transactionId){
-        Optional<Transaction> optional = transactionRepository.findById(transactionId);
+        Optional<Transaction> optional = repository.findById(transactionId);
         if(optional.isPresent()){
             Transaction transaction = optional.get();
-            transactionRepository.delete(transaction);
-            return !transactionRepository.existsById(transactionId);
+            repository.delete(transaction);
+            return !repository.existsById(transactionId);
         }else {
             throw new RuntimeException("Cannot find Transaction by id");
         }
     }
 
     private TransactionDto updateMechanic(TransactionDto transactionDto){
-        Optional<Transaction> optional = transactionRepository.findById(transactionDto.getId());
-        if (optional.isPresent()){
-            Category category = categoryMapper.mapToEntity(transactionDto.getCategoryDto());
-            Transaction transaction = optional.get();
-            transaction.setTitle(transactionDto.getTitle());
-            transaction.setDescription(transactionDto.getDescription());
-            transaction.setType(transactionDto.getType());
-            transaction.setDate(transactionDto.getDate());
-            transaction.setAmount(transactionDto.getAmount());
-            transaction.setCategory(category);
-            transactionRepository.save(transaction);
-            return transactionMapper.mapToDto(transaction);
+        if (repository.existsById(transactionDto.getId())){
+            Transaction transaction = mapper.mapToEntity(transactionDto);
+            Transaction fromDb = checkTransactionSave(transaction);
+            return mapper.mapToDto(fromDb);
         }else {
-            throw new RuntimeException("Cannot find Transaction by id");
+            LOGGER.error("Cannot find Transaction by id");
+            throw new RuntimeException();
+        }
+    }
+
+    private Transaction checkTransactionSave(Transaction transaction){
+        try{
+            Transaction formDb = repository.save(transaction);
+            LOGGER.info("Transaction has been saved");
+            return formDb;
+        }catch (Exception e){
+            LOGGER.error("Save error", e);
+            throw new RuntimeException();
         }
     }
 

@@ -3,18 +3,19 @@ package com.kodilla.walletmanager.service;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceDate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class TransactionService {
-    @Autowired
     private TransactionServiceCRUD transactionServiceCRUD;
-
-    @Autowired
     private TransactionServiceDate transactionServiceDate;
+
+    public TransactionService(TransactionServiceCRUD transactionServiceCRUD, TransactionServiceDate transactionServiceDate) {
+        this.transactionServiceCRUD = transactionServiceCRUD;
+        this.transactionServiceDate = transactionServiceDate;
+    }
 
     //CRUD
     public TransactionDto create(final TransactionDto transactionDto){
@@ -23,10 +24,6 @@ public class TransactionService {
 
     public List<TransactionDto> getAll(){
         return transactionServiceCRUD.getAll();
-    }
-
-    public TransactionDto get(long transactionId){
-        return transactionServiceCRUD.get(transactionId);
     }
 
     public TransactionDto update(TransactionDto transactionDto){
@@ -38,9 +35,6 @@ public class TransactionService {
     }
 
     //DATE
-    public List<TransactionDto> findByDate(String date){
-        return transactionServiceDate.findByDate(date);
-    }
 
     public List<TransactionDto> thisWeek(){
         return transactionServiceDate.thisWeek();
@@ -48,10 +42,6 @@ public class TransactionService {
 
     public List<TransactionDto> thisMonth(){
         return transactionServiceDate.thisMonth();
-    }
-
-    public List<TransactionDto> selectedMonth(String year_month){
-        return transactionServiceDate.selectedMonth(year_month);
     }
 
     public List<TransactionDto> betweenDate(String fromDate, String toDate){
