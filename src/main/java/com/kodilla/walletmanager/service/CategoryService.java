@@ -13,11 +13,13 @@ import java.util.Optional;
 
 @Service
 public class CategoryService {
-    @Autowired
-    CategoryRepository repository;
+    private final CategoryRepository repository;
+    private final CategoryMapper mapper;
 
-    @Autowired
-    CategoryMapper mapper;
+    public CategoryService(CategoryRepository repository, CategoryMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     public CategoryDto create(final CategoryDto dto){
         Category entity = mapper.mapToEntity(dto);

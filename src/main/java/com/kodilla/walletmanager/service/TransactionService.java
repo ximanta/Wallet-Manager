@@ -1,6 +1,7 @@
 package com.kodilla.walletmanager.service;
 
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
+import com.kodilla.walletmanager.domain.dto.UserLoginPassword;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceDate;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ public class TransactionService {
         return transactionServiceCRUD.create(transactionDto);
     }
 
-    public List<TransactionDto> getAll(){
-        return transactionServiceCRUD.getAll();
+    public List<TransactionDto> getAll(UserLoginPassword dto){
+        return transactionServiceCRUD.getAll(dto);
     }
 
     public TransactionDto update(TransactionDto transactionDto){
@@ -36,16 +37,16 @@ public class TransactionService {
 
     //DATE
 
-    public List<TransactionDto> thisWeek(){
-        return transactionServiceDate.thisWeek();
+    public List<TransactionDto> thisWeek(UserLoginPassword dto){
+        return transactionServiceDate.thisWeek(dto);
     }
 
-    public List<TransactionDto> thisMonth(){
-        return transactionServiceDate.thisMonth();
+    public List<TransactionDto> thisMonth(UserLoginPassword dto){
+        return transactionServiceDate.thisMonth(dto);
     }
 
-    public List<TransactionDto> betweenDate(String fromDate, String toDate){
-        return transactionServiceDate.betweenDate(fromDate,toDate);
+    public List<TransactionDto> betweenDate(String fromDate, String toDate, UserLoginPassword dto){
+        return transactionServiceDate.betweenDate(fromDate,toDate, dto);
     }
 }
 

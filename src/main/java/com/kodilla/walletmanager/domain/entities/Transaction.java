@@ -14,13 +14,13 @@ import java.sql.Date;
 @NamedQueries({
         @NamedQuery(
                 name = "Transaction.thisWeek",
-                query = "FROM Transaction WHERE YEARWEEK(date) = YEARWEEK(NOW())"),
+                query = "FROM Transaction WHERE YEARWEEK(date) = YEARWEEK(NOW()) AND user = :USER"),
         @NamedQuery(
                 name = "Transaction.thisMonth",
-                query = "FROM Transaction WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())"),
+                query = "FROM Transaction WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE()) AND user = :USER"),
         @NamedQuery(
                 name = "Transaction.betweenDate",
-                query = "FROM Transaction WHERE date >= :FROMDATE and date <= :TODATE")
+                query = "FROM Transaction WHERE date >= :FROMDATE and date <= :TODATE AND user = :USER")
 })
 
 @Getter

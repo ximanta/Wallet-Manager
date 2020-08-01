@@ -7,9 +7,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.TransactionSystemException;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -50,5 +54,30 @@ public class UserTest  {
 
         repository.delete(formDb);
         assertFalse(repository.existsById(formDb.getId()));
+    }
+
+    @Test(expected = TransactionSystemException.class)
+    public void createIncompleteRecordTest(){
+        User user = new User();
+        User fromDb = repository.save(user);
+        assertFalse(repository.existsById(fromDb.getId()));
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void checkLoginUniqueMechanic(){
+        //Given
+        for (int i = 0; i <= 5; i++){
+            repository.save(factory.user());
+        }
+        //When
+        List<User> users = repository.findAll();
+        List<User> duplicate = new ArrayList<>();
+        for (User user: users) {
+            if (user.getLogin().equals("Test")) {
+                duplicate.add(user);
+            }
+        }
+        //Then
+        assertEquals(1,duplicate.size());
     }
 }

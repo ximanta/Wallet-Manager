@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 
 import static org.junit.Assert.*;
@@ -77,6 +78,14 @@ public class TransactionTest {
         assertFalse(categoryRepository.existsById(fromDb.getCategory().getId()));
         assertFalse(userRepository.existsById(fromDb.getUser().getId()));
     }
+
+    @Test(expected = ConstraintViolationException.class)
+    public void createIncompleteRecordTest(){
+        Transaction transaction = new Transaction();
+        Transaction formDb = transactionRepository.save(transaction);
+        assertTrue(transactionRepository.existsById(formDb.getId()));
+    }
+
 
     private Transaction createTransaction(){
         Transaction transaction = factory.transaction();

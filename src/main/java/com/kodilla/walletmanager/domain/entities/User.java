@@ -3,6 +3,7 @@ package com.kodilla.walletmanager.domain.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,21 +13,22 @@ import java.util.HashSet;
 import java.util.Set;
 @NamedQuery(
         name = "User.get",
-        query = "FROM User WHERE login = :LOGIN and password = :PASSWORD")
+        query = "FROM User WHERE login like :LOGIN and password like :PASSWORD")
 @NamedQuery(
         name = "User.getByLogin",
-        query = "FROM User WHERE login = :LOGIN")
+        query = "FROM User WHERE login like :LOGIN")
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint( columnNames ="login") } )
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
-    @Column
+    @Column()
     private String login;
 
     @NotNull

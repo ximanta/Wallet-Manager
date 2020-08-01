@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import static org.junit.Assert.*;
 
@@ -39,6 +40,13 @@ public class CategoryTest {
         assertEquals(TransactionType.REVENUES,fromDb.getType());
         assertTrue(fromDb.getTransactions().isEmpty());
         assertFalse(repository.existsById(category.getId()));
+    }
+
+    @Test(expected = ConstraintViolationException.class )
+    public void crateIncompleteRecordTest(){
+            Category category = new Category();
+            Category fromDb = repository.save(category);
+            assertFalse(repository.existsById(fromDb.getId()));
     }
 
 }
