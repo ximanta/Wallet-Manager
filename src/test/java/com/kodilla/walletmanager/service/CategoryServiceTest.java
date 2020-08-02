@@ -1,16 +1,12 @@
 package com.kodilla.walletmanager.service;
 
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;
-import org.hamcrest.Matcher;
-import org.hamcrest.core.IsNull;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
