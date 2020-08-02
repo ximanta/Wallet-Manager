@@ -15,27 +15,22 @@ public class CategoryController {
     @Autowired
     CategoryService service;
 
-    @PostMapping(value = "/create",consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "",consumes = APPLICATION_JSON_VALUE)
     public CategoryDto create(@RequestBody CategoryDto dto){
         return service.create(dto);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("")
     public List<CategoryDto> getAll(@RequestParam(value = "type",required = false) String type){
         return service.getAll(type);
     }
 
-    @GetMapping("/get/{id}")
-    public CategoryDto get(@PathVariable long id){
-        return service.get(id);
-    }
-
-    @PutMapping("/update")
+    @PutMapping("")
     public CategoryDto update(@RequestBody CategoryDto dto){
         return service.update(dto);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public boolean delete(@PathVariable long id){
         return service.delete(id);
     }

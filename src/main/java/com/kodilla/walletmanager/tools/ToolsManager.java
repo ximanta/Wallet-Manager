@@ -64,6 +64,18 @@ public class ToolsManager {
 
     }
 
+    public static boolean isCategoryDtoCorrect(CategoryDto dto){
+        boolean isNull = dto != null;
+        boolean isName = dto.getName() != null;
+        boolean isType = dto.getType().equals(TransactionType.EXPENSES) || dto.getType().equals(TransactionType.REVENUES);
+        if (isName && isNull && isType){
+            LOGGER.info("CategoryDto is correct");
+            return true;
+        }
+        LOGGER.info("CategoryDto is incorrect");
+        return false;
+    }
+
     private static boolean isPasswordAccept(String password){
         boolean isPassword = password != null;
         boolean isLength = password.length() >= 6;

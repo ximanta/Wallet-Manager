@@ -43,12 +43,14 @@ public class UserService {
             User fromDb = checkUserSave(user);
             return mapper.mapToDto(fromDb);
         }else {
-            throw new RuntimeException();
+            LOGGER.error("Valid body");
+            throw new RuntimeException("Valid body");
         }
     }
 
     public UserDto update(UserDto dto){
-        if (ToolsManager.isUserDtoCorrect(dto)){
+        Optional<User> optional = repository.findById(dto.getId());
+        if (ToolsManager.isUserDtoCorrect(dto) && optional.isPresent()){
             return updateMechanic(dto);
         }else {
             throw new RuntimeException();

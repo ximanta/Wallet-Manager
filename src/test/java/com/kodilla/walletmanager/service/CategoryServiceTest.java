@@ -6,7 +6,11 @@ import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;
+import org.hamcrest.Matcher;
+import org.hamcrest.core.IsNull;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,6 +51,13 @@ public class CategoryServiceTest {
         assertEquals(TransactionType.REVENUES,fromDb.getType());
     }
 
+    @Test(expected = RuntimeException.class)
+    public void createValidBody() {
+        CategoryDto categoryDto = new CategoryDto();
+        CategoryDto fromDb = service.create(categoryDto);
+        repository.deleteById(fromDb.getId());
+    }
+
     @Test
     public void getAll() {
         //Given
@@ -70,21 +81,6 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void get() {
-        //Given
-        Category fromDb = repository.save(factory.category());
-
-        //When
-        CategoryDto categoryDto = service.get(fromDb.getId());
-        repository.delete(fromDb);
-
-        //Then
-        assertFalse(repository.existsById(fromDb.getId()));
-        assertEquals("Test",categoryDto.getName());
-        assertEquals(TransactionType.REVENUES,categoryDto.getType());
-    }
-
-    @Test
     public void update() {
         //Given
         Category fromDb = repository.save(factory.category());
@@ -103,6 +99,12 @@ public class CategoryServiceTest {
         assertEquals(TransactionType.EXPENSES,update.getType());
     }
 
+    @Test(expected = RuntimeException.class)
+    public void validUpdate(){
+        CategoryDto dto = new CategoryDto();
+        service.update(dto);
+    }
+
     @Test
     public void delete() {
         //When
@@ -113,5 +115,10 @@ public class CategoryServiceTest {
 
         //Then
         assertFalse(repository.existsById(fromDb.getId()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void  validDelete(){
+        service.delete(-2);
     }
 }
