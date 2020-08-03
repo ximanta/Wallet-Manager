@@ -1,14 +1,14 @@
 package com.kodilla.walletmanager.service;
 
 import com.kodilla.walletmanager.domain.builders.TransactionDtoBuilder;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.domain.dto.UserDto;
 import com.kodilla.walletmanager.domain.dto.UserLoginPassword;
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.domain.dto.CategoryDto;
-import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.mapper.UserMapper;
 import com.kodilla.walletmanager.repository.CategoryRepository;
@@ -23,9 +23,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -52,7 +52,7 @@ public class TransactionServiceTest {
     public void create() {
         //When
         Category category = categoryRepository.save(factory.category());
-        User user = userRepository.save(factory.user());
+        User user = saveDuplicate(factory.user());
         CategoryDto fromDbDto = categoryMapper.mapToDto(category);
         UserDto userDto = userMapper.mapToDto(user);
         TransactionDto transactionDto = factory.transactionDto();
@@ -71,11 +71,17 @@ public class TransactionServiceTest {
         assertNotNull(fromDb.getId());
         assertNotNull(fromDb.getCategoryDto());
         assertNotNull(fromDb.getUserDto());
-        assertEquals("Test",fromDb.getTitle());
-        assertEquals("Test Description",fromDb.getDescription());
-        assertEquals(TransactionType.REVENUES,fromDb.getType());
-        assertEquals(Date.valueOf("2020-06-20"),fromDb.getDate());
-        assertEquals(50,fromDb.getAmount(),0);
+        assertEquals("Test", fromDb.getTitle());
+        assertEquals("Test Description", fromDb.getDescription());
+        assertEquals(TransactionType.REVENUES, fromDb.getType());
+        assertEquals(Date.valueOf("2020-06-20"), fromDb.getDate());
+        assertEquals(50, fromDb.getAmount(), 0);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void vailCreate(){
+        TransactionDto transaction = factory.transactionDto();
+        transactionService.create(transaction);
     }
 
     @Test
@@ -84,13 +90,13 @@ public class TransactionServiceTest {
         List<Transaction> transactions = transactionDefaultList();
         User user = transactions.get(0).getUser();
         UserLoginPassword loginPassword = new UserLoginPassword(user.getLogin(), user.getPassword());
-        for (Transaction transaction : transactions){
+        for (Transaction transaction : transactions) {
             transactionRepository.save(transaction);
         }
 
         //When
         List<TransactionDto> transactionDtos = transactionService.getAll(loginPassword);
-        for (TransactionDto transaction: transactionDtos) {
+        for (TransactionDto transaction : transactionDtos) {
             transactionRepository.deleteById(transaction.getId());
         }
         categoryRepository.delete(transactions.get(0).getCategory());
@@ -99,69 +105,89 @@ public class TransactionServiceTest {
         //Then
         assertFalse(categoryRepository.existsById(transactionDtos.get(0).getCategoryDto().getId()));
         assertFalse(userRepository.existsById(user.getId()));
-        for (TransactionDto transaction: transactionDtos) {
+        for (TransactionDto transaction : transactionDtos) {
             assertFalse(transactionRepository.existsById(transaction.getId()));
         }
-        assertEquals(3,transactionDtos.size());
+        assertEquals(3, transactionDtos.size());
     }
 
-        @Test
-        public void update() {
-            //Given
-            Category formDb = categoryRepository.save(factory.category());
-            User user = userRepository.save(factory.user());
-            Transaction transaction = factory.transaction();
-            transaction.setCategory(formDb);
-            transaction.setUser(user);
-            Transaction toDb = transactionRepository.save(transaction);
-            long transactionId = toDb.getId();
-            CategoryDto categoryDto = categoryMapper.mapToDto(formDb);
-            UserDto userDto = userMapper.mapToDto(user);
+    @Test(expected = RuntimeException.class)
+    public void validGetAll() {
+        List<TransactionDto> dtos = transactionService.getAll(new UserLoginPassword("Test","Test"));
+    }
 
-            TransactionDto transactionDto = new TransactionDtoBuilder()
-                    .id(transactionId)
-                    .title("Test beta")
-                    .type(TransactionType.REVENUES)
-                    .description("Test Description beta")
-                    .date(Date.valueOf("2020-05-05"))
-                    .amount(40)
-                    .category(categoryDto)
-                    .user(userDto).build();
+    @Test
+    public void update() {
+        //Given
+        Category formDb = categoryRepository.save(factory.category());
+        User user = saveDuplicate(factory.user());
+        Transaction transaction = factory.transaction();
+        transaction.setCategory(formDb);
+        transaction.setUser(user);
+        Transaction toDb = transactionRepository.save(transaction);
+        long transactionId = toDb.getId();
+        CategoryDto categoryDto = categoryMapper.mapToDto(formDb);
+        UserDto userDto = userMapper.mapToDto(user);
 
-            //When
-            TransactionDto updated =transactionService.update(transactionDto);
-            transactionRepository.deleteById(updated.getId());
-            categoryRepository.delete(toDb.getCategory());
+        TransactionDto transactionDto = new TransactionDtoBuilder()
+                .id(transactionId)
+                .title("Test beta")
+                .type(TransactionType.REVENUES)
+                .description("Test Description beta")
+                .date(Date.valueOf("2020-05-05"))
+                .amount(40)
+                .category(categoryDto)
+                .user(userDto).build();
 
-            //Then
-            assertFalse(transactionRepository.existsById(updated.getId()));
-            assertFalse(categoryRepository.existsById(updated.getCategoryDto().getId()));
-            assertEquals(toDb.getCategory().getId(),updated.getCategoryDto().getId());
-            assertEquals(transactionId,updated.getId(),0);
-            assertEquals("Test beta",updated.getTitle());
-            assertEquals("Test Description beta",updated.getDescription());
-            assertEquals(TransactionType.REVENUES,updated.getType());
-            assertEquals(Date.valueOf("2020-05-05"),updated.getDate());
-            assertEquals(40,updated.getAmount(),0);
-        }
+        //When
+        TransactionDto updated = transactionService.update(transactionDto);
+        transactionRepository.deleteById(updated.getId());
+        categoryRepository.delete(toDb.getCategory());
+
+        //Then
+        assertFalse(transactionRepository.existsById(updated.getId()));
+        assertFalse(categoryRepository.existsById(updated.getCategoryDto().getId()));
+        assertEquals(toDb.getCategory().getId(), updated.getCategoryDto().getId());
+        assertEquals(transactionId, updated.getId(), 0);
+        assertEquals("Test beta", updated.getTitle());
+        assertEquals("Test Description beta", updated.getDescription());
+        assertEquals(TransactionType.REVENUES, updated.getType());
+        assertEquals(Date.valueOf("2020-05-05"), updated.getDate());
+        assertEquals(40, updated.getAmount(), 0);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void validUpdate(){
+        transactionService.update(factory.transactionDto());
+    }
+
+    @Test
+    public void delete() {
+        //Given
+        Category category = categoryRepository.save(factory.category());
+        User user = saveDuplicate(factory.user());
+        Transaction transaction = factory.transaction();
+        transaction.setCategory(category);
+        transaction.setUser(user);
+        Transaction fromDb = transactionRepository.save(transaction);
+
+        //When
+        transactionService.delete(fromDb.getId());
+        categoryRepository.delete(fromDb.getCategory());
+        userRepository.delete(user);
+
+        //Then
+        assertFalse(transactionRepository.existsById(fromDb.getId()));
+        assertFalse(categoryRepository.existsById(fromDb.getCategory().getId()));
+        assertFalse(userRepository.existsById(fromDb.getUser().getId()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void validDelete(){
+        transactionService.delete(-10);
+    }
+
     /*
-        @Test
-        public void delete() {
-            //Given
-            Category category = categoryRepository.save(factory.category());
-            Transaction transaction = factory.transaction();
-            transaction.setCategory(category);
-            Transaction fromDb = transactionRepository.save(transaction);
-
-            //When
-            transactionService.delete(fromDb.getId());
-            categoryRepository.delete(fromDb.getCategory());
-
-            //Then
-            assertFalse(transactionRepository.existsById(fromDb.getId()));
-            assertFalse(categoryRepository.existsById(fromDb.getCategory().getId()));
-        }
-
         @Test
         public void findByDate() {
             //Given
@@ -357,7 +383,7 @@ public class TransactionServiceTest {
     private List<Transaction> transactionDefaultList(){
         List<Transaction> transactions = new ArrayList<>();
         Category fromDb = categoryRepository.save(factory.category());
-        User user = userRepository.save(factory.user());
+        User user = saveDuplicate(factory.user());
 
         for (int i = 1; i <= 3; i++){
             Transaction transaction = factory.transaction();
@@ -369,5 +395,13 @@ public class TransactionServiceTest {
         return transactions;
     }
 
+    private User saveDuplicate(User user){
+        Optional<User> optional = userRepository.getByLogin(user.getLogin());
+        if (!optional.isPresent()){
+            return userRepository.save(user);
+        }else {
+            return optional.get();
+        }
+    }
 
 }
