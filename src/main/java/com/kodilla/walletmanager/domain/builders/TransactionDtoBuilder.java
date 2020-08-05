@@ -3,6 +3,7 @@ package com.kodilla.walletmanager.domain.builders;
 import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.domain.dto.UserDto;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 
 import java.sql.Date;
@@ -10,9 +11,10 @@ import java.sql.Date;
 public class TransactionDtoBuilder {
     private Long id;
     private Date date = new Date(new java.util.Date().getTime());
-    private TransactionType type;
+    private TransactionType transactionType;
     private String title;
     private String description;
+    private CurrencyType currencyType;
     private double amount;
     private CategoryDto category;
     private UserDto userDto;
@@ -28,7 +30,7 @@ public class TransactionDtoBuilder {
     }
 
     public TransactionDtoBuilder type(TransactionType type) {
-        this.type = type;
+        this.transactionType = type;
         return this;
     }
 
@@ -39,6 +41,11 @@ public class TransactionDtoBuilder {
 
     public TransactionDtoBuilder description(String description) {
         this.description = description;
+        return this;
+    }
+
+    public TransactionDtoBuilder currencyType(CurrencyType type) {
+        this.currencyType = type;
         return this;
     }
 
@@ -61,9 +68,10 @@ public class TransactionDtoBuilder {
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setId(id);
         transactionDto.setDate(date);
-        transactionDto.setType(type);
+        transactionDto.setType(transactionType);
         transactionDto.setTitle(title);
         transactionDto.setDescription(description);
+        transactionDto.setCurrencyType(currencyType);
         transactionDto.setAmount(amount);
         transactionDto.setCategoryDto(category);
         transactionDto.setUserDto(userDto);

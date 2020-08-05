@@ -1,5 +1,6 @@
 package com.kodilla.walletmanager.domain.dto;
 
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.tools.ToolsManager;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class TransactionDto {
     private Long id;
     private String title;
     private String description;
+    private CurrencyType currencyType;
     private double amount;
     private TransactionType type;
     private Date date;
@@ -37,11 +39,9 @@ public class TransactionDto {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", currencyType=" + currencyType +
                 ", amount=" + amount +
                 ", type=" + type +
-                ", date=" + date +
-                ", categoryDto=" + categoryDto +
-                ", user=" + userDto +
-                '}';
+                ", date=" + date + '}';
     }
 }

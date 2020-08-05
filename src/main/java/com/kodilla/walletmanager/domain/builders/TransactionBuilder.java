@@ -3,6 +3,7 @@ package com.kodilla.walletmanager.domain.builders;
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 
 import java.sql.Date;
@@ -13,6 +14,7 @@ public class TransactionBuilder {
     private TransactionType type;
     private String title;
     private String description;
+    private CurrencyType currencyType;
     private double amount;
     private Category category;
     private User user;
@@ -42,6 +44,11 @@ public class TransactionBuilder {
         return this;
     }
 
+    public TransactionBuilder currencyType(CurrencyType type) {
+        this.currencyType = type;
+        return this;
+    }
+
     public TransactionBuilder amount(double amount) {
         this.amount = amount;
         return this;
@@ -64,6 +71,7 @@ public class TransactionBuilder {
         transaction.setType(type);
         transaction.setTitle(title);
         transaction.setDescription(description);
+        transaction.setCurrencyType(currencyType);
         transaction.setAmount(amount);
         transaction.setCategory(category);
         transaction.setUser(user);

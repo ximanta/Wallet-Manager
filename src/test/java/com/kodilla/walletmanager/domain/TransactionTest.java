@@ -4,6 +4,7 @@ package com.kodilla.walletmanager.domain;
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.repository.TransactionRepository;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -54,6 +56,7 @@ public class TransactionTest {
                 ", type=" + fromDb.getType() +
                 ", title='" + fromDb.getTitle() + '\'' +
                 ", description='" + fromDb.getDescription() + '\'' +
+                ", currencyType=" + fromDb.getCurrencyType() +
                 ", amount=" + fromDb.getAmount() +
                 ", category=" + fromDb.getCategory() +
                 ", user=" + fromDb.getUser() +
@@ -63,6 +66,7 @@ public class TransactionTest {
         assertNotNull(fromDb.getId());
         assertEquals("Test",fromDb.getTitle());
         assertEquals("Test Description",fromDb.getDescription());
+        assertEquals(CurrencyType.USD,fromDb.getCurrencyType());
         assertEquals(50,fromDb.getAmount(),0);
         assertEquals(TransactionType.REVENUES,fromDb.getType());
         assertEquals(today.getDayOfMonth(),fromDb.getDate().toLocalDate().getDayOfMonth());
@@ -99,6 +103,7 @@ public class TransactionTest {
     }
 
     private User createUser(){
-        return userRepository.save(factory.user());
+        Optional<User> optional = userRepository.getByLogin(factory.user().getLogin());
+        return optional.orElseGet(() -> userRepository.save(factory.user()));
     }
 }

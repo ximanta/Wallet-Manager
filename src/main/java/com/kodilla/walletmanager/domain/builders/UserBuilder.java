@@ -1,6 +1,7 @@
 package com.kodilla.walletmanager.domain.builders;
 
 import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 
 import java.sql.Date;
 
@@ -11,6 +12,7 @@ public final class UserBuilder {
     private String emile;
     private Date birthDate;
     private boolean active;
+    private CurrencyType currencyType;
     private double balance;
 
     public UserBuilder id(Long id) {
@@ -38,6 +40,11 @@ public final class UserBuilder {
         return this;
     }
 
+    public UserBuilder currencyType(CurrencyType type) {
+        this.currencyType = type;
+        return this;
+    }
+
     public UserBuilder active(boolean active) {
         this.active = active;
         return this;
@@ -56,6 +63,7 @@ public final class UserBuilder {
         user.setEmile(emile);
         user.setBirthDate(birthDate);
         user.setActive(active);
+        user.setCurrencyType(currencyType);
         user.setBalance(balance);
 
         return user;

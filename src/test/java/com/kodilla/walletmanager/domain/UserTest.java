@@ -1,6 +1,7 @@
 package com.kodilla.walletmanager.domain;
 
 import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.repository.UserRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
@@ -39,6 +40,7 @@ public class UserTest  {
                 ", emile='" + user.getEmile() + '\'' +
                 ", birthDate=" + user.getBirthDate() +
                 ", active=" + user.isActive() +
+                ", currencyType=" + user.getCurrencyType() +
                 ", balance=" + user.getBalance() +
                 '}';
 
@@ -49,6 +51,7 @@ public class UserTest  {
         assertEquals("Password",formDb.getPassword());
         assertEquals("test@email.com",formDb.getEmile());
         assertEquals(Date.valueOf("2000-02-20"),formDb.getBirthDate());
+        assertEquals(CurrencyType.USD,user.getCurrencyType());
         assertEquals(-150.0,formDb.getBalance(),0);
         assertEquals(toString,formDb.toString());
 

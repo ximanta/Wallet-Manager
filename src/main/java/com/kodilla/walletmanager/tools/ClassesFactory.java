@@ -7,6 +7,7 @@ import com.kodilla.walletmanager.domain.builders.UserDtoBuilder;
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
@@ -25,6 +26,7 @@ public final class ClassesFactory {
                 .description("Test Description")
                 .date(Date.valueOf(LocalDate.now()))
                 .type(TransactionType.REVENUES)
+                .currencyType(CurrencyType.USD)
                 .amount(50)
                 .category(category())
                 .user(user())
@@ -37,6 +39,7 @@ public final class ClassesFactory {
                 .description("Test Description")
                 .date(Date.valueOf(LocalDate.now()))
                 .type(TransactionType.REVENUES)
+                .currencyType(CurrencyType.USD)
                 .amount(50)
                 .category(categoryDto())
                 .user(userDto()).build();
@@ -63,6 +66,7 @@ public final class ClassesFactory {
                 .emile("test@email.com")
                 .birthDate(Date.valueOf("2000-02-20"))
                 .active(true)
+                .currencyType(CurrencyType.USD)
                 .balance(-150).build();
     }
 
@@ -73,6 +77,7 @@ public final class ClassesFactory {
                 .emile("test@email.com")
                 .birthDate(Date.valueOf("2000-02-20"))
                 .active(true)
+                .currencyType(CurrencyType.USD)
                 .balance(-150).build();
     }
 }

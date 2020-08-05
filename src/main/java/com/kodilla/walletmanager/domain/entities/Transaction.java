@@ -1,5 +1,6 @@
 package com.kodilla.walletmanager.domain.entities;
 
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.tools.ToolsManager;
 import lombok.Getter;
@@ -48,6 +49,11 @@ public class Transaction {
     @Column
     private String description;
 
+    @NotNull
+    @Enumerated(value = EnumType.STRING)
+    @Column
+    private CurrencyType currencyType;
+
     @Column(precision = 2, length = 25)
     private double amount;
 
@@ -75,10 +81,10 @@ public class Transaction {
                 ", type=" + type +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", currencyType=" + currencyType +
                 ", amount=" + amount +
                 ", category=" + category +
-                ", user=" + user +
-                '}';
+                ", user=" + user + '}';
     }
 
     public void setAmount(double amount) {
@@ -89,7 +95,7 @@ public class Transaction {
         if (ToolsManager.isTheSameEnum(category.getType(),type)){
             this.category = category;
         } else {
-            System.out.println("Not the came type TransactionType");
+            System.out.println("Not the same type TransactionType");
         }
     }
 }

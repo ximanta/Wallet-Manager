@@ -1,5 +1,6 @@
 package com.kodilla.walletmanager.domain.entities;
 
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -49,6 +50,10 @@ public class User {
     private boolean active;
 
     @NotNull
+    @Column
+    private CurrencyType currencyType;
+
+    @NotNull
     @Column(precision = 2, length = 25, scale = 2)
     private double balance;
 
@@ -68,7 +73,7 @@ public class User {
                 ", emile='" + emile + '\'' +
                 ", birthDate=" + birthDate +
                 ", active=" + active +
-                ", balance=" + balance +
-                '}';
+                ", currencyType=" + currencyType +
+                ", balance=" + balance + '}';
     }
 }

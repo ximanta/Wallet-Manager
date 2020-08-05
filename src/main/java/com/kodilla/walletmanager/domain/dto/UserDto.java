@@ -1,5 +1,6 @@
 package com.kodilla.walletmanager.domain.dto;
 
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.tools.ToolsManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class UserDto {
     private String emile;
     private Date birthDate;
     private boolean active;
+    private CurrencyType currencyType;
     private double balance;
 
     public void setBalance(double balance) {

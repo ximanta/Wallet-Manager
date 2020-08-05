@@ -22,4 +22,5 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
 
     @Query
     List<Transaction> betweenDate(@Param("FROMDATE") Date fromDate, @Param("TODATE") Date toDate, @Param("USER")User user);
+    
 }
