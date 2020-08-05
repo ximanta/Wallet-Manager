@@ -2,11 +2,10 @@ package com.kodilla.walletmanager.mapper;
 
 import com.kodilla.walletmanager.domain.builders.UserBuilder;
 import com.kodilla.walletmanager.domain.builders.UserDtoBuilder;
-import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.dto.UserDto;
+import com.kodilla.walletmanager.domain.entities.User;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +19,7 @@ public class UserMapper {
                 .emile(dto.getEmile())
                 .birthDate(dto.getBirthDate())
                 .active(dto.isActive())
+                .currencyType(dto.getCurrencyType())
                 .balance(dto.getBalance()).build();
     }
 
@@ -31,6 +31,7 @@ public class UserMapper {
                 .emile(user.getEmile())
                 .birthDate(user.getBirthDate())
                 .active(user.isActive())
+                .currencyType(user.getCurrencyType())
                 .balance(user.getBalance()).build();
     }
 

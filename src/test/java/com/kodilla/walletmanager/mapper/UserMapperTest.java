@@ -1,7 +1,8 @@
 package com.kodilla.walletmanager.mapper;
 
-import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.dto.UserDto;
+import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +41,7 @@ public class UserMapperTest {
         assertEquals("Password",user.getPassword());
         assertEquals("test@email.com",user.getEmile());
         assertEquals(Date.valueOf("2000-02-20"),user.getBirthDate());
+        assertEquals(CurrencyType.USD,user.getCurrencyType());
         assertEquals(-150.0,user.getBalance(),0);
     }
 
@@ -59,6 +61,7 @@ public class UserMapperTest {
         assertEquals("Password",dto.getPassword());
         assertEquals("test@email.com",dto.getEmile());
         assertEquals(Date.valueOf("2000-02-20"),dto.getBirthDate());
+        assertEquals(CurrencyType.USD,dto.getCurrencyType());
         assertEquals(-150.0,dto.getBalance(),0);
     }
 
@@ -81,6 +84,7 @@ public class UserMapperTest {
         assertEquals("Password",dto.getPassword());
         assertEquals("test@email.com",dto.getEmile());
         assertEquals(Date.valueOf("2000-02-20"),dto.getBirthDate());
+        assertEquals(CurrencyType.USD,dto.getCurrencyType());
         assertEquals(-150.0,dto.getBalance(),0);
         assertEquals(3,dtos.size());
     }

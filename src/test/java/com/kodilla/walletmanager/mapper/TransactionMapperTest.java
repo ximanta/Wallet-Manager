@@ -1,6 +1,7 @@
 package com.kodilla.walletmanager.mapper;
 
 import com.kodilla.walletmanager.domain.entities.Transaction;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.tools.ClassesFactory;
@@ -40,6 +41,7 @@ public class TransactionMapperTest {
         assertEquals("Test Description",transaction.getDescription());
         assertEquals(Date.valueOf("2020-02-20"),transaction.getDate());
         assertEquals(TransactionType.REVENUES, transaction.getType());
+        assertEquals(CurrencyType.USD,transactionDto.getCurrencyType());
         assertEquals(50,transaction.getAmount(),0);
         assertNotNull(transaction.getCategory());
         assertNotNull(transaction.getUser());
@@ -60,6 +62,7 @@ public class TransactionMapperTest {
         assertEquals("Test Description",dto.getDescription());
         assertEquals(Date.valueOf("2020-02-20"),dto.getDate());
         assertEquals(TransactionType.REVENUES, dto.getType());
+        assertEquals(CurrencyType.USD,dto.getCurrencyType());
         assertEquals(50,dto.getAmount(),0);
         assertNotNull(dto.getCategoryDto());
         assertNotNull(dto.getUserDto());
@@ -81,6 +84,7 @@ public class TransactionMapperTest {
         assertEquals("Test",dto.getTitle());
         assertEquals("Test Description",dto.getDescription());
         assertEquals(TransactionType.REVENUES, dto.getType());
+        assertEquals(CurrencyType.USD,dto.getCurrencyType());
         assertEquals(50,dto.getAmount(),0);
         assertNotNull(dto.getCategoryDto());
         assertNotNull(dto.getUserDto());
