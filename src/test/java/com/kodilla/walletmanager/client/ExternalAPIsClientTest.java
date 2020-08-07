@@ -28,7 +28,7 @@ public class ExternalAPIsClientTest {
 
     }
 
-    @Test
+/*    @Test
     public void getCurrenciesValues() {
         //Given
         CurrencyJson currencyJson = new CurrencyJson();
@@ -48,5 +48,5 @@ public class ExternalAPIsClientTest {
         assertEquals("2020-05-05",json.getDate());
         assertEquals("USD",json.getBase());
         assertNotNull(json.getRates());
-    }
+    }*/
 }

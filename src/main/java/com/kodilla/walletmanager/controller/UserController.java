@@ -24,10 +24,10 @@ public class UserController {
         return service.get(login,password);
     }
 
-    @PutMapping("")
+/*    @PutMapping("")
     public UserDto update(@RequestBody UserDto dto){
         return service.update(dto);
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public boolean delete(@PathVariable long id){

@@ -54,18 +54,20 @@ public class ToolsManager {
 
     public static boolean isUserDtoCorrect(UserDto dto){
         boolean isLogin = dto.getLogin() != null;
-        boolean isLoginEmpty = !dto.getLogin().isEmpty();
         boolean isEmile = dto.getEmile() != null;
         boolean isBirthDate = dto.getBirthDate() != null;
-        boolean isPassword = isPasswordAccept(dto.getPassword());
-        if (isLogin && isLoginEmpty && isEmile && isBirthDate && isPassword){
-            LOGGER.info("UserDto is correct");
-            return true;
-        }else {
-            LOGGER.info("UserDto is incorrect");
-            return false;
-        }
+        boolean isCurrencyType = dto.getCurrencyType() !=null;
 
+        if (isLogin && isEmile && isBirthDate && isCurrencyType){
+            boolean isLoginEmpty = !dto.getLogin().isEmpty();
+            boolean isPassword = isPasswordAccept(dto.getPassword());
+            if (isLoginEmpty && isPassword){
+                LOGGER.info("UserDto is correct");
+                return true;
+            }
+        }
+        LOGGER.info("UserDto is incorrect");
+        return false;
     }
 
     public static boolean isCategoryDtoCorrect(CategoryDto dto){

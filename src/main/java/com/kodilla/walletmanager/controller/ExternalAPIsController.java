@@ -18,9 +18,9 @@ public class ExternalAPIsController {
         return client.bitcoinPrice();
     }
 
-    @GetMapping("/currency")
+/*    @GetMapping("/currency")
     public CurrencyJson getCurrenciesValues(){
         return client.getCurrenciesValues();
-    }
+    }*/
 
 }

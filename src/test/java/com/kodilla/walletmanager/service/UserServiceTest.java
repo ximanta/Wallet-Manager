@@ -2,6 +2,7 @@ package com.kodilla.walletmanager.service;
 
 import com.kodilla.walletmanager.domain.dto.UserDto;
 import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.mapper.UserMapper;
 import com.kodilla.walletmanager.repository.UserRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;
@@ -52,6 +53,7 @@ public class UserServiceTest {
         assertEquals("Password",userDto.getPassword());
         assertEquals("test@email.com",userDto.getEmile());
         assertEquals(Date.valueOf("2000-02-20"),userDto.getBirthDate());
+        assertEquals(CurrencyType.USD,userDto.getCurrencyType());
         assertEquals(-150,userDto.getBalance(),0);
     }
 
@@ -60,7 +62,7 @@ public class UserServiceTest {
         service.get("Valid","Valid");
     }
 
-    @Test
+   @Test
     public void getAll() {
         //Given
         saveDuplicate(factory.user());
@@ -90,6 +92,7 @@ public class UserServiceTest {
         assertEquals("Password",fromDb.getPassword());
         assertEquals("test@email.com",fromDb.getEmile());
         assertEquals(Date.valueOf("2000-02-20"),fromDb.getBirthDate());
+        assertEquals(CurrencyType.USD,fromDb.getCurrencyType());
         assertEquals(-150,fromDb.getBalance(),0);
     }
 
@@ -100,56 +103,58 @@ public class UserServiceTest {
 
     @Test
     public void update() {
-        //Given
-        User user = saveDuplicate(factory.user());
-        UserDto userDto = factory.userDto();
-        userDto.setId(user.getId());
-        userDto.setLogin("Update");
-        userDto.setPassword("Update");
-        userDto.setEmile("update@emile.com");
-        userDto.setActive(false);
-        userDto.setBalance(140);
+            //Given
+            User user = saveDuplicate(factory.user());
+            UserDto userDto = factory.userDto();
+            userDto.setId(user.getId());
+            userDto.setLogin("Update");
+            userDto.setPassword("Update");
+            userDto.setEmile("update@emile.com");
+            userDto.setCurrencyType(CurrencyType.BRL);
+            userDto.setActive(false);
+            userDto.setBalance(140);
 
-        //When
-        UserDto fromDb = service.update(userDto);
-        repository.delete(mapper.mapToEntity(fromDb));
+            //When
+            UserDto fromDb = service.update(userDto,true);
+            repository.delete(mapper.mapToEntity(fromDb));
 
-        //Then
-        assertNotNull(fromDb.getId());
-        assertFalse(fromDb.isActive());
-        assertFalse(repository.existsById(fromDb.getId()));
-        assertEquals("Update",fromDb.getLogin());
-        assertEquals("Update",fromDb.getPassword());
-        assertEquals("update@emile.com",fromDb.getEmile());
-        assertEquals(Date.valueOf("2000-02-20"),fromDb.getBirthDate());
-        assertEquals(140,fromDb.getBalance(),0);
-    }
+            //Then
+            assertNotNull(fromDb.getId());
+            assertFalse(fromDb.isActive());
+            assertFalse(repository.existsById(fromDb.getId()));
+            assertEquals("Update",fromDb.getLogin());
+            assertEquals("Update",fromDb.getPassword());
+            assertEquals("update@emile.com",fromDb.getEmile());
+            assertEquals(Date.valueOf("2000-02-20"),fromDb.getBirthDate());
+            assertEquals(CurrencyType.BRL,fromDb.getCurrencyType());
+            assertEquals(140,fromDb.getBalance(),0);
+        }
 
-    @Test(expected = RuntimeException.class)
-    public void validUpdate(){
-        User user = saveDuplicate(factory.user());
-        UserDto dto = new UserDto();
-        dto.setId(user.getId());
-        service.update(dto);
-    }
+        @Test(expected = RuntimeException.class)
+        public void validUpdate(){
+            User user = saveDuplicate(factory.user());
+            UserDto dto = new UserDto();
+            dto.setId(user.getId());
+            service.update(dto,true);
+        }
+    /*
+        @Test
+        public void delete() {
+            //Given
+            User user = saveDuplicate(factory.user());
 
-    @Test
-    public void delete() {
-        //Given
-        User user = saveDuplicate(factory.user());
+            //When
+            service.delete(user.getId());
 
-        //When
-        service.delete(user.getId());
+            //Then
+            assertFalse(repository.existsById(user.getId()));
+        }
 
-        //Then
-        assertFalse(repository.existsById(user.getId()));
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void deleteValidId(){
-        service.delete(-100);
-    }
-
+        @Test(expected = RuntimeException.class)
+        public void deleteValidId(){
+            service.delete(-100);
+        }
+    */
     private User saveDuplicate(User user){
         Optional<User> optional = repository.getByLogin(user.getLogin());
         if (!optional.isPresent()){

@@ -1,11 +1,16 @@
 package com.kodilla.walletmanager.client;
 
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.json.CurrencyJson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import javax.persistence.EntityListeners;
 
 @Component
 public class ExternalAPIsClient {
@@ -23,10 +28,10 @@ public class ExternalAPIsClient {
         }
     }
 
-    public CurrencyJson getCurrenciesValues(){
+    public CurrencyJson getCurrenciesValues(CurrencyType type){
         try{
             ResponseEntity<CurrencyJson> entity = template.getForEntity(
-                    "https://api.exchangeratesapi.io/latest?base=USD",
+                    "https://api.exchangeratesapi.io/latest?base=" + type.toString(),
                     CurrencyJson.class);
             return entity.getBody();
         } catch (RestClientException e){
