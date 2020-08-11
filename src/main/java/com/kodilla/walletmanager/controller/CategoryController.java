@@ -12,10 +12,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-    @Autowired
-    CategoryService service;
+    private CategoryService service;
 
-    @PostMapping(value = "",consumes = APPLICATION_JSON_VALUE)
+    private CategoryController(CategoryService service) {
+        this.service = service;
+    }
+
+    @PostMapping(value = "")
     public CategoryDto create(@RequestBody CategoryDto dto){
         return service.create(dto);
     }

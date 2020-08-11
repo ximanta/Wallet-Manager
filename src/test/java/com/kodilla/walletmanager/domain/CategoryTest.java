@@ -30,6 +30,10 @@ public class CategoryTest {
         //Given
         Category category = factory.category();
         repository.save(category);
+        String toString = "Category{" +
+                "id=" + category.getId() +
+                ", name='" + category.getName() + '\'' +
+                ", type=" + category.getType() + '}';
 
         //When
         Category fromDb = repository.getOne(category.getId());
@@ -38,6 +42,7 @@ public class CategoryTest {
         //Then
         assertEquals("Test",fromDb.getName());
         assertEquals(TransactionType.REVENUES,fromDb.getType());
+        assertEquals(toString,fromDb.toString());
         assertTrue(fromDb.getTransactions().isEmpty());
         assertFalse(repository.existsById(category.getId()));
     }

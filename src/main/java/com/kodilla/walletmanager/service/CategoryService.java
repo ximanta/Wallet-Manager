@@ -1,8 +1,7 @@
 package com.kodilla.walletmanager.service;
 
-import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.dto.CategoryDto;
-import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
@@ -11,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,9 +37,15 @@ public class CategoryService {
     }
 
     public List<CategoryDto> getAll(String type){
-        List<Category> list = repository.findAll();
+        List<Category> list = new ArrayList<>();
+        try{
+            list = repository.findAll();
+            LOGGER.info("Category list has been taken");
+        } catch (Exception e){
+            LOGGER.error("Category List error",e);
+        }
         List<CategoryDto> dtos = mapper.mapToDtos(list);
-        return ToolsManager.sortByTypeC(dtos,type);
+        return ToolsManager.sortCategoryByType(dtos,type);
     }
 
     public CategoryDto update(CategoryDto dto){
@@ -51,12 +57,15 @@ public class CategoryService {
         if (optional.isPresent()){
             Category category = optional.get();
             repository.delete(category);
-            LOGGER.info("Category has been deleted");
-            return !repository.existsById(id);
-        }else {
-            LOGGER.error("Cannot find Category by id");
-            throw new RuntimeException("Cannot find Category by id");
+            if (!repository.existsById(id)){
+                LOGGER.info("Category has been deleted");
+                return true;
+            }
+            LOGGER.info("Category hasn't been deleted");
+            return false;
         }
+            LOGGER.error("Cannot find Category by id");
+            return false;
     }
 
     private Category updateMechanic(CategoryDto dto){

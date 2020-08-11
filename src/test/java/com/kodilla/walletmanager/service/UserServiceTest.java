@@ -101,7 +101,7 @@ public class UserServiceTest {
         service.create(new UserDto());
     }
 
-    @Test
+/*    @Test
     public void update() {
             //Given
             User user = saveDuplicate(factory.user());
@@ -128,15 +128,15 @@ public class UserServiceTest {
             assertEquals(Date.valueOf("2000-02-20"),fromDb.getBirthDate());
             assertEquals(CurrencyType.BRL,fromDb.getCurrencyType());
             assertEquals(140,fromDb.getBalance(),0);
-        }
+        }*/
 
-        @Test(expected = RuntimeException.class)
+/*        @Test(expected = RuntimeException.class)
         public void validUpdate(){
             User user = saveDuplicate(factory.user());
             UserDto dto = new UserDto();
             dto.setId(user.getId());
             service.update(dto,true);
-        }
+        }*/
     /*
         @Test
         public void delete() {

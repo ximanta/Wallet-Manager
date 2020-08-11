@@ -73,10 +73,14 @@ public class ToolsManager {
     public static boolean isCategoryDtoCorrect(CategoryDto dto){
         boolean isNull = dto != null;
         boolean isName = dto.getName() != null;
-        boolean isType = dto.getType().equals(TransactionType.EXPENSES) || dto.getType().equals(TransactionType.REVENUES);
+        boolean isType = dto.getType() != null;
         if (isName && isNull && isType){
-            LOGGER.info("CategoryDto is correct");
-            return true;
+            boolean isTypeCorrect = dto.getType().equals(TransactionType.EXPENSES) || dto.getType().equals(TransactionType.REVENUES);
+            boolean isBlank = !dto.getName().isEmpty();
+            if (isTypeCorrect && isBlank){
+                LOGGER.info("CategoryDto is correct");
+                return true;
+            }
         }
         LOGGER.info("CategoryDto is incorrect");
         return false;
@@ -124,7 +128,7 @@ public class ToolsManager {
         }
     }
 
-    public static List<CategoryDto> sortByTypeC(List<CategoryDto> list, String type){
+    public static List<CategoryDto> sortCategoryByType(List<CategoryDto> list, String type){
         if (type == null){
             return list;
         }else {

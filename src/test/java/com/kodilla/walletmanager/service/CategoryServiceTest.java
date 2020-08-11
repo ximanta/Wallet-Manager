@@ -114,8 +114,9 @@ public class CategoryServiceTest {
         assertFalse(repository.existsById(fromDb.getId()));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void  validDelete(){
-        service.delete(-2);
+        boolean isDelete = service.delete(-2);
+        assertFalse(isDelete);
     }
 }
