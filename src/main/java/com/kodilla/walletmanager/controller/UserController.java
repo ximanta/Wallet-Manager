@@ -29,8 +29,8 @@ public class UserController {
         return service.update(dto);
     }*/
 
-    @DeleteMapping("/{id}")
+/*    @DeleteMapping("/{id}")
     public boolean delete(@PathVariable long id){
         return service.delete(id);
-    }
+    }*/
 }

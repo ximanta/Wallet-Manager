@@ -11,4 +11,9 @@ public class AdminConfig {
     @Value("${admin.mail}")
     private String adminMail;
 
+    @Value("${link.api.currency}")
+    private String currencyApi;
+
+    @Value("${link.api.bitcoin}")
+    private String bitcoinApi;
 }

@@ -12,6 +12,10 @@ import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.domain.dto.UserDto;
+import com.kodilla.walletmanager.json.Bitcoin;
+import com.kodilla.walletmanager.json.BitcoinJson;
+import com.kodilla.walletmanager.json.CurrencyJson;
+import com.kodilla.walletmanager.json.RatesJson;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -79,5 +83,21 @@ public final class ClassesFactory {
                 .active(true)
                 .currencyType(CurrencyType.USD)
                 .balance(-150).build();
+    }
+
+    public CurrencyJson currencyJson(){
+        CurrencyJson json = new CurrencyJson();
+        json.setBase("");
+        json.setDate("10-10-2020");
+        json.setRates(new RatesJson());
+
+        return json;
+    }
+
+    public BitcoinJson bitcoinJson(){
+        BitcoinJson json = new BitcoinJson();
+        json.setBitcoin(new Bitcoin());
+
+        return json;
     }
 }

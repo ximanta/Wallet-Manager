@@ -58,7 +58,7 @@ public class UserService {
         }
     }
 
-    public UserDto update(UserDto dto, boolean conversion){
+/*    public UserDto update(UserDto dto, boolean conversion){
         return updateMechanic(dto,conversion);
     }
 
@@ -71,9 +71,9 @@ public class UserService {
         }else {
             throw new RuntimeException("Cannot find User by id");
         }
-    }
+    }*/
 
-    private UserDto updateMechanic(UserDto dto, boolean conversion){
+/*    private UserDto updateMechanic(UserDto dto, boolean conversion){
         Optional<User> optional = repository.findById(dto.getId());
         if (optional.isPresent()){
             User user = mapper.mapToEntity(dto);
@@ -84,9 +84,9 @@ public class UserService {
             LOGGER.error("Cannot find User by id");
             throw new RuntimeException();
         }
-    }
+    }*/
 
-    private User checkCurrency(User original, User updated, boolean conversion) {
+/*    private User checkCurrency(User original, User updated, boolean conversion) {
         if (original.getCurrencyType() != updated.getCurrencyType() && conversion){
             User user = updated;
             double balance = ToolsManager.tenthRoundDouble(original.getBalance() * getCheckCurrencyValues(original,updated));
@@ -95,9 +95,9 @@ public class UserService {
             return user;
        }
         return updated;
-    }
+    }*/
 
-    private double getCheckCurrencyValues(User original, User updated){
+/*    private double getCheckCurrencyValues(User original, User updated){
         try {
             CurrencyJson json = client.getCurrenciesValues(updated.getCurrencyType());
             Method method = RatesJson.class.getMethod("get" + original.getCurrencyType().toString());
@@ -108,7 +108,7 @@ public class UserService {
             LOGGER.error("GetValues from ExternalApi Error");
             return 1;
         }
-    }
+    }*/
 
     private User checkUserSave(User user){
         try{

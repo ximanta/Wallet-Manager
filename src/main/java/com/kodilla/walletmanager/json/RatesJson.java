@@ -14,71 +14,71 @@ import java.util.Map;
 @Setter
 public class RatesJson {
     @JsonProperty("CAD")
-    private Double CAD;
+    private double CAD;
     @JsonProperty("HKD")
-    private Double HKD;
+    private double HKD;
     @JsonProperty("ISK")
-    private Double ISK;
+    private double ISK;
     @JsonProperty("PHP")
-    private Double PHP;
+    private double PHP;
     @JsonProperty("DKK")
-    private Double DKK;
+    private double DKK;
     @JsonProperty("HUF")
-    private Double HUF;
+    private double HUF;
     @JsonProperty("CZK")
-    private Double CZK;
+    private double CZK;
     @JsonProperty("GBP")
-    private Double GBP;
+    private double GBP;
     @JsonProperty("RON")
-    private Double RON;
+    private double RON;
     @JsonProperty("SEK")
-    private Double SEK;
+    private double SEK;
     @JsonProperty("IDR")
-    private Double IDR;
+    private double IDR;
     @JsonProperty("INR")
-    private Double INR;
+    private double INR;
     @JsonProperty("BRL")
-    private Double BRL;
+    private double BRL;
     @JsonProperty("RUB")
-    private Double RUB;
+    private double RUB;
     @JsonProperty("HRK")
-    private Double HRK;
+    private double HRK;
     @JsonProperty("JPY")
-    private Double JPY;
+    private double JPY;
     @JsonProperty("THB")
-    private Double THB;
+    private double THB;
     @JsonProperty("CHF")
-    private Double CHF;
+    private double CHF;
     @JsonProperty("EUR")
-    private Double EUR;
+    private double EUR;
     @JsonProperty("MYR")
-    private Double MYR;
+    private double MYR;
     @JsonProperty("BGN")
-    private Double BGN;
+    private double BGN;
     @JsonProperty("TRY")
-    private Double TRY;
+    private double TRY;
     @JsonProperty("CNY")
-    private Double CNY;
+    private double CNY;
     @JsonProperty("NOK")
-    private Double NOK;
+    private double NOK;
     @JsonProperty("NZD")
-    private Double NZD;
+    private double NZD;
     @JsonProperty("ZAR")
-    private Double ZAR;
+    private double ZAR;
     @JsonProperty("USD")
-    private Double USD;
+    private double USD;
     @JsonProperty("MXN")
-    private Double MXN;
+    private double MXN;
     @JsonProperty("SGD")
-    private Double SGD;
+    private double SGD;
     @JsonProperty("AUD")
-    private Double AUD;
+    private double AUD;
     @JsonProperty("ILS")
-    private Double ILS;
+    private double ILS;
     @JsonProperty("KRW")
-    private Double KRW;
+    private double KRW;
     @JsonProperty("PLN")
-    private Double PLN;
+    private double PLN;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
