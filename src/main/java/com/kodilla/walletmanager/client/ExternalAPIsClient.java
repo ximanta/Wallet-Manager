@@ -2,6 +2,7 @@ package com.kodilla.walletmanager.client;
 
 import com.kodilla.walletmanager.config.AdminConfig;
 import com.kodilla.walletmanager.domain.entities.ConvertCurrency;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.json.BitcoinJson;
 import com.kodilla.walletmanager.json.CurrencyJson;
 import com.kodilla.walletmanager.json.RatesJson;
@@ -16,6 +17,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Method;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ExternalAPIsClient {
@@ -30,23 +34,28 @@ public class ExternalAPIsClient {
         this.factory = factory;
     }
 
-    public BitcoinJson bitcoinValue(String type){
+    public BitcoinJson getBitcoinValue(String type){
         ResponseEntity<BitcoinJson> entity = bitcoinValueGetForEntity(type);
         if (entity.getBody() != null){
             return entity.getBody();
         }
         return factory.bitcoinJson();
     }
+
     public double getConvertCurrency(ConvertCurrency currency){
         return currency.getAmount() * convertCurrencyMechanic(currency.getFromCurrency(),currency.getToCurrency());
     }
 
     public CurrencyJson getCurrenciesValues(String type){
-        ResponseEntity<CurrencyJson> entity = getCurrenciesGetForEntity(type);
+        ResponseEntity<CurrencyJson> entity = currenciesGetForEntity(type);
         if (entity.getBody() != null){
             return entity.getBody();
         }
         return factory.currencyJson();
+    }
+
+    public List<String> getCurrencyList(){
+        return EnumSet.allOf(CurrencyType.class).stream().map(CurrencyType::name).collect(Collectors.toList());
     }
 
     private ResponseEntity<BitcoinJson> bitcoinValueGetForEntity(String type){
@@ -62,7 +71,7 @@ public class ExternalAPIsClient {
         return entity;
     }
 
-    private ResponseEntity<CurrencyJson> getCurrenciesGetForEntity(String type){
+    private ResponseEntity<CurrencyJson> currenciesGetForEntity(String type){
         ResponseEntity<CurrencyJson> entity = new ResponseEntity<>(HttpStatus.ACCEPTED);
         try{
             entity = template.getForEntity(
