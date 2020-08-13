@@ -4,7 +4,6 @@ import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -22,14 +21,13 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint( columnNames ="login") } )
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
-    @Column()
+    @Column(unique = true)
     private String login;
 
     @NotNull

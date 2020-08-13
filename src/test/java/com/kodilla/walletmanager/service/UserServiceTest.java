@@ -101,66 +101,62 @@ public class UserServiceTest {
         service.create(new UserDto());
     }
 
-/*    @Test
+    @Test
     public void update() {
-            //Given
-            User user = saveDuplicate(factory.user());
-            UserDto userDto = factory.userDto();
-            userDto.setId(user.getId());
-            userDto.setLogin("Update");
-            userDto.setPassword("Update");
-            userDto.setEmile("update@emile.com");
-            userDto.setCurrencyType(CurrencyType.BRL);
-            userDto.setActive(false);
-            userDto.setBalance(140);
+        //Given
+        User user = saveDuplicate(factory.user());
+        UserDto userDto = factory.userDto();
+        userDto.setId(user.getId());
+        userDto.setLogin("Update");
+        userDto.setPassword("Update");
+        userDto.setEmile("update@emile.com");
+        userDto.setCurrencyType(CurrencyType.BRL);
+        userDto.setActive(false);
+        userDto.setBalance(140);
 
-            //When
-            UserDto fromDb = service.update(userDto,true);
-            repository.delete(mapper.mapToEntity(fromDb));
+        //When
+        UserDto fromDb = service.update(userDto, true);
+        repository.delete(mapper.mapToEntity(fromDb));
 
-            //Then
-            assertNotNull(fromDb.getId());
-            assertFalse(fromDb.isActive());
-            assertFalse(repository.existsById(fromDb.getId()));
-            assertEquals("Update",fromDb.getLogin());
-            assertEquals("Update",fromDb.getPassword());
-            assertEquals("update@emile.com",fromDb.getEmile());
-            assertEquals(Date.valueOf("2000-02-20"),fromDb.getBirthDate());
-            assertEquals(CurrencyType.BRL,fromDb.getCurrencyType());
-            assertEquals(140,fromDb.getBalance(),0);
-        }*/
+        //Then
+        assertNotNull(fromDb.getId());
+        assertFalse(fromDb.isActive());
+        assertFalse(repository.existsById(fromDb.getId()));
+        assertEquals("Update", fromDb.getLogin());
+        assertEquals("Update", fromDb.getPassword());
+        assertEquals("update@emile.com", fromDb.getEmile());
+        assertEquals(Date.valueOf("2000-02-20"), fromDb.getBirthDate());
+        assertEquals(CurrencyType.BRL, fromDb.getCurrencyType());
+        assertNotEquals(140, fromDb.getBalance(), 0);
+    }
 
-/*        @Test(expected = RuntimeException.class)
-        public void validUpdate(){
-            User user = saveDuplicate(factory.user());
-            UserDto dto = new UserDto();
-            dto.setId(user.getId());
-            service.update(dto,true);
-        }*/
-    /*
-        @Test
-        public void delete() {
-            //Given
-            User user = saveDuplicate(factory.user());
+    @Test(expected = RuntimeException.class)
+    public void validUpdate() {
+        User user = saveDuplicate(factory.user());
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        service.update(dto, true);
+    }
 
-            //When
-            service.delete(user.getId());
+    @Test
+    public void delete() {
+        //Given
+        User user = saveDuplicate(factory.user());
 
-            //Then
-            assertFalse(repository.existsById(user.getId()));
-        }
+        //When
+        service.delete(user.getId(),user.getPassword());
 
-        @Test(expected = RuntimeException.class)
-        public void deleteValidId(){
-            service.delete(-100);
-        }
-    */
-    private User saveDuplicate(User user){
+        //Then
+        assertFalse(repository.existsById(user.getId()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deleteValidId() {
+        service.delete(-100,"");
+    }
+
+    private User saveDuplicate(User user) {
         Optional<User> optional = repository.getByLogin(user.getLogin());
-        if (!optional.isPresent()){
-            return repository.save(user);
-        }else {
-            return optional.get();
-        }
+        return optional.orElseGet(() -> repository.save(user));
     }
 }

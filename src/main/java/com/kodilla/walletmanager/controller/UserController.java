@@ -14,7 +14,7 @@ public class UserController {
         this.service = service;
     }
 
-    @PostMapping("")
+    @PostMapping
     public UserDto create(@RequestBody UserDto dto){
         return service.create(dto);
     }
@@ -24,13 +24,14 @@ public class UserController {
         return service.get(login,password);
     }
 
-/*    @PutMapping("")
-    public UserDto update(@RequestBody UserDto dto){
-        return service.update(dto);
-    }*/
+    @PutMapping("")
+    public UserDto update(@RequestBody UserDto dto,
+                          @RequestParam(value = "convert")boolean convert){
+        return service.update(dto, convert);
+    }
 
-/*    @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable long id){
-        return service.delete(id);
-    }*/
+    @DeleteMapping("/{id}/{password}")
+    public boolean delete(@PathVariable long id, @PathVariable String password) {
+        return service.delete(id,password);
+    }
 }

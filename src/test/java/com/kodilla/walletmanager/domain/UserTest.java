@@ -4,6 +4,8 @@ import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.repository.UserRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,17 @@ public class UserTest  {
 
     @Autowired
     ClassesFactory factory;
+
+    @Before
+    public void clean(){
+        User test = factory.user();
+        List<User> users = repository.findAll();
+        for (User user: users) {
+            if (user.getLogin().equals(test.getLogin()) && user.getPassword().equals(test.getPassword()) && user.getEmile().equals(test.getEmile())){
+                repository.delete(user);
+            }
+        }
+    }
 
     @Test
     public void createCompleteRecordTest(){

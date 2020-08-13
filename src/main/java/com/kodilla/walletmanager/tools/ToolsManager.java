@@ -34,12 +34,7 @@ public class ToolsManager {
     }
 
     public static double tenthRoundDouble(double d){
-        if((d * 100) - (long)(d * 100) != 0) {
-            double tmp = Math.round(d) * 100;
-            return tmp / 100 ;
-        } else {
-            return d;
-        }
+            return (double)Math.round(d * 100) / 100;
     }
 
     public static boolean isTransactionDtoCorrect(TransactionDto dto){
@@ -59,14 +54,14 @@ public class ToolsManager {
         boolean isCurrencyType = dto.getCurrencyType() !=null;
 
         if (isLogin && isEmile && isBirthDate && isCurrencyType){
-            boolean isLoginEmpty = !dto.getLogin().isEmpty();
+            boolean isLoginEmpty = isLoginAccept(dto.getLogin());
             boolean isPassword = isPasswordAccept(dto.getPassword());
             if (isLoginEmpty && isPassword){
                 LOGGER.info("UserDto is correct");
                 return true;
             }
         }
-        LOGGER.info("UserDto is incorrect");
+        LOGGER.info("UserDto valid body");
         return false;
     }
 
@@ -93,7 +88,20 @@ public class ToolsManager {
             LOGGER.info("Password is accepted");
             return true;
         }
-        LOGGER.warn("Incorrect password");
+        LOGGER.warn("Incorrect password, at least 6 characters");
+        return false;
+    }
+
+    private static boolean isLoginAccept(String login){
+        if (login != null){
+            if (login.length() >= 5){
+                    LOGGER.info("Correct Login");
+                    return true;
+            }
+            LOGGER.error("To short Login, aat least 5 characters");
+            return false;
+        }
+        LOGGER.error("Null Login");
         return false;
     }
 

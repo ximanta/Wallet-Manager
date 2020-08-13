@@ -8,6 +8,7 @@ import com.kodilla.walletmanager.json.CurrencyJson;
 import com.kodilla.walletmanager.json.RatesJson;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.tools.ClassesFactory;
+import com.kodilla.walletmanager.tools.ToolsManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,8 @@ public class ExternalAPIsClient {
     }
 
     public double getConvertCurrency(ConvertCurrency currency){
-        return currency.getAmount() * convertCurrencyMechanic(currency.getFromCurrency(),currency.getToCurrency());
+        double value = currency.getAmount() * convertCurrencyMechanic(currency.getFromCurrency(),currency.getToCurrency());
+        return ToolsManager.tenthRoundDouble(value);
     }
 
     public CurrencyJson getCurrenciesValues(String type){

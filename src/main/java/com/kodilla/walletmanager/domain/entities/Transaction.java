@@ -23,11 +23,10 @@ import java.sql.Date;
                 name = "Transaction.betweenDate",
                 query = "FROM Transaction WHERE date >= :FROMDATE and date <= :TODATE AND user = :USER")
 })
-
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

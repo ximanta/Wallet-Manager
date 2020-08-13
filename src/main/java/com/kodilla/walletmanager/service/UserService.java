@@ -2,22 +2,16 @@ package com.kodilla.walletmanager.service;
 
 import com.kodilla.walletmanager.client.ExternalAPIsClient;
 import com.kodilla.walletmanager.domain.dto.UserDto;
+import com.kodilla.walletmanager.domain.entities.ConvertCurrency;
 import com.kodilla.walletmanager.domain.entities.User;
-import com.kodilla.walletmanager.domain.enums.CurrencyType;
-import com.kodilla.walletmanager.json.CurrencyJson;
-import com.kodilla.walletmanager.json.RatesJson;
 import com.kodilla.walletmanager.mapper.UserMapper;
 import com.kodilla.walletmanager.repository.UserRepository;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.tools.ToolsManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +44,7 @@ public class UserService {
     public UserDto create(UserDto dto){
         if (ToolsManager.isUserDtoCorrect(dto)){
             User user = mapper.mapToEntity(dto);
-            User fromDb = checkUserSave(user);
+            User fromDb = checkUserSave(isExistingUser(user));
             return mapper.mapToDto(fromDb);
         }else {
             LOGGER.error("Valid body");
@@ -58,22 +52,28 @@ public class UserService {
         }
     }
 
-/*    public UserDto update(UserDto dto, boolean conversion){
+    public UserDto update(UserDto dto, boolean conversion){
         return updateMechanic(dto,conversion);
     }
 
-    public boolean delete(long id){
+    public boolean delete(long id, String password){
         Optional<User> user = repository.findById(id);
         if(user.isPresent()){
-            repository.delete(user.get());
-            LOGGER.info("User has been deleted");
-            return !repository.existsById(id);
+            if (user.get().getPassword().equals(password)){
+                repository.delete(user.get());
+                boolean isExisting = repository.existsById(user.get().getId());
+                return checkIsExisting(isExisting);
+            } else{
+                LOGGER.error("Incorrect password");
+                throw new RuntimeException("Incorrect password");
+            }
         }else {
+            LOGGER.error("Cannot find User by id");
             throw new RuntimeException("Cannot find User by id");
         }
-    }*/
+    }
 
-/*    private UserDto updateMechanic(UserDto dto, boolean conversion){
+    private UserDto updateMechanic(UserDto dto, boolean conversion){
         Optional<User> optional = repository.findById(dto.getId());
         if (optional.isPresent()){
             User user = mapper.mapToEntity(dto);
@@ -84,40 +84,30 @@ public class UserService {
             LOGGER.error("Cannot find User by id");
             throw new RuntimeException();
         }
-    }*/
+    }
 
-/*    private User checkCurrency(User original, User updated, boolean conversion) {
+    private User checkCurrency(User original, User updated, boolean conversion) {
         if (original.getCurrencyType() != updated.getCurrencyType() && conversion){
-            User user = updated;
-            double balance = ToolsManager.tenthRoundDouble(original.getBalance() * getCheckCurrencyValues(original,updated));
+            ConvertCurrency convertCurrency = new ConvertCurrency(
+                    original.getCurrencyType().toString(),
+                    updated.getCurrencyType().toString(),
+                    updated.getBalance());
+            double balance = client.getConvertCurrency(convertCurrency);
             updated.setBalance(balance);
             LOGGER.info("Currency has been converted to : " + updated.getCurrencyType().toString());
-            return user;
+            return updated;
        }
         return updated;
-    }*/
-
-/*    private double getCheckCurrencyValues(User original, User updated){
-        try {
-            CurrencyJson json = client.getCurrenciesValues(updated.getCurrencyType());
-            Method method = RatesJson.class.getMethod("get" + original.getCurrencyType().toString());
-            double a = (Double) method.invoke(json.getRates());
-            LOGGER.info("GetValues from external Api complete");
-            return a;
-        }catch (Exception e){
-            LOGGER.error("GetValues from ExternalApi Error");
-            return 1;
-        }
-    }*/
+    }
 
     private User checkUserSave(User user){
         try{
-            User formDb = repository.save(isExistingUser(user));
+            User formDb = repository.save(user);
             LOGGER.info("User has been saved");
             return formDb;
         }catch (Exception e){
-            LOGGER.error("Save error", e);
-            throw new RuntimeException();
+            LOGGER.error("Save error");
+            throw new RuntimeException("Save error");
         }
     }
 
@@ -127,10 +117,16 @@ public class UserService {
             return user;
         }else {
             LOGGER.error("There is user with the same login");
-            throw new RuntimeException();
+            throw new RuntimeException("There is user with the same login");
         }
     }
 
-
-
+    private boolean checkIsExisting(boolean b){
+        if (b){
+            LOGGER.warn("User hasn't been deleted");
+            return false;
+        }
+        LOGGER.info("User has been deleted");
+        return true;
+    }
 }
