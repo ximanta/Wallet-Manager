@@ -1,7 +1,6 @@
 package com.kodilla.walletmanager.domain.entities;
 
 import com.kodilla.walletmanager.domain.enums.CurrencyType;
-import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.tools.ToolsManager;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,11 +34,6 @@ public class Transaction {
     @NotNull
     @Column
     private Date date =  new Date(new java.util.Date().getTime());
-
-    @NotNull
-    @Enumerated(value = EnumType.STRING)
-    @Column
-    private TransactionType type;
 
     @Column
     @NotBlank
@@ -77,7 +71,6 @@ public class Transaction {
         return "Transaction{" +
                 "id=" + id +
                 ", date=" + date +
-                ", type=" + type +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", currencyType=" + currencyType +
@@ -90,11 +83,4 @@ public class Transaction {
         this.amount = ToolsManager.positiveTenthRoundDouble(amount);
     }
 
-    public void setCategory(Category category) {
-        if (ToolsManager.isTheSameEnum(category.getType(),type)){
-            this.category = category;
-        } else {
-            System.out.println("Not the same type TransactionType");
-        }
-    }
 }

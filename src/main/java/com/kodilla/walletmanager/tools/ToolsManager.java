@@ -39,12 +39,11 @@ public class ToolsManager {
 
     public static boolean isTransactionDtoCorrect(TransactionDto dto){
         boolean isDate = dto.getDate() != null;
-        boolean isType = dto.getType() != null;
         boolean isCategory = dto.getCategoryDto() != null;
         boolean isUser = dto.getUserDto() != null;
         boolean isTitleNotBlank = dto.getTitle() != null && !dto.getTitle().isEmpty();
 
-        return isDate && isType && isCategory && isTitleNotBlank && isUser;
+        return isDate && isCategory && isTitleNotBlank && isUser;
     }
 
     public static boolean isUserDtoCorrect(UserDto dto){
@@ -117,7 +116,7 @@ public class ToolsManager {
                 case REV:
                     List<TransactionDto> revenues = new ArrayList<>();
                     for (TransactionDto dto:dtos) {
-                        if (dto.getType() == TransactionType.REVENUES){
+                        if (dto.getCategoryDto().getType() == TransactionType.REVENUES){
                             revenues.add(dto);
                         }
                     }
@@ -125,7 +124,7 @@ public class ToolsManager {
                 case EXP:
                     List<TransactionDto> expenses = new ArrayList<>();
                     for (TransactionDto dto:dtos) {
-                        if (dto.getType().equals(TransactionType.EXPENSES)){
+                        if (dto.getCategoryDto().getType().equals(TransactionType.EXPENSES)){
                             expenses.add(dto);
                         }
                     }

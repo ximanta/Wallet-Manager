@@ -5,7 +5,6 @@ import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.enums.CurrencyType;
-import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.repository.TransactionRepository;
 import com.kodilla.walletmanager.repository.UserRepository;
@@ -53,7 +52,6 @@ public class TransactionTest {
         String toString = "Transaction{" +
                 "id=" + fromDb.getId() +
                 ", date=" + fromDb.getDate() +
-                ", type=" + fromDb.getType() +
                 ", title='" + fromDb.getTitle() + '\'' +
                 ", description='" + fromDb.getDescription() + '\'' +
                 ", currencyType=" + fromDb.getCurrencyType() +
@@ -68,7 +66,6 @@ public class TransactionTest {
         assertEquals("Test Description",fromDb.getDescription());
         assertEquals(CurrencyType.USD,fromDb.getCurrencyType());
         assertEquals(50,fromDb.getAmount(),0);
-        assertEquals(TransactionType.REVENUES,fromDb.getType());
         assertEquals(today.getDayOfMonth(),fromDb.getDate().toLocalDate().getDayOfMonth());
         assertEquals(today.getMonthValue(),fromDb.getDate().toLocalDate().getMonthValue());
         assertEquals(today.getYear(),fromDb.getDate().toLocalDate().getYear());

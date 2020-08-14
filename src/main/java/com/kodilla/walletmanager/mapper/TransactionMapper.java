@@ -32,7 +32,6 @@ public class TransactionMapper {
                 .description(transactionDto.getDescription())
                 .currencyType(transactionDto.getCurrencyType())
                 .amount(transactionDto.getAmount())
-                .type(transactionDto.getType())
                 .date(transactionDto.getDate())
                 .category(category)
                 .user(user).build();
@@ -47,7 +46,6 @@ public class TransactionMapper {
                 .description(transaction.getDescription())
                 .currencyType(transaction.getCurrencyType())
                 .amount(transaction.getAmount())
-                .type(transaction.getType())
                 .date(transaction.getDate())
                 .category(categoryDto)
                 .user(userDto).build();

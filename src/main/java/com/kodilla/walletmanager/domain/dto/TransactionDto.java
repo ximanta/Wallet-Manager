@@ -16,21 +16,12 @@ public class TransactionDto {
     private String description;
     private CurrencyType currencyType;
     private double amount;
-    private TransactionType type;
     private Date date;
     private CategoryDto categoryDto;
     private UserDto userDto;
 
     public void setAmount(double amount) {
         this.amount = ToolsManager.positiveTenthRoundDouble(amount);
-    }
-
-    public void setCategoryDto(CategoryDto categoryDto) {
-        if (ToolsManager.isTheSameEnum(categoryDto.getType(),type)){
-            this.categoryDto = categoryDto;
-        }else {
-            System.out.println("Not the came type TransactionType");
-        }
     }
 
     @Override
@@ -41,7 +32,6 @@ public class TransactionDto {
                 ", description='" + description + '\'' +
                 ", currencyType=" + currencyType +
                 ", amount=" + amount +
-                ", type=" + type +
                 ", date=" + date + '}';
     }
 }

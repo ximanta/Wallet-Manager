@@ -11,7 +11,6 @@ import java.sql.Date;
 public class TransactionDtoBuilder {
     private Long id;
     private Date date = new Date(new java.util.Date().getTime());
-    private TransactionType transactionType;
     private String title;
     private String description;
     private CurrencyType currencyType;
@@ -26,11 +25,6 @@ public class TransactionDtoBuilder {
 
     public TransactionDtoBuilder date(Date date) {
         this.date = date;
-        return this;
-    }
-
-    public TransactionDtoBuilder type(TransactionType type) {
-        this.transactionType = type;
         return this;
     }
 
@@ -68,7 +62,6 @@ public class TransactionDtoBuilder {
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setId(id);
         transactionDto.setDate(date);
-        transactionDto.setType(transactionType);
         transactionDto.setTitle(title);
         transactionDto.setDescription(description);
         transactionDto.setCurrencyType(currencyType);

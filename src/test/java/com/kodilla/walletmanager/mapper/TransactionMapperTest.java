@@ -40,7 +40,6 @@ public class TransactionMapperTest {
         assertEquals("Test",transaction.getTitle());
         assertEquals("Test Description",transaction.getDescription());
         assertEquals(Date.valueOf("2020-02-20"),transaction.getDate());
-        assertEquals(TransactionType.REVENUES, transaction.getType());
         assertEquals(CurrencyType.USD,transactionDto.getCurrencyType());
         assertEquals(50,transaction.getAmount(),0);
         assertNotNull(transaction.getCategory());
@@ -61,7 +60,6 @@ public class TransactionMapperTest {
         assertEquals("Test",dto.getTitle());
         assertEquals("Test Description",dto.getDescription());
         assertEquals(Date.valueOf("2020-02-20"),dto.getDate());
-        assertEquals(TransactionType.REVENUES, dto.getType());
         assertEquals(CurrencyType.USD,dto.getCurrencyType());
         assertEquals(50,dto.getAmount(),0);
         assertNotNull(dto.getCategoryDto());
@@ -83,7 +81,6 @@ public class TransactionMapperTest {
         assertNull(dto.getId());
         assertEquals("Test",dto.getTitle());
         assertEquals("Test Description",dto.getDescription());
-        assertEquals(TransactionType.REVENUES, dto.getType());
         assertEquals(CurrencyType.USD,dto.getCurrencyType());
         assertEquals(50,dto.getAmount(),0);
         assertNotNull(dto.getCategoryDto());
