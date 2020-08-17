@@ -32,6 +32,9 @@ public class TransactionDto {
                 ", description='" + description + '\'' +
                 ", currencyType=" + currencyType +
                 ", amount=" + amount +
-                ", date=" + date + '}';
+                ", date=" + date +
+                ", categoryDto=" + categoryDto +
+                ", userDto=" + userDto +
+                '}';
     }
 }

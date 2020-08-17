@@ -1,7 +1,7 @@
 package com.kodilla.walletmanager.service.transaction;
 
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
-import com.kodilla.walletmanager.domain.dto.UserLoginPassword;
+import com.kodilla.walletmanager.domain.dto.UserCertifying;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.mapper.TransactionMapper;
@@ -29,8 +29,8 @@ public class TransactionServiceDate {
     }
 
 
-    public List<TransactionDto> thisWeek(UserLoginPassword loginPassword){
-        Optional<User> user = getOptional(loginPassword);
+    public List<TransactionDto> thisWeek(UserCertifying certifying){
+        Optional<User> user = getOptional(certifying);
         if (user.isPresent()){
             List<Transaction> transactions = repository.thisWeek(user.get());
             LOGGER.info("This week transactions has been loaded");
@@ -42,8 +42,8 @@ public class TransactionServiceDate {
 
     }
 
-    public List<TransactionDto> thisMonth(UserLoginPassword loginPassword){
-        Optional<User> user = getOptional(loginPassword);
+    public List<TransactionDto> thisMonth(UserCertifying certifying){
+        Optional<User> user = getOptional(certifying);
         if (user.isPresent()){
             List<Transaction> transactions = repository.thisMonth(user.get());
             LOGGER.info("This Month transactions has been loaded");
@@ -54,8 +54,8 @@ public class TransactionServiceDate {
         }
     }
 
-    public List<TransactionDto> betweenDate(String fromDate, String toDate, UserLoginPassword loginPassword){
-        Optional<User> user = getOptional(loginPassword);
+    public List<TransactionDto> betweenDate(String fromDate, String toDate, UserCertifying certifying){
+        Optional<User> user = getOptional(certifying);
         if (user.isPresent()){
             Date from = Date.valueOf(fromDate);
             Date to = Date.valueOf(toDate);
@@ -69,7 +69,7 @@ public class TransactionServiceDate {
 
     }
 
-    private Optional<User> getOptional(UserLoginPassword loginPassword){
-        return userRepository.get(loginPassword.getLogin(),loginPassword.getPassword());
+    private Optional<User> getOptional(UserCertifying certifying){
+        return userRepository.get(certifying.getLogin(),certifying.getPassword());
     }
 }

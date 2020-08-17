@@ -108,7 +108,7 @@ public class ToolsManager {
         return  first != null && first == second;
     }
 
-    public static List<TransactionDto> sortByTypeT(List<TransactionDto> dtos, String type){
+    public static List<TransactionDto> sortTransactionByType(List<TransactionDto> dtos, String type){
         if (type == null){
             return dtos;
         }else {

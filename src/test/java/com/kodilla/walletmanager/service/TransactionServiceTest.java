@@ -4,11 +4,11 @@ import com.kodilla.walletmanager.domain.builders.TransactionDtoBuilder;
 import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.domain.dto.UserDto;
-import com.kodilla.walletmanager.domain.dto.UserLoginPassword;
+import com.kodilla.walletmanager.domain.dto.UserCertifying;
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
-import com.kodilla.walletmanager.domain.enums.TransactionType;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.mapper.UserMapper;
 import com.kodilla.walletmanager.repository.CategoryRepository;
@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +53,7 @@ public class TransactionServiceTest {
     public void create() {
         //When
         Category category = categoryRepository.save(factory.category());
+        System.out.println(category);
         User user = saveDuplicate(factory.user());
         CategoryDto fromDbDto = categoryMapper.mapToDto(category);
         UserDto userDto = userMapper.mapToDto(user);
@@ -59,7 +61,9 @@ public class TransactionServiceTest {
         transactionDto.setDate(Date.valueOf("2020-06-20"));
         transactionDto.setCategoryDto(fromDbDto);
         transactionDto.setUserDto(userDto);
+        transactionDto.setCurrencyType(CurrencyType.EUR);
         TransactionDto fromDb = transactionService.create(transactionDto);
+        System.out.println(fromDb);
         transactionRepository.deleteById(fromDb.getId());
         categoryRepository.delete(category);
         userRepository.delete(user);
@@ -73,12 +77,11 @@ public class TransactionServiceTest {
         assertNotNull(fromDb.getUserDto());
         assertEquals("Test", fromDb.getTitle());
         assertEquals("Test Description", fromDb.getDescription());
-        assertEquals(TransactionType.REVENUES, fromDb.getType());
         assertEquals(Date.valueOf("2020-06-20"), fromDb.getDate());
-        assertEquals(50, fromDb.getAmount(), 0);
+        assertNotEquals(50, fromDb.getAmount(), 0);
     }
 
-    @Test(expected = RuntimeException.class)
+   @Test(expected = RuntimeException.class)
     public void vailCreate(){
         TransactionDto transaction = factory.transactionDto();
         transactionService.create(transaction);
@@ -89,7 +92,7 @@ public class TransactionServiceTest {
         //Given
         List<Transaction> transactions = transactionDefaultList();
         User user = transactions.get(0).getUser();
-        UserLoginPassword loginPassword = new UserLoginPassword(user.getLogin(), user.getPassword());
+        UserCertifying loginPassword = new UserCertifying(user.getLogin(), user.getPassword());
         for (Transaction transaction : transactions) {
             transactionRepository.save(transaction);
         }
@@ -113,7 +116,7 @@ public class TransactionServiceTest {
 
     @Test(expected = RuntimeException.class)
     public void validGetAll() {
-        List<TransactionDto> dtos = transactionService.getAll(new UserLoginPassword("Test","Test"));
+        List<TransactionDto> dtos = transactionService.getAll(new UserCertifying("Test","Test"));
     }
 
     @Test
@@ -132,10 +135,10 @@ public class TransactionServiceTest {
         TransactionDto transactionDto = new TransactionDtoBuilder()
                 .id(transactionId)
                 .title("Test beta")
-                .type(TransactionType.REVENUES)
                 .description("Test Description beta")
                 .date(Date.valueOf("2020-05-05"))
                 .amount(40)
+                .currencyType(CurrencyType.EUR)
                 .category(categoryDto)
                 .user(userDto).build();
 
@@ -151,9 +154,8 @@ public class TransactionServiceTest {
         assertEquals(transactionId, updated.getId(), 0);
         assertEquals("Test beta", updated.getTitle());
         assertEquals("Test Description beta", updated.getDescription());
-        assertEquals(TransactionType.REVENUES, updated.getType());
         assertEquals(Date.valueOf("2020-05-05"), updated.getDate());
-        assertEquals(40, updated.getAmount(), 0);
+        assertNotEquals(40, updated.getAmount(), 0);
     }
 
     @Test(expected = RuntimeException.class)
@@ -166,13 +168,14 @@ public class TransactionServiceTest {
         //Given
         Category category = categoryRepository.save(factory.category());
         User user = saveDuplicate(factory.user());
+        UserCertifying certifying = new UserCertifying(user.getLogin(),user.getPassword());
         Transaction transaction = factory.transaction();
         transaction.setCategory(category);
         transaction.setUser(user);
         Transaction fromDb = transactionRepository.save(transaction);
 
         //When
-        transactionService.delete(fromDb.getId());
+        transactionService.delete(fromDb.getId(),certifying);
         categoryRepository.delete(fromDb.getCategory());
         userRepository.delete(user);
 
@@ -184,38 +187,17 @@ public class TransactionServiceTest {
 
     @Test(expected = RuntimeException.class)
     public void validDelete(){
-        transactionService.delete(-10);
+        transactionService.delete(-10,null);
     }
-
-    /*
-        @Test
-        public void findByDate() {
-            //Given
-            List<Transaction> transactions = givenFindByDate();
-
-            //When
-            List<TransactionDto> fromDb = transactionService.findByDate("2020-06-20");
-            for (Transaction transaction: transactions) {
-                transactionRepository.delete(transaction);
-            }
-            categoryRepository.delete(transactions.get(0).getCategory());
-
-            //Then
-            for (TransactionDto transaction: fromDb) {
-                assertEquals(transaction.getDate(), Date.valueOf("2020-06-20"));
-                assertFalse(transactionRepository.existsById(transaction.getId()));
-                assertFalse(categoryRepository.existsById(transaction.getCategoryDto().getId()));
-            }
-            assertEquals(2,fromDb.size());
-        }
 
         @Test
         public void thisWeek() {
             //Given
             List<Transaction> transactions = givenThisWeek();
+            UserCertifying certifying = new UserCertifying(transactions.get(0).getUser().getLogin(),transactions.get(0).getUser().getPassword());
 
             //When
-            List<TransactionDto> transactionDtos = transactionService.thisWeek();
+            List<TransactionDto> transactionDtos = transactionService.thisWeek(certifying);
             for (Transaction transaction: transactions) {
                 transactionRepository.delete(transaction);
             }
@@ -233,9 +215,10 @@ public class TransactionServiceTest {
         public void thisMonth() {
             //Given
             List<Transaction> transactions = givenThisMonth();
+            UserCertifying certifying = new UserCertifying(transactions.get(0).getUser().getLogin(),transactions.get(0).getUser().getPassword());
 
             //When
-            List<TransactionDto> transactionDtos = transactionService.thisMonth();
+            List<TransactionDto> transactionDtos = transactionService.thisMonth(certifying);
             for (Transaction transaction: transactions) {
                 transactionRepository.delete(transaction);
             }
@@ -245,31 +228,6 @@ public class TransactionServiceTest {
             for (Transaction transaction: transactions) {
                 assertFalse(transactionRepository.existsById(transaction.getId()));
                 assertFalse(categoryRepository.existsById(transaction.getCategory().getId()));
-            }
-            assertEquals(2,transactionDtos.size());
-        }
-
-        @Test
-        public void selectedMonth() {
-            //Given
-            List<Transaction> transactions = givenSelectedMonth();
-
-            //When
-            List<TransactionDto> transactionDtos = transactionService.selectedMonth("2019-05");
-            for (Transaction transaction: transactions) {
-                transactionRepository.delete(transaction);
-            }
-            categoryRepository.delete(transactions.get(0).getCategory());
-
-            //Then
-            for (Transaction transaction: transactions) {
-                assertFalse(transactionRepository.existsById(transaction.getId()));
-                assertFalse(categoryRepository.existsById(transaction.getCategory().getId()));
-            }
-            for (TransactionDto transactionDto: transactionDtos) {
-                long monthNumber = transactionDto.getDate().toLocalDate().getMonthValue();
-                long yearNumber = transactionDto.getDate().toLocalDate().getYear();
-                assertTrue(monthNumber == 5 && yearNumber == 2019);
             }
             assertEquals(2,transactionDtos.size());
         }
@@ -278,9 +236,10 @@ public class TransactionServiceTest {
         public void betweenDate() {
             //Given
             List<Transaction> transactions = givenBetweenDate();
+            UserCertifying certifying = new UserCertifying(transactions.get(0).getUser().getLogin(),transactions.get(0).getUser().getPassword());
 
             //When
-            List<TransactionDto> transactionDtos = transactionService.betweenDate("2019-03-05","2019-05-20");
+            List<TransactionDto> transactionDtos = transactionService.betweenDate("2019-03-05","2019-05-20",certifying);
             for (Transaction transaction: transactions) {
                 transactionRepository.delete(transaction);
             }
@@ -379,7 +338,7 @@ public class TransactionServiceTest {
 
             return transactions;
         }
-    */
+
     private List<Transaction> transactionDefaultList(){
         List<Transaction> transactions = new ArrayList<>();
         Category fromDb = categoryRepository.save(factory.category());
