@@ -1,18 +1,28 @@
 package com.kodilla.walletmanager.tools;
 
+import com.kodilla.walletmanager.domain.dto.UserDto;
+import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.dto.CategoryDto;
-import com.kodilla.walletmanager.dto.TransactionDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.TransactionDto;
+import com.kodilla.walletmanager.repository.UserRepository;
+import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ToolsManager {
     public static final String REV = "REV";
     public static final String EXP = "EXP";
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionServiceCRUD.class);
 
     public static double positiveTenthRoundDouble(double d){
         if (d < 0){
@@ -24,35 +34,81 @@ public class ToolsManager {
     }
 
     public static double tenthRoundDouble(double d){
-        if((d * 100) - (long)(d * 100) != 0) {
-            double tmp = Math.round(d) * 100;
-            return tmp / 100 ;
-        } else {
-            return d;
+            return (double)Math.round(d * 100) / 100;
+    }
+
+    public static boolean isTransactionDtoCorrect(TransactionDto dto){
+        boolean isDate = dto.getDate() != null;
+        boolean isCategory = dto.getCategoryDto() != null;
+        boolean isUser = dto.getUserDto() != null;
+        boolean isTitleNotBlank = dto.getTitle() != null && !dto.getTitle().isEmpty();
+
+        return isDate && isCategory && isTitleNotBlank && isUser;
+    }
+
+    public static boolean isUserDtoCorrect(UserDto dto){
+        boolean isLogin = dto.getLogin() != null;
+        boolean isEmile = dto.getEmile() != null;
+        boolean isBirthDate = dto.getBirthDate() != null;
+        boolean isCurrencyType = dto.getCurrencyType() !=null;
+
+        if (isLogin && isEmile && isBirthDate && isCurrencyType){
+            boolean isLoginEmpty = isLoginAccept(dto.getLogin());
+            boolean isPassword = isPasswordAccept(dto.getPassword());
+            if (isLoginEmpty && isPassword){
+                LOGGER.info("UserDto is correct");
+                return true;
+            }
         }
+        LOGGER.info("UserDto valid body");
+        return false;
     }
 
-    public static boolean isTransactionDtoCorrect(TransactionDto transactionDto){
-        boolean isDate = transactionDto.getDate() != null;
-        boolean isType = transactionDto.getType() != null;
-        boolean isCategory = transactionDto.getCategoryDto() != null;
-        boolean isTitleNotBlank = transactionDto.getTitle() != null && !transactionDto.getTitle().isEmpty();
-
-        return isDate && isType && isCategory && isTitleNotBlank;
+    public static boolean isCategoryDtoCorrect(CategoryDto dto){
+        boolean isNull = dto != null;
+        boolean isName = dto.getName() != null;
+        boolean isType = dto.getType() != null;
+        if (isName && isNull && isType){
+            boolean isTypeCorrect = dto.getType().equals(TransactionType.EXPENSES) || dto.getType().equals(TransactionType.REVENUES);
+            boolean isBlank = !dto.getName().isEmpty();
+            if (isTypeCorrect && isBlank){
+                LOGGER.info("CategoryDto is correct");
+                return true;
+            }
+        }
+        LOGGER.info("CategoryDto is incorrect");
+        return false;
     }
 
-    public static boolean isMonthCorrect(int month,int year){
-        boolean isMonthCorrect = month > 0 && month <= 12;
-        boolean isYearCorrect = year >= 1980 && year <= LocalDate.now().getYear();
+    private static boolean isPasswordAccept(String password){
+        boolean isPassword = password != null;
+        boolean isLength = password.length() >= 6;
+        if (isPassword && isLength){
+            LOGGER.info("Password is accepted");
+            return true;
+        }
+        LOGGER.warn("Incorrect password, at least 6 characters");
+        return false;
+    }
 
-        return isMonthCorrect && isYearCorrect;
+    private static boolean isLoginAccept(String login){
+        if (login != null){
+            if (login.length() >= 5){
+                    LOGGER.info("Correct Login");
+                    return true;
+            }
+            LOGGER.error("To short Login, aat least 5 characters");
+            return false;
+        }
+        LOGGER.error("Null Login");
+        return false;
     }
 
     public static boolean isTheSameEnum(TransactionType first, TransactionType second){
         return  first != null && first == second;
     }
 
-    public static List<TransactionDto> sortByTypeT(List<TransactionDto> dtos, String type){
+    public static List<TransactionDto> sortTransactionByType(List<TransactionDto> dtos, String type){
         if (type == null){
             return dtos;
         }else {
@@ -60,7 +116,7 @@ public class ToolsManager {
                 case REV:
                     List<TransactionDto> revenues = new ArrayList<>();
                     for (TransactionDto dto:dtos) {
-                        if (dto.getType() == TransactionType.REVENUES){
+                        if (dto.getCategoryDto().getType() == TransactionType.REVENUES){
                             revenues.add(dto);
                         }
                     }
@@ -68,7 +124,7 @@ public class ToolsManager {
                 case EXP:
                     List<TransactionDto> expenses = new ArrayList<>();
                     for (TransactionDto dto:dtos) {
-                        if (dto.getType().equals(TransactionType.EXPENSES)){
+                        if (dto.getCategoryDto().getType().equals(TransactionType.EXPENSES)){
                             expenses.add(dto);
                         }
                     }
@@ -79,7 +135,7 @@ public class ToolsManager {
         }
     }
 
-    public static List<CategoryDto> sortByTypeC(List<CategoryDto> list, String type){
+    public static List<CategoryDto> sortCategoryByType(List<CategoryDto> list, String type){
         if (type == null){
             return list;
         }else {
@@ -107,4 +163,3 @@ public class ToolsManager {
     }
 
 }
-

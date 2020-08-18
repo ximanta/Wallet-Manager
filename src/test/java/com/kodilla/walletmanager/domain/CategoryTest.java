@@ -1,5 +1,6 @@
 package com.kodilla.walletmanager.domain;
 
+import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.repository.CategoryRepository;
 import com.kodilla.walletmanager.tools.ClassesFactory;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import static org.junit.Assert.*;
 
@@ -28,6 +30,10 @@ public class CategoryTest {
         //Given
         Category category = factory.category();
         repository.save(category);
+        String toString = "Category{" +
+                "id=" + category.getId() +
+                ", name='" + category.getName() + '\'' +
+                ", type=" + category.getType() + '}';
 
         //When
         Category fromDb = repository.getOne(category.getId());
@@ -36,8 +42,16 @@ public class CategoryTest {
         //Then
         assertEquals("Test",fromDb.getName());
         assertEquals(TransactionType.REVENUES,fromDb.getType());
+        assertEquals(toString,fromDb.toString());
         assertTrue(fromDb.getTransactions().isEmpty());
         assertFalse(repository.existsById(category.getId()));
+    }
+
+    @Test(expected = ConstraintViolationException.class )
+    public void crateIncompleteRecordTest(){
+            Category category = new Category();
+            Category fromDb = repository.save(category);
+            assertFalse(repository.existsById(fromDb.getId()));
     }
 
 }

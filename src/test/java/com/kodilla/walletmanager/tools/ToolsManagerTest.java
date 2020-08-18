@@ -1,8 +1,9 @@
+/*
 package com.kodilla.walletmanager.tools;
 
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.dto.CategoryDto;
-import com.kodilla.walletmanager.dto.TransactionDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import org.junit.Test;
 
 import java.sql.Date;
@@ -198,4 +199,4 @@ public class ToolsManagerTest {
             assertEquals(TransactionType.EXPENSES,dto.getType());
         }
     }
-}
+}*/

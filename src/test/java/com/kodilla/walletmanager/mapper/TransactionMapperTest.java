@@ -1,10 +1,9 @@
 package com.kodilla.walletmanager.mapper;
 
-import com.kodilla.walletmanager.domain.Category;
-import com.kodilla.walletmanager.domain.Transaction;
+import com.kodilla.walletmanager.domain.entities.Transaction;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.dto.CategoryDto;
-import com.kodilla.walletmanager.dto.TransactionDto;
+import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -22,10 +21,7 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class TransactionMapperTest {
     @Autowired
-    TransactionMapper transactionMapper;
-
-    @Autowired
-    CategoryMapper categoryMapper;
+    TransactionMapper mapper;
 
     @Autowired
     ClassesFactory factory;
@@ -34,36 +30,40 @@ public class TransactionMapperTest {
     public void mapToEntity() {
         //Given
         TransactionDto transactionDto = factory.transactionDto();
+        transactionDto.setDate(Date.valueOf("2020-02-20"));
 
         //When
-        Transaction transaction = transactionMapper.mapToEntity(transactionDto);
+        Transaction transaction = mapper.mapToEntity(transactionDto);
 
         //Then
         assertNull(transaction.getId());
         assertEquals("Test",transaction.getTitle());
         assertEquals("Test Description",transaction.getDescription());
+        assertEquals(Date.valueOf("2020-02-20"),transaction.getDate());
+        assertEquals(CurrencyType.USD,transactionDto.getCurrencyType());
         assertEquals(50,transaction.getAmount(),0);
-        assertEquals(TransactionType.REVENUES, transaction.getType());
-        assertEquals(createdCategory().getName(),transaction.getCategory().getName());
-        assertEquals(createdCategory().getType(),transaction.getCategory().getType());
+        assertNotNull(transaction.getCategory());
+        assertNotNull(transaction.getUser());
     }
 
     @Test
     public void mapToDto() {
         //Given
         Transaction transaction = factory.transaction();
+        transaction.setDate(Date.valueOf("2020-02-20"));
 
         //When
-        TransactionDto transactionDto = transactionMapper.mapToDto(transaction);
+        TransactionDto dto = mapper.mapToDto(transaction);
 
         //Then
-        assertNull(transactionDto.getId());
-        assertEquals("Test",transactionDto.getTitle());
-        assertEquals("Test Description",transactionDto.getDescription());
-        assertEquals(50,transactionDto.getAmount(),0);
-        assertEquals(TransactionType.REVENUES, transactionDto.getType());
-        assertEquals(createdCategory().getName(),transactionDto.getCategoryDto().getName());
-        assertEquals(createdCategory().getType(),transactionDto.getCategoryDto().getType());
+        assertNull(dto.getId());
+        assertEquals("Test",dto.getTitle());
+        assertEquals("Test Description",dto.getDescription());
+        assertEquals(Date.valueOf("2020-02-20"),dto.getDate());
+        assertEquals(CurrencyType.USD,dto.getCurrencyType());
+        assertEquals(50,dto.getAmount(),0);
+        assertNotNull(dto.getCategoryDto());
+        assertNotNull(dto.getUserDto());
     }
 
     @Test
@@ -74,16 +74,17 @@ public class TransactionMapperTest {
         }
 
         //When
-        List<TransactionDto> transactionDtos = transactionMapper.mapToDtos(transactions);
-        TransactionDto transactionDto = transactionDtos.get(0);
+        List<TransactionDto> transactionDtos = mapper.mapToDtos(transactions);
+        TransactionDto dto = transactionDtos.get(0);
 
         //Then
-        assertNull(transactionDto.getId());
-        assertNotNull(transactionDto.getCategoryDto());
-        assertEquals("Test",transactionDto.getTitle());
-        assertEquals("Test Description",transactionDto.getDescription());
-        assertEquals(50,transactionDto.getAmount(),0);
-        assertEquals(3,transactionDtos.size());
+        assertNull(dto.getId());
+        assertEquals("Test",dto.getTitle());
+        assertEquals("Test Description",dto.getDescription());
+        assertEquals(CurrencyType.USD,dto.getCurrencyType());
+        assertEquals(50,dto.getAmount(),0);
+        assertNotNull(dto.getCategoryDto());
+        assertNotNull(dto.getUserDto());
     }
 
     @Test
@@ -92,13 +93,9 @@ public class TransactionMapperTest {
         List<Transaction> transactions = new ArrayList<>();
 
         //When
-        List<TransactionDto> transactionDtos = transactionMapper.mapToDtos(transactions);
+        List<TransactionDto> transactionDtos = mapper.mapToDtos(transactions);
 
         //Then
         assertTrue(transactionDtos.isEmpty());
-    }
-
-    private Category createdCategory(){
-        return factory.category();
     }
 }

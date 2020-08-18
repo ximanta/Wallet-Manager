@@ -1,6 +1,6 @@
 package com.kodilla.walletmanager.controller;
 
-import com.kodilla.walletmanager.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,30 +12,28 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-    @Autowired
-    CategoryService service;
+    private CategoryService service;
 
-    @PostMapping(value = "/create",consumes = APPLICATION_JSON_VALUE)
+    private CategoryController(CategoryService service) {
+        this.service = service;
+    }
+
+    @PostMapping(value = "")
     public CategoryDto create(@RequestBody CategoryDto dto){
         return service.create(dto);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("")
     public List<CategoryDto> getAll(@RequestParam(value = "type",required = false) String type){
         return service.getAll(type);
     }
 
-    @GetMapping("/get/{id}")
-    public CategoryDto get(@PathVariable long id){
-        return service.get(id);
-    }
-
-    @PutMapping("/update")
+    @PutMapping("")
     public CategoryDto update(@RequestBody CategoryDto dto){
         return service.update(dto);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public boolean delete(@PathVariable long id){
         return service.delete(id);
     }

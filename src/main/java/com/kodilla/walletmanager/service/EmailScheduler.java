@@ -1,7 +1,7 @@
 package com.kodilla.walletmanager.service;
 
 import com.kodilla.walletmanager.config.AdminConfig;
-import com.kodilla.walletmanager.domain.Mail;
+import com.kodilla.walletmanager.domain.entities.Mail;
 import com.kodilla.walletmanager.service.transaction.SimpleEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

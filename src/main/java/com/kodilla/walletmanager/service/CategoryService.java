@@ -1,47 +1,51 @@
 package com.kodilla.walletmanager.service;
 
-import com.kodilla.walletmanager.domain.Category;
-import com.kodilla.walletmanager.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.mapper.CategoryMapper;
 import com.kodilla.walletmanager.repository.CategoryRepository;
+import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.tools.ToolsManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CategoryService {
-    @Autowired
-    CategoryRepository repository;
+    private final CategoryRepository repository;
+    private final CategoryMapper mapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionServiceCRUD.class);
 
-    @Autowired
-    CategoryMapper mapper;
+    public CategoryService(CategoryRepository repository, CategoryMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     public CategoryDto create(final CategoryDto dto){
-        Category entity = mapper.mapToEntity(dto);
-        if (entity == null){
-            return new CategoryDto();
-        }else {
-            Category category = repository.save(entity);
+        if (ToolsManager.isCategoryDtoCorrect(dto)){
+            Category entity = mapper.mapToEntity(dto);
+            Category category = checkCategorySave(entity);
             return mapper.mapToDto(category);
+        }else {
+            LOGGER.error("Valid body",new RuntimeException());
+            throw new RuntimeException("Valid body");
         }
     }
 
     public List<CategoryDto> getAll(String type){
-        List<Category> list = repository.findAll();
-        List<CategoryDto> dtos = mapper.mapToDtos(list);
-        return ToolsManager.sortByTypeC(dtos,type);
-    }
-
-    public CategoryDto get(long id){
-        Optional<Category> category = repository.findById(id);
-        if (category.isPresent()){
-            return mapper.mapToDto(category.get());
-        }else {
-            return new CategoryDto();
+        List<Category> list = new ArrayList<>();
+        try{
+            list = repository.findAll();
+            LOGGER.info("Category list has been taken");
+        } catch (Exception e){
+            LOGGER.error("Category List error",e);
         }
+        List<CategoryDto> dtos = mapper.mapToDtos(list);
+        return ToolsManager.sortCategoryByType(dtos,type);
     }
 
     public CategoryDto update(CategoryDto dto){
@@ -53,24 +57,38 @@ public class CategoryService {
         if (optional.isPresent()){
             Category category = optional.get();
             repository.delete(category);
-            return !repository.existsById(id);
-        }else {
-            throw new RuntimeException("Cannot find Transaction by id");
+            if (!repository.existsById(id)){
+                LOGGER.info("Category has been deleted");
+                return true;
+            }
+            LOGGER.info("Category hasn't been deleted");
+            return false;
         }
+            LOGGER.error("Cannot find Category by id");
+            return false;
     }
 
     private Category updateMechanic(CategoryDto dto){
         Optional<Category> optional = repository.findById(dto.getId());
-        boolean isPresent = optional.isPresent();
-        boolean isTitle = dto.getName() != null;
-        boolean isType = dto.getType() != null;
-        if (isPresent && isTitle && isType){
+        if (ToolsManager.isCategoryDtoCorrect(dto) && optional.isPresent()){
             Category category = optional.get();
             category.setName(dto.getName());
             category.setType(dto.getType());
-            return repository.save(category);
+            return checkCategorySave(category);
         }else {
-            throw new RuntimeException("Cannot find Category by id");
+            LOGGER.error("Cannot find Category by id or Valid body ");
+            throw new RuntimeException("Cannot find Category by id or Valid body");
+        }
+    }
+
+    private Category checkCategorySave(Category category){
+        try{
+            Category formDb = repository.save(category);
+            LOGGER.info("User has been saved");
+            return formDb;
+        }catch (Exception e){
+            LOGGER.error("Save error", e);
+            throw new RuntimeException();
         }
     }
 }

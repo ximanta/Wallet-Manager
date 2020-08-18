@@ -1,7 +1,7 @@
 package com.kodilla.walletmanager.mapper;
 
-import com.kodilla.walletmanager.domain.Category;
-import com.kodilla.walletmanager.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.entities.Category;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

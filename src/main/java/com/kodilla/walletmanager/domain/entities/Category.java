@@ -1,4 +1,4 @@
-package com.kodilla.walletmanager.domain;
+package com.kodilla.walletmanager.domain.entities;
 
 import com.kodilla.walletmanager.domain.enums.TransactionType;
 import lombok.Getter;
@@ -41,8 +41,8 @@ public class Category {
     public String toString() {
         return "Category{" +
                 "id=" + id +
-                ", name='" + name + '\''+
-                '}';
+                ", name='" + name + '\'' +
+                ", type=" + type + '}';
     }
 
     public Set<Transaction> getTransactions() {

@@ -1,12 +1,21 @@
 package com.kodilla.walletmanager.tools;
 
-import com.kodilla.walletmanager.domain.Category;
-import com.kodilla.walletmanager.domain.Transaction;
-import com.kodilla.walletmanager.domain.User;
+import com.kodilla.walletmanager.domain.builders.TransactionBuilder;
+import com.kodilla.walletmanager.domain.builders.TransactionDtoBuilder;
+import com.kodilla.walletmanager.domain.builders.UserBuilder;
+import com.kodilla.walletmanager.domain.builders.UserDtoBuilder;
+import com.kodilla.walletmanager.domain.entities.Category;
+import com.kodilla.walletmanager.domain.entities.Transaction;
+import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.domain.enums.TransactionType;
-import com.kodilla.walletmanager.dto.CategoryDto;
-import com.kodilla.walletmanager.dto.TransactionDto;
-import com.kodilla.walletmanager.dto.UserDto;
+import com.kodilla.walletmanager.domain.dto.CategoryDto;
+import com.kodilla.walletmanager.domain.dto.TransactionDto;
+import com.kodilla.walletmanager.domain.dto.UserDto;
+import com.kodilla.walletmanager.json.Bitcoin;
+import com.kodilla.walletmanager.json.BitcoinJson;
+import com.kodilla.walletmanager.json.CurrencyJson;
+import com.kodilla.walletmanager.json.RatesJson;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -16,25 +25,26 @@ import java.time.LocalDate;
 public final class ClassesFactory {
 
     public Transaction transaction(){
-        return new Transaction.TransactionBuilder()
+        return new TransactionBuilder()
                 .title("Test")
                 .description("Test Description")
                 .date(Date.valueOf(LocalDate.now()))
-                .type(TransactionType.REVENUES)
+                .currencyType(CurrencyType.USD)
                 .amount(50)
                 .category(category())
+                .user(user())
                 .build();
     }
 
     public TransactionDto transactionDto(){
-        return new TransactionDto.TransactionDtoBuilder()
+        return new TransactionDtoBuilder()
                 .title("Test")
                 .description("Test Description")
                 .date(Date.valueOf(LocalDate.now()))
-                .type(TransactionType.REVENUES)
+                .currencyType(CurrencyType.USD)
                 .amount(50)
                 .category(categoryDto())
-                .build();
+                .user(userDto()).build();
     }
 
     public Category category(){
@@ -52,16 +62,40 @@ public final class ClassesFactory {
     }
 
     public User user(){
-        User user = new User();
-        user.setBalance(-150);
-        user.setEmile("test@email.com");
-        return user;
+        return new UserBuilder()
+                .login("Test")
+                .password("Password")
+                .emile("test@email.com")
+                .birthDate(Date.valueOf("2000-02-20"))
+                .active(true)
+                .currencyType(CurrencyType.USD)
+                .balance(-150).build();
     }
 
     public UserDto userDto(){
-        UserDto userDto = new UserDto();
-        userDto.setBalance(-150);
-        userDto.setEmile("test@email.com");
-        return userDto;
+        return new UserDtoBuilder()
+                .login("Test")
+                .password("Password")
+                .emile("test@email.com")
+                .birthDate(Date.valueOf("2000-02-20"))
+                .active(true)
+                .currencyType(CurrencyType.USD)
+                .balance(-150).build();
+    }
+
+    public CurrencyJson currencyJson(){
+        CurrencyJson json = new CurrencyJson();
+        json.setBase("");
+        json.setDate("10-10-2020");
+        json.setRates(new RatesJson());
+
+        return json;
+    }
+
+    public BitcoinJson bitcoinJson(){
+        BitcoinJson json = new BitcoinJson();
+        json.setBitcoin(new Bitcoin());
+
+        return json;
     }
 }

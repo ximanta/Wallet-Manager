@@ -1,7 +1,8 @@
 package com.kodilla.walletmanager.mapper;
 
-import com.kodilla.walletmanager.domain.User;
-import com.kodilla.walletmanager.dto.UserDto;
+import com.kodilla.walletmanager.domain.dto.UserDto;
+import com.kodilla.walletmanager.domain.entities.User;
+import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.tools.ClassesFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,9 +35,14 @@ public class UserMapperTest {
         User user = mapper.mapToEntity(dto);
 
         //Then
+        assertTrue(user.isActive());
         assertEquals(1L,user.getId(),0);
-        assertEquals(-150,user.getBalance(),0);
+        assertEquals("Test",user.getLogin());
+        assertEquals("Password",user.getPassword());
         assertEquals("test@email.com",user.getEmile());
+        assertEquals(Date.valueOf("2000-02-20"),user.getBirthDate());
+        assertEquals(CurrencyType.USD,user.getCurrencyType());
+        assertEquals(-150.0,user.getBalance(),0);
     }
 
     @Test
@@ -48,11 +54,15 @@ public class UserMapperTest {
         //When
         UserDto dto = mapper.mapToDto(user);
 
-
         //Then
+        assertTrue(dto.isActive());
         assertEquals(1L,dto.getId(),0);
-        assertEquals(-150,dto.getBalance(),0);
+        assertEquals("Test",dto.getLogin());
+        assertEquals("Password",dto.getPassword());
         assertEquals("test@email.com",dto.getEmile());
+        assertEquals(Date.valueOf("2000-02-20"),dto.getBirthDate());
+        assertEquals(CurrencyType.USD,dto.getCurrencyType());
+        assertEquals(-150.0,dto.getBalance(),0);
     }
 
     @Test
@@ -68,8 +78,14 @@ public class UserMapperTest {
         UserDto dto = dtos.get(0);
 
         //Then
-        assertEquals(-150,dto.getBalance(),0);
+        assertTrue(dto.isActive());
+        assertNull(dto.getId());
+        assertEquals("Test",dto.getLogin());
+        assertEquals("Password",dto.getPassword());
         assertEquals("test@email.com",dto.getEmile());
+        assertEquals(Date.valueOf("2000-02-20"),dto.getBirthDate());
+        assertEquals(CurrencyType.USD,dto.getCurrencyType());
+        assertEquals(-150.0,dto.getBalance(),0);
         assertEquals(3,dtos.size());
     }
 

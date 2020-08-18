@@ -1,5 +1,6 @@
 package com.kodilla.walletmanager.domain;
 
+import com.kodilla.walletmanager.domain.entities.Mail;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

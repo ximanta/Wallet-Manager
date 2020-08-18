@@ -1,26 +1,34 @@
 package com.kodilla.walletmanager.controller;
 
 import com.kodilla.walletmanager.client.ExternalAPIsClient;
-import com.kodilla.walletmanager.json.CurrencyJson;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.kodilla.walletmanager.domain.entities.ConvertCurrency;
+import com.kodilla.walletmanager.json.BitcoinJson;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/external")
 public class ExternalAPIsController {
-    @Autowired
-    ExternalAPIsClient client;
+    private final ExternalAPIsClient client;
 
-    @GetMapping("/bitcoin")
-    public double getBitcoinPrice(){
-        return client.bitcoinPrice();
+    private ExternalAPIsController(ExternalAPIsClient client) {
+        this.client = client;
     }
 
-    @GetMapping("/currency")
-    public CurrencyJson getCurrenciesValues(){
-        return client.getCurrenciesValues();
+    @GetMapping("/bitcoin/{type}")
+    public BitcoinJson getBitcoinPrice(@PathVariable String type){
+        return client.getBitcoinValue(type);
+    }
+
+    @GetMapping("/convert")
+    public double getConvertValue(@RequestBody ConvertCurrency currency){
+        return client.getConvertCurrency(currency);
+    }
+
+    @GetMapping("/currencyList")
+    public List<String> getCurrencyList(){
+        return client.getCurrencyList();
     }
 
 }
