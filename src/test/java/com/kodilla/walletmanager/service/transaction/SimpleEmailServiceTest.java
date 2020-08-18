@@ -1,6 +1,6 @@
 package com.kodilla.walletmanager.service.transaction;
 
-import com.kodilla.walletmanager.domain.entities.Mail;
+import com.kodilla.walletmanager.domain.pojos.Mail;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

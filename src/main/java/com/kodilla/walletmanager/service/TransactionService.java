@@ -1,7 +1,7 @@
 package com.kodilla.walletmanager.service;
 
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
-import com.kodilla.walletmanager.domain.dto.UserCertifying;
+import com.kodilla.walletmanager.domain.pojos.UserCertifying;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceDate;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,6 @@ public class TransactionService {
         this.transactionServiceDate = transactionServiceDate;
     }
 
-    //CRUD
     public TransactionDto create(final TransactionDto transactionDto) {
         return transactionServiceCRUD.create(transactionDto);
     }
@@ -34,8 +33,6 @@ public class TransactionService {
     public boolean delete(final long transactionId, UserCertifying certifying) {
         return transactionServiceCRUD.delete(transactionId, certifying);
     }
-
-    //DATE
 
     public List<TransactionDto> thisWeek(UserCertifying dto) {
         return transactionServiceDate.thisWeek(dto);

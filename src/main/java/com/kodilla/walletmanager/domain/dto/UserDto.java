@@ -3,6 +3,7 @@ package com.kodilla.walletmanager.domain.dto;
 import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.tools.ToolsManager;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -11,6 +12,7 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class UserDto {
     private Long id;
     private String login;

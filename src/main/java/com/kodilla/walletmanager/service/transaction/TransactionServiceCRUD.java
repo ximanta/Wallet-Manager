@@ -2,8 +2,8 @@ package com.kodilla.walletmanager.service.transaction;
 
 import com.kodilla.walletmanager.client.ExternalAPIsClient;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
-import com.kodilla.walletmanager.domain.dto.UserCertifying;
-import com.kodilla.walletmanager.domain.entities.ConvertCurrency;
+import com.kodilla.walletmanager.domain.pojos.UserCertifying;
+import com.kodilla.walletmanager.domain.pojos.ConvertCurrency;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.enums.TransactionType;

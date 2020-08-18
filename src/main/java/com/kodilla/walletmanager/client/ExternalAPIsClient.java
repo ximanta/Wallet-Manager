@@ -1,7 +1,7 @@
 package com.kodilla.walletmanager.client;
 
 import com.kodilla.walletmanager.config.AdminConfig;
-import com.kodilla.walletmanager.domain.entities.ConvertCurrency;
+import com.kodilla.walletmanager.domain.pojos.ConvertCurrency;
 import com.kodilla.walletmanager.domain.enums.CurrencyType;
 import com.kodilla.walletmanager.json.BitcoinJson;
 import com.kodilla.walletmanager.json.CurrencyJson;
@@ -48,29 +48,29 @@ public class ExternalAPIsClient {
         return ToolsManager.tenthRoundDouble(value);
     }
 
+    public List<String> getCurrencyList(){
+        return EnumSet.allOf(CurrencyType.class).stream().map(CurrencyType::name).collect(Collectors.toList());
+    }
+
+    private double convertCurrencyMechanic(String fromCurrency,String toCurrency){
+        try {
+            CurrencyJson json = getCurrenciesValues(fromCurrency);
+            Method method = RatesJson.class.getMethod("get" + toCurrency);
+            double a = (Double) method.invoke(json.getRates());
+            LOGGER.info("GetValues from external Api complete");
+            return a;
+        }catch (Exception e){
+            LOGGER.error("GetValues from external Api Error",e);
+            return 1;
+        }
+    }
+
     public CurrencyJson getCurrenciesValues(String type){
         ResponseEntity<CurrencyJson> entity = currenciesGetForEntity(type);
         if (entity.getBody() != null){
             return entity.getBody();
         }
         return factory.currencyJson();
-    }
-
-    public List<String> getCurrencyList(){
-        return EnumSet.allOf(CurrencyType.class).stream().map(CurrencyType::name).collect(Collectors.toList());
-    }
-
-    private ResponseEntity<BitcoinJson> bitcoinValueGetForEntity(String type){
-        ResponseEntity<BitcoinJson> entity = new ResponseEntity<>(HttpStatus.ACCEPTED);
-        try {
-            entity = template.getForEntity(
-                    config.getBitcoinApi() + type,
-                    BitcoinJson.class);
-            LOGGER.info("Bitcoin Value has been taken");
-        } catch (RestClientException e){
-            LOGGER.error("Bitcoin GET error",e);
-        }
-        return entity;
     }
 
     private ResponseEntity<CurrencyJson> currenciesGetForEntity(String type){
@@ -86,16 +86,16 @@ public class ExternalAPIsClient {
         return entity;
     }
 
-    private double convertCurrencyMechanic(String fromCurrency,String toCurrency){
+    private ResponseEntity<BitcoinJson> bitcoinValueGetForEntity(String type){
+        ResponseEntity<BitcoinJson> entity = new ResponseEntity<>(HttpStatus.ACCEPTED);
         try {
-            CurrencyJson json = getCurrenciesValues(fromCurrency);
-            Method method = RatesJson.class.getMethod("get" + toCurrency);
-            double a = (Double) method.invoke(json.getRates());
-            LOGGER.info("GetValues from external Api complete");
-            return a;
-        }catch (Exception e){
-            LOGGER.error("GetValues from external Api Error",e);
-            return 1;
+            entity = template.getForEntity(
+                    config.getBitcoinApi() + type,
+                    BitcoinJson.class);
+            LOGGER.info("Bitcoin Value has been taken");
+        } catch (RestClientException e){
+            LOGGER.error("Bitcoin GET error",e);
         }
+        return entity;
     }
 }

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
+
     public User mapToEntity(UserDto dto){
         return new UserBuilder()
                 .id(dto.getId())

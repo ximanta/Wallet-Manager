@@ -31,7 +31,7 @@ public class CategoryService {
             Category category = checkCategorySave(entity);
             return mapper.mapToDto(category);
         }else {
-            LOGGER.error("Valid body",new RuntimeException());
+            LOGGER.error("Valid body");
             throw new RuntimeException("Valid body");
         }
     }
@@ -87,8 +87,8 @@ public class CategoryService {
             LOGGER.info("User has been saved");
             return formDb;
         }catch (Exception e){
-            LOGGER.error("Save error", e);
-            throw new RuntimeException();
+            LOGGER.error("Save error");
+            throw e;
         }
     }
 }

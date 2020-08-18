@@ -4,7 +4,6 @@ import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.domain.enums.CurrencyType;
-import com.kodilla.walletmanager.domain.enums.TransactionType;
 
 import java.sql.Date;
 

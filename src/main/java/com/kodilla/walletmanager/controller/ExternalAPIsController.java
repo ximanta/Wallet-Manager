@@ -1,12 +1,13 @@
 package com.kodilla.walletmanager.controller;
 
 import com.kodilla.walletmanager.client.ExternalAPIsClient;
-import com.kodilla.walletmanager.domain.entities.ConvertCurrency;
+import com.kodilla.walletmanager.domain.pojos.ConvertCurrency;
 import com.kodilla.walletmanager.json.BitcoinJson;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/external")
 public class ExternalAPIsController {

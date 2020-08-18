@@ -1,7 +1,7 @@
 package com.kodilla.walletmanager.controller;
 
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
-import com.kodilla.walletmanager.domain.dto.UserCertifying;
+import com.kodilla.walletmanager.domain.pojos.UserCertifying;
 import com.kodilla.walletmanager.service.TransactionService;
 import com.kodilla.walletmanager.tools.ToolsManager;
 import org.springframework.web.bind.annotation.*;
@@ -12,27 +12,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
-    final TransactionService service;
+    private final TransactionService service;
 
     public TransactionController(TransactionService service) {
         this.service = service;
     }
 
-    //CRUD
-    @PostMapping("")
+    @PostMapping
     public TransactionDto create(@RequestBody TransactionDto dto){
         return service.create(dto);
     }
 
-    @GetMapping("/all")
-    public List<TransactionDto> getAll(
-            @RequestParam(value = "type",required = false) String type,
-            @RequestBody UserCertifying dto){
-        List<TransactionDto> dtos = service.getAll(dto);
-        return ToolsManager.sortTransactionByType(dtos,type);
-    }
-
-    @PutMapping("")
+    @PutMapping
     public TransactionDto update(@RequestBody TransactionDto dto){
         return service.update(dto);
     }
@@ -43,7 +34,13 @@ public class TransactionController {
         return service.delete(id,dto);
     }
 
-    //DATE
+    @GetMapping("/all")
+    public List<TransactionDto> getAll(
+            @RequestParam(value = "type",required = false) String type,
+            @RequestBody UserCertifying dto){
+        List<TransactionDto> dtos = service.getAll(dto);
+        return ToolsManager.sortTransactionByType(dtos,type);
+    }
 
     @GetMapping("/thisWeek")
     public List<TransactionDto> thisWeek(
@@ -65,7 +62,7 @@ public class TransactionController {
     public List<TransactionDto> betweenDate(@PathVariable String fromDate,
                                             @PathVariable String toDate,
                                             @RequestBody UserCertifying dto,
-                                            @RequestParam(value = "type",required = false)String type) {
+                                            @RequestParam(value = "type",required = false) String type) {
         List<TransactionDto> dtos = service.betweenDate(fromDate, toDate, dto);
         return ToolsManager.sortTransactionByType(dtos,type);
     }

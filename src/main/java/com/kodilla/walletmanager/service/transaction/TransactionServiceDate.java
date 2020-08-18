@@ -1,7 +1,7 @@
 package com.kodilla.walletmanager.service.transaction;
 
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
-import com.kodilla.walletmanager.domain.dto.UserCertifying;
+import com.kodilla.walletmanager.domain.pojos.UserCertifying;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.mapper.TransactionMapper;
@@ -39,7 +39,6 @@ public class TransactionServiceDate {
             LOGGER.error("Cannot load Transactions");
             throw new RuntimeException();
         }
-
     }
 
     public List<TransactionDto> thisMonth(UserCertifying certifying){
@@ -66,7 +65,6 @@ public class TransactionServiceDate {
             LOGGER.error("Cannot load Transactions");
             throw new RuntimeException();
         }
-
     }
 
     private Optional<User> getOptional(UserCertifying certifying){

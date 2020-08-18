@@ -1,8 +1,7 @@
 package com.kodilla.walletmanager.mapper;
 
-import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.dto.CategoryDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.kodilla.walletmanager.domain.entities.Category;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,8 +9,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class CategoryMapper {
-    @Autowired
-    TransactionMapper transactionMapper;
 
     public Category mapToEntity(CategoryDto categoryDto){
         Category category = new Category();

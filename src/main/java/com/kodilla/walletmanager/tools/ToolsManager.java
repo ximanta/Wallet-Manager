@@ -1,22 +1,16 @@
 package com.kodilla.walletmanager.tools;
 
-import com.kodilla.walletmanager.domain.dto.UserDto;
-import com.kodilla.walletmanager.domain.entities.User;
-import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
-import com.kodilla.walletmanager.repository.UserRepository;
+import com.kodilla.walletmanager.domain.dto.UserDto;
+import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.service.transaction.TransactionServiceCRUD;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ToolsManager {
@@ -41,9 +35,10 @@ public class ToolsManager {
         boolean isDate = dto.getDate() != null;
         boolean isCategory = dto.getCategoryDto() != null;
         boolean isUser = dto.getUserDto() != null;
-        boolean isTitleNotBlank = dto.getTitle() != null && !dto.getTitle().isEmpty();
+        boolean isTitle = dto.getTitle() != null;
+        boolean isTitleNotBlank = !dto.getTitle().isEmpty();
 
-        return isDate && isCategory && isTitleNotBlank && isUser;
+        return isDate && isCategory && isTitleNotBlank && isTitle && isUser;
     }
 
     public static boolean isUserDtoCorrect(UserDto dto){
@@ -102,10 +97,6 @@ public class ToolsManager {
         }
         LOGGER.error("Null Login");
         return false;
-    }
-
-    public static boolean isTheSameEnum(TransactionType first, TransactionType second){
-        return  first != null && first == second;
     }
 
     public static List<TransactionDto> sortTransactionByType(List<TransactionDto> dtos, String type){
