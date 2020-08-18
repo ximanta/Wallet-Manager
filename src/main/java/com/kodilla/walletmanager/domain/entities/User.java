@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 @NamedQuery(
         name = "User.get",
         query = "FROM User WHERE login like :LOGIN and password like :PASSWORD")

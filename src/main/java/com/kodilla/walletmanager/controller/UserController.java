@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    private UserService service;
+    private final UserService service;
 
     public UserController(UserService service) {
         this.service = service;
@@ -24,9 +24,9 @@ public class UserController {
         return service.get(login,password);
     }
 
-    @PutMapping("")
+    @PutMapping
     public UserDto update(@RequestBody UserDto dto,
-                          @RequestParam(value = "convert")boolean convert){
+                          @RequestParam(value = "convert") boolean convert){
         return service.update(dto, convert);
     }
 

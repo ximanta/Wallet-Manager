@@ -2,7 +2,7 @@ package com.kodilla.walletmanager.service;
 
 import com.kodilla.walletmanager.client.ExternalAPIsClient;
 import com.kodilla.walletmanager.domain.dto.UserDto;
-import com.kodilla.walletmanager.domain.entities.ConvertCurrency;
+import com.kodilla.walletmanager.domain.pojos.ConvertCurrency;
 import com.kodilla.walletmanager.domain.entities.User;
 import com.kodilla.walletmanager.mapper.UserMapper;
 import com.kodilla.walletmanager.repository.UserRepository;
@@ -31,8 +31,10 @@ public class UserService {
     public UserDto get(String login, String password){
         Optional<User> user = repository.get(login,password);
         if (user.isPresent()){
+            LOGGER.info("User has been loaded");
             return mapper.mapToDto(user.get());
         }else {
+            LOGGER.info("Cannot find User by id");
             throw new RuntimeException("Cannot find User by id");
         }
     }

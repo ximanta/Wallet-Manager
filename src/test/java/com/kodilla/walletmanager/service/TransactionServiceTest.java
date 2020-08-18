@@ -4,7 +4,7 @@ import com.kodilla.walletmanager.domain.builders.TransactionDtoBuilder;
 import com.kodilla.walletmanager.domain.dto.CategoryDto;
 import com.kodilla.walletmanager.domain.dto.TransactionDto;
 import com.kodilla.walletmanager.domain.dto.UserDto;
-import com.kodilla.walletmanager.domain.dto.UserCertifying;
+import com.kodilla.walletmanager.domain.pojos.UserCertifying;
 import com.kodilla.walletmanager.domain.entities.Category;
 import com.kodilla.walletmanager.domain.entities.Transaction;
 import com.kodilla.walletmanager.domain.entities.User;
@@ -356,11 +356,7 @@ public class TransactionServiceTest {
 
     private User saveDuplicate(User user){
         Optional<User> optional = userRepository.getByLogin(user.getLogin());
-        if (!optional.isPresent()){
-            return userRepository.save(user);
-        }else {
-            return optional.get();
-        }
+        return optional.orElseGet(() -> userRepository.save(user));
     }
 
 }

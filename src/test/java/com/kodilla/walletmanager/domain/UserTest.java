@@ -17,6 +17,7 @@ import org.springframework.transaction.TransactionSystemException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -31,13 +32,8 @@ public class UserTest  {
 
     @Before
     public void clean(){
-        User test = factory.user();
-        List<User> users = repository.findAll();
-        for (User user: users) {
-            if (user.getLogin().equals(test.getLogin()) && user.getPassword().equals(test.getPassword()) && user.getEmile().equals(test.getEmile())){
-                repository.delete(user);
-            }
-        }
+        Optional<User> user = repository.getByLogin(factory.user().getLogin());
+        user.ifPresent(value -> repository.delete(value));
     }
 
     @Test

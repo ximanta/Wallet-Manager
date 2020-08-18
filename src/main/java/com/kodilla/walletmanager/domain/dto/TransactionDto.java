@@ -1,7 +1,6 @@
 package com.kodilla.walletmanager.domain.dto;
 
 import com.kodilla.walletmanager.domain.enums.CurrencyType;
-import com.kodilla.walletmanager.domain.enums.TransactionType;
 import com.kodilla.walletmanager.tools.ToolsManager;
 import lombok.Getter;
 import lombok.Setter;

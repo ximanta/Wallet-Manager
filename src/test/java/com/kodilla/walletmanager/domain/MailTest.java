@@ -1,6 +1,6 @@
 package com.kodilla.walletmanager.domain;
 
-import com.kodilla.walletmanager.domain.entities.Mail;
+import com.kodilla.walletmanager.domain.pojos.Mail;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
